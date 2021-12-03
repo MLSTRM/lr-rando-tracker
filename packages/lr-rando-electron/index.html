@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>LR Rando Tracker</title>
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'" />
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+  <style>
+    @font-face {
+      font-family: "Xoireqe";
+      src: url("resources/fonts/XOIREQE.TTF") format("TTF");
+    }
+
+    body {
+      font-family: 'Tahoma';
+    }
+
+    .column {
+      float: left;
+      width: 50%;
+    }
+
+    .xoi {
+      font-family: "Xoireqe";
+    }
+
+    .row {
+      background-color: #9fb3bd;
+    }
+
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .column20 > img.top {
+      float: left;
+      width: 100px;
+    }
+
+    .column40 {
+      float: left;
+      width: 200px;
+    }
+
+    .column60 {
+      float: left;
+      width: 300px;
+    }
+
+    .column80 {
+      float: left;
+      width: 400px;
+    }
+
+    .column100 {
+      float: left;
+      width: 500px;
+      min-height: 40px;
+    }
+
+    .cell20 {
+      height: 100px;
+      text-align: center;
+      justify-content: center;
+      line-height: 50px;
+      vertical-align: middle;
+      border: solid;
+      border-color: #9fb3bd;
+      border-width: 1px;
+    }
+
+    .cell20 > img.top {
+      float: top;
+      max-height: 50%;
+      justify-content: center;
+    }
+
+    .cell20 > div {
+      float: left;
+      width: 20%;
+      height: inherit;
+    }
+
+    .cell20s > div {
+      float: left;
+      width: 20%;
+    }
+
+    .cell20 > img.left {
+      vertical-align: middle;
+    }
+
+    .cell20s > img.left {
+      vertical-align: middle;
+    }
+
+    .cell20s {
+      height: 50px;
+      line-height: 50px;
+    }
+
+    .cellLight {
+      background-color: #f3f2f0;
+      color: #000000
+    }
+
+    .cellDark {
+      background-color: #1d1914;
+      color: #ffffff;
+    }
+
+    .inactive {
+      opacity: 50%;
+      filter: grayscale(100%);
+    }
+
+    .inactive > span {
+      opacity: 40%;
+    }
+
+    .rangeLeft::before {
+      clear: both;
+    }
+
+    .rangeLeft {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 30%;
+      z-index: 1;
+      float: left;
+      display: none;
+    }
+
+    .clickRange:hover .rangeLeft {
+      display: inherit;
+    }
+
+    .rangeRight {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      width: 30%;
+      z-index: 1;
+      float: right;
+      display: none;
+    }
+
+    .clickRange:hover .rangeRight {
+      display: inherit;
+    }
+
+    .clickRange {
+      position: relative;
+    }
+
+    .clickRange .rangeLeft {
+      display: none;
+    }
+
+    .clickRange .rangeRight {
+      display: none;
+    }
+
+    .noSelect {
+      user-select: none;
+    }
+
+    .columnGrid {
+      min-width: 500px;
+      max-width: 500px;
+    }
+
+    .mainFlex {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .columnTall {
+      min-height: 516px;
+    }
+
+    .topButton {
+      float: left;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="mainHolder" style="width: 100%;">
+    <div class="row column100" id="pretty_region_top">
+      <div class="column60 autoTracker" style="height: 40px;">
+        <span id="auto-region">Luxerion</span><br/><span id="auto-zone"></span>
+      </div>
+      <div class="column40 autoTracker" style="height: 40px;">
+        <img src="resources/images/icon-garb.png" alt="Active Garb: " height="40" width="40" /><span id="auto-schema"></span>
+      </div>
+    </div>
+    <div style="clear:both"></div>
+
+    <div class="mainFlex">
+      <div id="pretty_tracker_region" class="noSelect columnGrid">
+        <!--Restructure into rows-->
+        <!--Change shown rows based on settigns (e.g. boss fights)-->
+        <div class="row" id="pretty_region_meta_1">
+          <div class="cell20">
+            <div class="cellLight clickRange" data-min="0" data-max="14" data-threshold="-1">
+              <!-- Only day if not auto tracking -->
+              <img src="resources/images/icon-clock.png" alt="Day " height="40" width="40" class="top"><br/><span id="auto-trueday" class="value">0</span><span class="autoTracker">: <span id="auto-time">00:00</span></span>
+            </div>
+            <div class="cellDark">
+              <img src="resources/images/icon-gil.png" alt="Gil: " height="40" width="40"  class="top"/><br/> <span id="auto-gil">0</span>
+            </div>
+            <div class="cellLight clickRange" data-min="5" data-max="9" data-threshold="4">
+              <img src="resources/images/icon-ep.png" alt="Max EP:" width="40" height="40" class="top" /><br/> <span id="auto-ep" class="value">5</span>
+            </div>
+            <div class="cellDark clickRange" data-min="6" data-max="12" data-threshold="5">
+              <img src="resources/images/icon-recovery.png" alt="Item slots:" width="40" height="40" class="top" /><br/> <span id="auto-itemslots" class="value">6</span>
+            </div>
+            <div class="cellLight clickRange" data-min="0" data-max="3" data-threshold="0">
+              <img src="resources/images/odin-icon.png" alt="Odin: " height="40" width="40" class="top"><br/> <span id="auto-odin-level" class="value">0</span><span class="autoTracker">: <span id="auto-odin-health">250</span> <span id="auto-odin-next">/ 400</span></span>
+            </div>
+          </div>
+          <div class="cell20 cell20s">
+            <div class="cellDark clickToggle" data-epkey="ti900_00">
+              <span>OC</span>
+            </div>
+            <div class="cellLight clickToggle" data-epkey="ti000_00">
+              <span>Curaga</span>
+            </div>
+            <div class="cellDark clickToggle" data-epkey="ti020_00">
+              <span>Arise</span>
+            </div>
+            <div class="cellLight clickToggle" data-epkey="ti030_00">
+              <span>Esunada</span>
+            </div>
+            <div class="cellDark clickToggle" data-epkey="ti600_00">
+              <span>Decoy</span>
+            </div>
+          </div>
+          <div class="cell20 cell20s">
+            <div class="cellLight clickToggle" data-epkey="ti500_00">
+              <span>Quake</span>
+            </div>
+            <div class="cellDark clickToggle" data-epkey="at900_00">
+              <span>AoO</span>
+            </div>
+            <div class="cellLight clickToggle" data-epkey="ti830_00">
+              <span>Escape</span>
+            </div>
+            <div class="cellDark clickToggle" data-epkey="ti840_00">
+              <span>Chronostasis</span>
+            </div>
+            <div class="cellLight clickToggle" data-epkey="ti810_00">
+              <span>TP</span>
+            </div>
+          </div>
+          <div class="cell20">
+            <div class="cellDark centerImage clickRange" data-min="0" data-max="5" data-threshold="4" data-mainquest="1">
+              <img src="resources/images/Luxerion-lrffxiii-icon.png"  class="top" alt="Main quest 1" height="40" width="40" /><br/>1-<span class="value">0</span>
+            </div>
+            <div class="cellLight centerImage clickRange" data-min="0" data-max="3" data-threshold="2" data-mainquest="2">
+              <img src="resources/images/Yusnaan-lrffxiii-icon.png"  class="top" alt="Main quest 2" height="40" width="40"/><br/>2-<span class="value">0</span>
+            </div>
+            <div class="cellDark centerImage clickRange" data-min="0" data-max="3" data-threshold="2" data-mainquest="3">
+              <img src="resources/images/Wildlands-lrffxiii-icon.png"  class="top" alt="Main quest 3" height="40" width="40" /><br/>3-<span class="value">0</span>
+            </div>
+            <div class="cellLight centerImage clickRange" data-min="0" data-max="5" data-threshold="4" data-mainquest="4">
+              <img src="resources/images/Deaddunes-lrffxiii-icon.png"  class="top" alt="Main quest 4" height="40" width="40" /><br/>4-<span class="value">0</span>
+            </div>
+            <div class="cellDark centerImage clickToggle">
+              <img src="resources/images/Wildlands-lrffxiii-icon.png"  class="top" alt="Main quest 5" height="40" width="40" /><br/>5-1
+            </div>
+          </div>
+          <!--Bosses here if boss rando is on-->
+          <div class="cell20 cell20s">
+            <div class="cellLight clickToggle">
+              <img src="resources/images/boss-noel.png" alt="Noel Kreiss" width="100"/>
+            </div>
+            <div class="cellDark clickToggle">
+              <img src="resources/images/boss-snow.png" alt="Snow Villiers" width="100"/>
+            </div>
+            <div class="cellLight clickToggle">
+              <img src="resources/images/boss-caius.png" alt="Caius Ballad" width="100"/>
+            </div>
+            <div class="cellDark clickToggle">
+              <img src="resources/images/boss-gren.png" alt="Grendel" width="100" />
+            </div>
+            <div class="cellLight clickToggle">
+              <img src="resources/images/boss-zaltys.png" alt="Zaltys" width="100" />
+            </div>
+          </div>
+          <div class="cell20 cell20s">
+            <div class="cellDark clickToggle" data-key="key_y_ticket">
+              <img src="resources/images/ticket.png" alt="Ticket" style="vertical-align: middle;" height="30" width="30" />Ticket
+            </div>
+            <div class="cellLight clickToggle" data-key="key_y_id">
+              <img src="resources/images/idcard.png" alt="ID Card" style="vertical-align: middle;" height="30" width="30" />ID
+            </div>
+            <div class="cellDark clickToggle" data-key="key_y_shiji">
+              <img src="resources/images/note.png" alt="Boss's Note" style="vertical-align: middle; filter:invert(1)" height="30" width="30" />Note
+            </div>
+            <div class="cellLight clickRange" data-min="0" data-max="10" data-key="key_y_fire">
+              <img src="resources/images/firework.png" alt="Fireworks" style="vertical-align: middle;" height="30" width="30" /> <span class="value">0</span>
+            </div>
+            <div class="cellDark centerImage clickToggle">
+              <img src="resources/images/boss-eres.png" alt="Ereshkigal" width="100" />
+            </div>
+          </div>
+
+          <div class="cell20 cell20s">
+            <div class="cellLight clickToggle" data-key="key_soulcd">
+              <span>Seed card</span>
+            </div>
+            <div class="cellDark clickToggle" data-key="key_w_mogsoul">
+              <span>Mog Frag</span>
+            </div>
+            <div class="cellLight clickRange" data-min="0" data-key="key_d_key">
+              <span><img src="resources/images/pilgrims-crux.png" alt="Pilgrim's Crux:" height="35"> <span class="value">0</span></span>
+            </div>
+            <div class="cellDark clickRange" data-min="0" data-max="3" data-key="key_d_sekiban">
+              <span>Tablet: <span class="value">0</span></span>
+            </div>
+            <div class="cellLight clickRange" data-min="0" data-max="3" data-key="key_d_wing,key_d_top,key_d_base">
+              <span>SCrux <span class="value">0</span></span>
+            </div>
+          </div>
+
+          <div class="cell20 cell20s">
+            <div class="column20 cellDark clickToggle" data-key="key_s_zyouai">
+              <span>Smiles</span>
+            </div>
+            <div class="column20 cellLight clickToggle" data-key="key_s_hiai">
+              <span>Radiance</span>
+            </div>   
+            <div class="column20 cellDark clickToggle" data-key="key_s_kairaku">
+              <span>Mischief</span>
+            </div>
+            <div class="column20 cellLight clickToggle" data-key="key_s_kanki">
+              <span>Courage</span>
+            </div>
+            <div class="column20 cellDark clickToggle" data-key="key_s_hunnu">
+              <span>Kindness</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="keyInventory" class="autoTracker">
+        <div class="row">
+          <div class="column40 columnTall" id="keyItems">
+            Key Items:
+            <table id="basic_keyItems">
+            </table>
+          </div>
+        </div>
+      </div>
+      <div id="inventory" class="autoTracker">
+        <div class="row">
+          <div class="column40 columnTall" id="items">
+            Items:
+            <table id="basic_items">
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br />
+  <br />
+  <button id="autoPollButton" class="topButton" onclick="beginPoll()" type="button">Start auto tracker</button>
+  <button id="detatchButton" class="topButton autoTracker" onclick="detatchTracker()" type="button" disabled="true">Stop auto tracker</button>
+  <!-- You can also require other files to run in this process -->
+  <!--<script>
+      require("./dist/renderer.js")
+    </script>-->
+  <script>var exports = { "__esModule": true };</script>
+  <script src="./dist/renderer.js"></script>
+</body>
+
+</html>

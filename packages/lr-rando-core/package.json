@@ -1,0 +1,17 @@
+{
+    "name": "lr-rando-core",
+    "version": "1.0.0",
+    "description": "Core information for Lightning Returns Randomiser",
+    "author": "MLSTRM (Christopher Wall)",
+    "license": "MIT",
+    "private": true,
+    "main": "build/index.js",
+    "scripts": {
+      "clean": "rimraf ./build/**",
+      "build": "tsc -b ."
+    },
+    "devDependencies": {
+      "typescript": "^4.5.2"
+    }
+  }
+  

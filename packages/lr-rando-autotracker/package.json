@@ -1,0 +1,24 @@
+{
+    "name": "lr-rando-autotracker",
+    "version": "1.0.0",
+    "description": "Autotracker for Lightning Returns Randomiser",
+    "author": "MLSTRM (Christopher Wall)",
+    "license": "MIT",
+    "private": true,
+    "main": "build/index.js",
+    "scripts": {
+      "clean": "rimraf ./build/**",
+      "build": "tsc -b .",
+      "test": "yarn run build && node ./build/test-script.js"
+    },
+    "dependencies": {
+        "memoryjs": "^3.4.0",
+        "lr-rando-core": "file:../lr-rando-core"
+    },
+    "devDependencies": {
+      "@types/node": "^16.11.9",
+      "typescript": "^4.5.2",
+      "ts-node": "^10.4.0"
+    }
+  }
+  
