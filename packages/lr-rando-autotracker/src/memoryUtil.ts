@@ -6,7 +6,7 @@ import { LrMemoryReader, RandoMemoryState, resolveDateTime } from ".";
 //should stop at first null char.
 export function stripNullChars(input: Buffer): string {
     const str = input.toString();
-    return str.substring(0,str.indexOf('\0')).replace(/\0/g, '');
+    return str.replace(/\0/g, '');
 }
 
 const someStatsBaseLocation = 0x4CF79D8; //Initial pointer into interesting memory block

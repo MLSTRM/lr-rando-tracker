@@ -131,18 +131,22 @@ export function resolveMainQuestProgress(input: MainQuestProgressValues): MainQu
 }
 
 function processValueBoundaries(mapping: {[key: string]: {num: number; complete: number; completeSecond?: number}}, toCheck: number, toCheckSecond?: number): {num: number; name: string} {
+    let highest = {
+        num: 0,
+        name: 'Unknown'
+    };
     for(const entry of Object.entries(mapping)){
         const {num, complete, completeSecond} = entry[1];
         if(toCheckSecond && completeSecond){
             if(toCheck >= complete && toCheckSecond >= completeSecond){
-                return {
+                highest = {
                     num,
                     name: entry[0]
                 };
             }
         } else if(!toCheckSecond && !completeSecond){
             if(toCheck >= complete){
-                return {
+                highest = {
                     num,
                     name: entry[0]
                 };
@@ -151,9 +155,5 @@ function processValueBoundaries(mapping: {[key: string]: {num: number; complete:
             console.log('Had only one of 2 expected second values?');
         }
     }
-    console.log('Fell through value boundaries');
-    return {
-        num: 0,
-        name: 'Unknown'
-    }
+    return highest;
 }

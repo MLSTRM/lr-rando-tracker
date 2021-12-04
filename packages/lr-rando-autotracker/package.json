@@ -12,8 +12,7 @@
       "test": "yarn run build && node ./build/test-script.js"
     },
     "dependencies": {
-        "memoryjs": "^3.4.0",
-        "lr-rando-core": "file:../lr-rando-core"
+        "memoryjs": "^3.4.0"
     },
     "devDependencies": {
       "@types/node": "^16.11.9",

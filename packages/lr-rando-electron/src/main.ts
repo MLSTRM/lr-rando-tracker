@@ -82,4 +82,4 @@ ipcMain.handle('randoEPCheck', async (event, ability) => {
 
 ipcMain.handle('randoMainQuestCheck', async (event, main) => {
   return backend.checkMainQuest(main);
-})
+});

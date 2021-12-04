@@ -1,5 +1,5 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
-import { extractZoneInfo, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem } from "lr-rando-core";
+import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem } from "lr-rando-core";
 
 export class RandoBackend {
     private reader: LrMemoryReader;
@@ -89,24 +89,7 @@ export class RandoBackend {
         return !!this.oldState.epAbilities?.includes(name);
     }
 
-    public checkMainQuest(main: number): number {
-        let value: number | undefined;
-        switch (main){
-            case 1:
-                value = this.oldState.mainQuestProgress?.luxerion;
-                break;
-            case 2:
-                value = this.oldState.mainQuestProgress?.yusnaan;
-                break;
-            case 3:
-                value = this.oldState.mainQuestProgress?.wildlands;
-                break;
-            case 4:
-                value = this.oldState.mainQuestProgress?.deaddunes;
-                break;
-            default:
-                value = 0;
-        }
-        return value ?? 0;
+    public checkMainQuest(main: string): number {
+        return this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0;
     }
 }

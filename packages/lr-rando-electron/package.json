@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "memoryjs": "^3.4.0",
-    "lr-rando-core": "file:../lr-rando-core",
-    "lr-rando-autotracker": "file:../lr-rando-autotracker"
+    "lr-rando-core": "^1.0.0",
+    "lr-rando-autotracker": "^1.0.0"
   }
 }
