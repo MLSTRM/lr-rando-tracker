@@ -9,11 +9,6 @@
     content="default-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'" />
   <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
   <style>
-    @font-face {
-      font-family: "Xoireqe";
-      src: url("resources/fonts/XOIREQE.TTF") format("TTF");
-    }
-
     body {
       font-family: 'Tahoma';
     }
@@ -183,6 +178,9 @@
 
     .columnTall {
       min-height: 516px;
+      max-height: 700px;
+      overflow-y: scroll;
+      overflow-x: hidden;
     }
 
     .topButton {
@@ -193,20 +191,17 @@
 
 <body>
   <div class="mainHolder" style="width: 100%;">
-    <div class="row column100" id="pretty_region_top">
-      <div class="column60 autoTracker" style="height: 40px;">
-        <span id="auto-region">Luxerion</span><br/><span id="auto-zone"></span>
-      </div>
-      <div class="column40 autoTracker" style="height: 40px;">
-        <img src="resources/images/icon-garb.png" alt="Active Garb: " height="40" width="40" /><span id="auto-schema"></span>
-      </div>
-    </div>
-    <div style="clear:both"></div>
 
     <div class="mainFlex">
       <div id="pretty_tracker_region" class="noSelect columnGrid">
-        <!--Restructure into rows-->
-        <!--Change shown rows based on settigns (e.g. boss fights)-->
+        <div class="row column100" id="pretty_region_top">
+          <div class="column60 autoTracker" style="height: 40px;">
+            <span id="auto-region">Luxerion</span><br/><span id="auto-zone"></span>
+          </div>
+          <div class="column40 autoTracker" style="height: 40px;">
+            <img src="resources/images/icon-garb.png" alt="Active Garb: " height="40" width="40" /><span id="auto-schema"></span>
+          </div>
+        </div>
         <div class="row" id="pretty_region_meta_1">
           <div class="cell20">
             <div class="cellLight clickRange" data-min="0" data-max="14" data-threshold="-1">
@@ -277,7 +272,6 @@
               <img src="resources/images/Wildlands-lrffxiii-icon.png"  class="top" alt="Main quest 5" height="40" width="40" /><br/>5-1
             </div>
           </div>
-          <!--Bosses here if boss rando is on-->
           <div class="cell20 cell20s">
             <div class="cellLight clickToggle">
               <img src="resources/images/boss-noel.png" alt="Noel Kreiss" width="100"/>
@@ -317,34 +311,34 @@
             <div class="cellLight clickToggle" data-key="key_soulcd">
               <span>Seed card</span>
             </div>
-            <div class="cellDark clickToggle" data-key="key_w_mogsoul">
+            <div class="cellDark clickToggle" data-key="key_w_mogsoul" data-oneway="true">
               <span>Mog Frag</span>
             </div>
             <div class="cellLight clickRange" data-min="0" data-key="key_d_key">
               <span><img src="resources/images/pilgrims-crux.png" alt="Pilgrim's Crux:" height="35"> <span class="value">0</span></span>
             </div>
-            <div class="cellDark clickRange" data-min="0" data-max="3" data-key="key_d_sekiban">
+            <div class="cellDark clickRange" data-min="0" data-max="3" data-key="key_d_sekiban" data-oneway="true">
               <span>Tablet: <span class="value">0</span></span>
             </div>
-            <div class="cellLight clickRange" data-min="0" data-max="3" data-key="key_d_wing,key_d_top,key_d_base">
+            <div class="cellLight clickRange" data-min="0" data-max="3" data-key="key_d_wing,key_d_top,key_d_base" data-oneway="true">
               <span>SCrux <span class="value">0</span></span>
             </div>
           </div>
 
           <div class="cell20 cell20s">
-            <div class="column20 cellDark clickToggle" data-key="key_s_zyouai">
+            <div class="column20 cellDark clickToggle" data-key="key_s_zyouai" data-oneway="true">
               <span>Smiles</span>
             </div>
-            <div class="column20 cellLight clickToggle" data-key="key_s_hiai">
+            <div class="column20 cellLight clickToggle" data-key="key_s_hiai" data-oneway="true">
               <span>Radiance</span>
             </div>   
-            <div class="column20 cellDark clickToggle" data-key="key_s_kairaku">
+            <div class="column20 cellDark clickToggle" data-key="key_s_kairaku" data-oneway="true">
               <span>Mischief</span>
             </div>
-            <div class="column20 cellLight clickToggle" data-key="key_s_kanki">
+            <div class="column20 cellLight clickToggle" data-key="key_s_kanki" data-oneway="true">
               <span>Courage</span>
             </div>
-            <div class="column20 cellDark clickToggle" data-key="key_s_hunnu">
+            <div class="column20 cellDark clickToggle" data-key="key_s_hunnu" data-oneway="true">
               <span>Kindness</span>
             </div>
           </div>

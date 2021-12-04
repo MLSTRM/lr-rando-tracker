@@ -312,10 +312,9 @@ function convertMapToTable(map?: Map<any, any>): string | undefined {
 // Create quests section with auto scanning of inventory/completion requirements
 // pull icons from the thing bartz pointed me at / I unpacked
 
-// yusnaan values
-//Check wildlands temple area mappings (yup really is p numbers. WHYYYY)
-//obtaining key item doesn't unset inactive (pilgrims crux, fireworks - check autotrack value logic for removing inactive, same with odin also)
+
 //curaga and escape show up in the intro?
+
 //disconnecting and reconnecting bugs out
 
 // use library on ark for boss tracking (?)
