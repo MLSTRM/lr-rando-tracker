@@ -168,3 +168,25 @@ const interval = setInterval(() => {
 
 // Item start - 0xDCDA0D50
 // pSomeStats - 0xDE0551D0
+
+
+// boss mappings in btscore
+/*
+
+
+"1480║$btscore000" = "Caius Ballad-"; //tutorial
+"1481║$btscore001" = "Ereshkigal-"; //noel
+"1482║$btscore002" = "Ereshkigal-";
+"1483║$btscore003" = "Grendel"; //snow
+"1484║$btscore004" = "Parandus";
+"1485║$btscore005" = "Parandus";
+"1486║$btscore006" = "Snow Villiers++"; //wildlands
+"1487║$btscore007" = "Zaltys+"; //dead dunes
+"1488║$btscore008" = "Zaltys+";
+"1489║$btscore009" = "Bhunivelze"; //final
+"1490║$btscore010" = "Bhunivelze+";
+"1491║$btscore011" = "Zaltys"; //unused?
+"1492║$btscore050" = "Aeronite";
+"1493║$btscore051" = "Noel Kreiss++"; //ultimate lair
+
+*/

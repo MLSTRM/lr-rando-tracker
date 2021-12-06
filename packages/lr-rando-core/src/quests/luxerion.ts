@@ -62,8 +62,8 @@ export const LuxerionMainQuest = {
 };
 
 export const LuxMainQuestCompletionValues: {[key: string]: {num: number; complete: number}} = {
-    '1-1': {num: 1, complete: 0x00},
-    '1-2': {num: 2, complete: 0x28},
+    '1-1': {num: 1, complete: 0x28},
+    '1-2': {num: 2, complete: 0x64},
     '1-3': {num: 3, complete: 0x226},
     '1-4': {num: 4, complete: 0x258},
     '1-5': {num: 5, complete: 0x320}

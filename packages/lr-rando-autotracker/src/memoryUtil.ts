@@ -1,4 +1,3 @@
-import { read } from "fs";
 import { resolveMainQuestProgress } from "lr-rando-core";
 import { BYTE, DWORD, INT, INT64, SHORT } from "memoryjs";
 import { LrMemoryReader, RandoMemoryState, resolveDateTime } from ".";
