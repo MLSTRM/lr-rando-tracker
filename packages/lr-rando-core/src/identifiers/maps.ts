@@ -104,7 +104,7 @@ export const zoneMappings = {
             "zm_mapwl_073": "The Crash Site"
         }
     },
-    "zm_map_wl_lb1": {
+    "zm_mapwl_lb1": {
         name: "Temple of the Goddess (WL)",
         zones: {
             "zm_mapwl_p501": "Closed Hall",
@@ -313,7 +313,7 @@ export function extractZoneInfo(rawMap: string, rawZone: string): {map: string, 
     const map: ValidMapNames = extractMapOrUnknown(rawMap.substring(1).trim());
     const zone = rawZone.substring(1).trim();
     const knownMap = zoneMappings[map];
-    if(knownMap){
+    if(knownMap && map!=='unk'){
         const resolvedMap = knownMap.name;
         const knownZone = zoneIsValid(map, zone);
         if(knownZone){
@@ -330,7 +330,7 @@ export function extractZoneInfo(rawMap: string, rawZone: string): {map: string, 
         };
     }
     return {
-        map: `Unknown region - ${map}`,
+        map: `Unknown region - ${rawMap}`,
         zone: zone,
         known: false
     };

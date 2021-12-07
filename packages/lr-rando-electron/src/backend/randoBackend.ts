@@ -1,6 +1,8 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem } from "lr-rando-core";
 
+const reservedKeys = ['time', 'region'];
+
 export class RandoBackend {
     private reader: LrMemoryReader;
     private readerLoaded: boolean = false;
@@ -42,8 +44,9 @@ export class RandoBackend {
         }
     }
 
+
     removeDuplicatesRecursive(obj1: any, obj2: any): any {
-        for(const key of Object.keys(obj1).filter(k => k!=='time')){
+        for(const key of Object.keys(obj1).filter(k => !reservedKeys.includes(k))){
             if(Array.isArray(obj1[key]) || Array.isArray(obj2[key]) || obj1[key] instanceof Map || obj2[key] instanceof Map){
                 continue;
             }
@@ -61,8 +64,8 @@ export class RandoBackend {
 
     prettifyState(state: RandoMemoryState): RandoMemoryState;
     prettifyState(state: Partial<RandoMemoryState>): Partial<RandoMemoryState> {
-        if(state.region?.zone){
-            const regionInfo = extractZoneInfo(state.region.map ?? this.oldState.region?.map, state.region.zone);
+        if(state.region){
+            const regionInfo = extractZoneInfo(state.region.map, state.region.zone);
             if(!regionInfo.known){
                 const key = regionInfo.map+':'+regionInfo.zone;
                 if(!this.unknownRegions.has(key)){
@@ -72,6 +75,7 @@ export class RandoBackend {
             }
             state.region = regionInfo;
         }
+        
 
         if(state.epAbilities){
             const EpAbilities: string[] = [];
