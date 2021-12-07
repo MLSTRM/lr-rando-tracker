@@ -161,7 +161,9 @@ export const keyItemNameMap = Object.freeze({
     'libra_m770': 'Study of the Savage*',
     'libra_m896': 'Desert Sahagin Notes',
     'libra_m897': 'Ectopudding Notes',
-    'libra_m898': 'Aster Protoflorian Notes'
+    'libra_m898': 'Aster Protoflorian Notes',
+    // Rando specific
+    'key_r_kanki': 'Rando Proof of Slaughterhouse Fragment'
 });
 
 function isValidKeyItem(name: string): name is KeyItem {
