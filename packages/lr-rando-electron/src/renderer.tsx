@@ -125,14 +125,16 @@ function beginPoll() {
       }, 4)
     );
     if(result){
-      if(result.time?.day ?? 0 < 0){
+      if((result.time?.day ?? 0 < 0) || (result.maxEP && result.maxEP > 20)){
         setPropOnElem('#basicInfoLoading', 'No save active!');
       }
 
       setPropOnElem('#basicInfoLoading', '');
       setPropOnElem('#basic_day', result.time?.day);
       setPropOnElem('#basic_trueday', result.time?.trueDay);
+      if(result.time){
       setPropOnElem('#basic_time', `${result.time?.hour.toString().padStart(2,'0')}:${result.time?.minute.toString().padStart(2,'0')}`);
+      }
       setPropOnElem('#basic_region', result.region?.map);
       setPropOnElem('#basic_zone', !!result.region?.known ? result.region?.zone : undefined);
       setPropOnElem('#basic_gil', result.gil);

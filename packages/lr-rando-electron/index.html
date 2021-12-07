@@ -177,14 +177,24 @@
     }
 
     .columnTall {
-      min-height: 516px;
-      max-height: 700px;
+      min-height: 520px;
+      max-height: 520px;
       overflow-y: scroll;
       overflow-x: hidden;
     }
 
     .topButton {
       float: left;
+    }
+
+    .mainFlex .flexRegion {
+      max-height: 550px;
+    }
+
+    .centreSpan {
+      display: inline-block;
+      vertical-align: middle;
+      height: inherit;
     }
   </style>
 </head>
@@ -193,13 +203,13 @@
   <div class="mainHolder" style="width: 100%;">
 
     <div class="mainFlex">
-      <div id="pretty_tracker_region" class="noSelect columnGrid">
+      <div id="pretty_tracker_region" class="noSelect columnGrid flexRegion">
         <div class="row column100" id="pretty_region_top">
           <div class="column60 autoTracker" style="height: 40px;">
             <span id="auto-region">Luxerion</span><br/><span id="auto-zone"></span>
           </div>
           <div class="column40 autoTracker" style="height: 40px;">
-            <img src="resources/images/icon-garb.png" alt="Active Garb: " height="40" width="40" /><span id="auto-schema"></span>
+            <img src="resources/images/icon-garb.png" alt="Active Garb: " height="40" width="40" /><span id="auto-schema" class="centreSpan"></span>
           </div>
         </div>
         <div class="row" id="pretty_region_meta_1">
@@ -344,19 +354,19 @@
           </div>
         </div>
       </div>
-      <div id="keyInventory" class="autoTracker">
+      <div id="keyInventory" class="autoTracker flexRegion">
         <div class="row">
+          Key Items:
           <div class="column40 columnTall" id="keyItems">
-            Key Items:
             <table id="basic_keyItems">
             </table>
           </div>
         </div>
       </div>
-      <div id="inventory" class="autoTracker">
+      <div id="inventory" class="autoTracker flexRegion">
         <div class="row">
+          Items: 
           <div class="column40 columnTall" id="items">
-            Items:
             <table id="basic_items">
             </table>
           </div>

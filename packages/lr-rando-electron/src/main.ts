@@ -5,11 +5,12 @@ import { RandoBackend } from "./backend/randoBackend";
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 950,
     minWidth: 530,
     minHeight: 670,
+    width: 950,
     height: 730,
     maxWidth: 1000,
+    maxHeight: 800,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),

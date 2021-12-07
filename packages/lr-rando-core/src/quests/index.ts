@@ -135,6 +135,9 @@ function processValueBoundaries(mapping: {[key: string]: {num: number; complete:
         num: 0,
         name: 'Unknown'
     };
+    if(typeof toCheck === undefined){
+        return highest;
+    }
     for(const entry of Object.entries(mapping)){
         const {num, complete, completeSecond} = entry[1];
         if(toCheckSecond && completeSecond){
