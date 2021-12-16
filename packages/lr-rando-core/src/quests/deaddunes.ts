@@ -68,7 +68,8 @@ export const DeadDunesSideQuests = {
             "Dead_4_3"
         ],
         trigger: "Bhakti",
-        handIn: "Bhakti"
+        handIn: "Bhakti",
+        sideQuestId: 41 //check
     } as QuestInfo,
     "Old Rivals": {
         name: "Old Rivals",
@@ -76,7 +77,8 @@ export const DeadDunesSideQuests = {
             "his_wifes_dream": true
         },
         trigger: Tobias,
-        handIn: Tobias
+        handIn: Tobias,
+        sideQuestId: 42
     } as QuestInfo,
     "His Wife's Dream": {
         name: "His Wife's Dream",
@@ -88,7 +90,8 @@ export const DeadDunesSideQuests = {
             "started_Old Rivals"
         ],
         trigger: Ramon,
-        handIn: Ramon
+        handIn: Ramon,
+        sideQuestId: 44
     } as QuestInfo,
     "Tool of the Trade": {
         name: "Tool of the Trade",
@@ -96,7 +99,8 @@ export const DeadDunesSideQuests = {
             "loupe": true
         },
         trigger: Elmer,
-        handIn: Elmer
+        handIn: Elmer,
+        sideQuestId: 45
     } as QuestInfo,
     "Adonis' Audition": {
         name: "Adonis' Audition",
@@ -104,7 +108,8 @@ export const DeadDunesSideQuests = {
             "{gurangatch}": true
         },
         trigger: Adonis,
-        handIn: Adonis
+        handIn: Adonis,
+        sideQuestId: 46
     } as QuestInfo,
     "What Rough Beast Slouches": {
         name: "What Rough Beast Slouches",
@@ -115,7 +120,8 @@ export const DeadDunesSideQuests = {
             "Dead_4_3"
         ],
         trigger: Nolan,
-        handIn: Nolan
+        handIn: Nolan,
+        sideQuestId: 47
     } as QuestInfo,
     "Skeletons in the Closet": {
         name: "Skeletons in the Closet",
@@ -127,7 +133,8 @@ export const DeadDunesSideQuests = {
             "keyItem_crux_body"
         ],
         trigger: Jamus,
-        handIn: Jamus
+        handIn: Jamus,
+        sideQuestId: 48
     } as QuestInfo,
     "Last one Standing": {
         name: "Last one Standing",
@@ -135,6 +142,7 @@ export const DeadDunesSideQuests = {
             "all_omegas": 31
         },
         trigger: Zanford,
-        handIn: Zanford
+        handIn: Zanford,
+        sideQuestId: 49
     } as QuestInfo
 };

@@ -110,12 +110,24 @@
     }
 
     .inactive {
-      opacity: 50%;
+      /*opacity: 10%;*/
       filter: grayscale(100%);
     }
 
+    .inactive > img {
+      opacity: 50%;
+    }
+
+    .inactive.cellLight {
+      background-color: #f3f2f022;
+    }
+
+    .inactive.cellDark {
+      background-color: #1d191422;
+    }
+
     .inactive > span {
-      opacity: 40%;
+      opacity: 80%;
     }
 
     .rangeLeft::before {
@@ -179,6 +191,13 @@
     .columnTall {
       min-height: 520px;
       max-height: 520px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
+    .columnHalf {
+      min-height: 240px;
+      max-height: 240px;
       overflow-y: scroll;
       overflow-x: hidden;
     }
@@ -278,8 +297,8 @@
             <div class="cellLight centerImage clickRange" data-min="0" data-max="5" data-threshold="4" data-mainquest="deaddunes">
               <img src="resources/images/DeadDunes-lrffxiii-icon.png"  class="top" alt="Main quest 4" height="40" width="40" /><br/>4-<span class="value">0</span>
             </div>
-            <div class="cellDark centerImage clickToggle">
-              <img src="resources/images/Wildlands-lrffxiii-icon.png"  class="top" alt="Main quest 5" height="40" width="40" /><br/>5-1
+            <div class="cellDark centerImage clickRange" data-min="0" data-max="1" data-threshold="0" data-mainquest="sazh">
+              <img src="resources/images/Wildlands-lrffxiii-icon.png"  class="top" alt="Main quest 5" height="40" width="40" /><br/>5-<span class="value">0</span>
             </div>
           </div>
           <div class="cell20 cell20s">
@@ -368,6 +387,32 @@
           Items: 
           <div class="column40 columnTall" id="items">
             <table id="basic_items">
+            </table>
+          </div>
+        </div>
+      </div>
+      <div id="sideQuests" class="autoTracker flexRegion">
+        <div class="row">
+          Side quests:
+          <div class="column40 columnTall" id="side-quests">
+            <table id="base_side_quests">
+            </table>
+          </div>
+        </div>
+      </div>
+      <div id="canvas" class="autoTracker flexRegion">
+        <div class="row">
+          Canvas of Prayers:
+          <br />
+          Accepted:
+          <div class="column40 columnHalf" id="canvas-accepted">
+            <table id="base_canvas_acc">
+            </table>
+          </div>
+          <br/>
+          Completed:
+          <div class="column40 columnHalf" id="canvas-completed">
+            <table id="base_canvas_done">
             </table>
           </div>
         </div>

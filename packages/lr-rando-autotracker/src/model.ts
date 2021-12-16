@@ -1,4 +1,4 @@
-import { MainQuestPosition } from 'lr-rando-core';
+import { MainQuestPosition, SideQuestProgress } from 'lr-rando-core';
 
 export interface RandoMemoryState {
     region: {
@@ -23,4 +23,9 @@ export interface RandoMemoryState {
     keyItems: Map<string, number>;
     items: Map<string, number>;
     mainQuestProgress: MainQuestPosition;
+    sideQuestProgress: {[key: string]: SideQuestProgress[]};
+    canvasOfPrayers: {
+        accepted: {[key: string]: string[]},
+        completed: {[key: string]: string[]}
+    }
 }

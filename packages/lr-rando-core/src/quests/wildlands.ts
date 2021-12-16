@@ -56,7 +56,8 @@ export const WildlandsSideQuests = {
             "Wild_3_1"
         ],
         trigger: Sarala,
-        handIn: Sarala
+        handIn: Sarala,
+        sideQuestId: 21
     } as QuestInfo,
     "The Hunter's Challenge": {
         name: "The Hunter's Challenge",
@@ -69,7 +70,8 @@ export const WildlandsSideQuests = {
             "Wild_3_1"
         ],
         trigger: Hunter_Chief,
-        handIn: Hunter_Chief
+        handIn: Hunter_Chief,
+        sideQuestId: 22
     } as QuestInfo,
     "A Final Cure": {
         name: "A Final Cure",
@@ -86,7 +88,8 @@ export const WildlandsSideQuests = {
             "event_make_chocobull"
         ],
         trigger: Cardesia,
-        handIn: Cardesia
+        handIn: Cardesia,
+        sideQuestId: 23
     } as QuestInfo,
     "Fuzzy Search": {
         name: "Fuzzy Search",
@@ -94,7 +97,8 @@ export const WildlandsSideQuests = {
             "herd_sheep": 3
         },
         trigger: Dr_Sheep,
-        handIn: Dr_Sheep
+        handIn: Dr_Sheep,
+        sideQuestId: 24
     } as QuestInfo,
     "Round 'Em Up": {
         name: "Round 'Em Up",
@@ -109,7 +113,8 @@ export const WildlandsSideQuests = {
             "time_3h_after_fuzzy_search",
         ],
         trigger: Dr_Sheep,
-        handIn: Millie
+        handIn: Millie,
+        sideQuestId: 25
     } as QuestInfo,
     "Chocobo Cheer": {
         name: "Chocobo Cheer",
@@ -120,7 +125,8 @@ export const WildlandsSideQuests = {
             "Wild_3_2"
         ],
         trigger: Nadia,
-        handIn: Nadia
+        handIn: Nadia,
+        sideQuestId: 26
     } as QuestInfo,
     "Peace and Quiet, Kupo": {
         name: "Peace and Quiet, Kupo",
@@ -128,7 +134,8 @@ export const WildlandsSideQuests = {
             "dryads": 3
         },
         trigger: Moogle,
-        handIn: Moogle
+        handIn: Moogle,
+        sideQuestId: 27
     } as QuestInfo,
     "Saving an Angel": {
         name: "Saving an Angel",
@@ -137,7 +144,8 @@ export const WildlandsSideQuests = {
         },
         prerequisiteQuests: [
             "Wild_3_1"
-        ]
+        ],
+        sideQuestId: 28
     } as QuestInfo,
     "Omega Point": {
         name: "Omega Point",
@@ -151,7 +159,8 @@ export const WildlandsSideQuests = {
             "odin_level_2"
         ],
         trigger: Research_Leader,
-        handIn: Research_Leader
+        handIn: Research_Leader,
+        sideQuestId: 29
     } as QuestInfo,
     "The Old Man and the Field": {
         name: "The Old Man and the Field",
@@ -166,7 +175,8 @@ export const WildlandsSideQuests = {
             "event_harvest_tantal"
         ],
         trigger: Old_Man,
-        handIn: Old_Man
+        handIn: Old_Man,
+        sideQuestId: 30
     } as QuestInfo,
     "Land of Our Forbears": {
         name: "Land of Our Forbears",
@@ -178,7 +188,8 @@ export const WildlandsSideQuests = {
             "The Old Man and The Field"
         ],
         trigger: Aryas_Chef,
-        handIn: Aryas_Chef
+        handIn: Aryas_Chef,
+        sideQuestId: 31
     } as QuestInfo,
     "A Taste of the Past": {
         name: "A Taste of the Past",
@@ -190,7 +201,8 @@ export const WildlandsSideQuests = {
             "Wild_3_2"
         ],
         trigger: Aryas_Chef,
-        handIn: Aryas_Chef
+        handIn: Aryas_Chef,
+        sideQuestId: 32
     } as QuestInfo,
     "Dog, Doctor and Assistant": {
         name: "Dog, Doctor and Assistant",
@@ -204,7 +216,8 @@ export const WildlandsSideQuests = {
             "Wild_3_2"
         ],
         trigger: Thirteen,
-        handIn: Thirteen
+        handIn: Thirteen,
+        sideQuestId: 33
     } as QuestInfo,
     "The Right Stuff": {
         name: "The Right Stuff",
@@ -215,7 +228,8 @@ export const WildlandsSideQuests = {
             "Wild_3_1"
         ],
         trigger: Hopeful_Hunter,
-        handIn: Hopeful_Hunter
+        handIn: Hopeful_Hunter,
+        sideQuestId: 35
     } as QuestInfo,
     "The Secret Lives of Sheep": {
         name: "The Secret Lives of Sheep",
@@ -225,7 +239,8 @@ export const WildlandsSideQuests = {
         prerequisiteQuests: [
             "Round 'Em Up"
         ],
-        trigger: Cornelia
+        trigger: Cornelia,
+        sideQuestId: 36
     } as QuestInfo,
     "Where Are You, Moogle?": {
         name: "Where Are You, Moogle?",
@@ -238,7 +253,8 @@ export const WildlandsSideQuests = {
             "Peace and Quiet, Kupo"
         ],
         trigger: Moggel,
-        handIn: Moggel
+        handIn: Moggel,
+        sideQuestId: 37
     } as QuestInfo,
     "Mercy of a Goddess": {
         name: "Mercy of a Goddess",
@@ -246,7 +262,8 @@ export const WildlandsSideQuests = {
             "cardesias_cure": true
         },
         trigger: Taleb,
-        handIn: Taleb
+        handIn: Taleb,
+        sideQuestId: 38
     } as QuestInfo,
     "The Grail of Valhalla": {
         name: "The Grail of Valhalla",
@@ -256,7 +273,8 @@ export const WildlandsSideQuests = {
             "poltae_panels": 4
         },
         trigger: Professor,
-        handIn: Professor
+        handIn: Professor,
+        sideQuestId: 39
     } as QuestInfo,
     "To Live in Chaos": {
         name: "To Live in Chaos",
@@ -269,7 +287,8 @@ export const WildlandsSideQuests = {
         prerequisiteOther: [
             "odin_level_3"
         ],
-        trigger: "Station"
+        trigger: "Station",
+        sideQuestId: 40
     } as QuestInfo,
     "Killing Time": {
         name: "Killing Time",
@@ -277,7 +296,8 @@ export const WildlandsSideQuests = {
         prerequisiteOther: [
             "odin_level_2"
         ],
-        handIn: "Poltae Ledge"
+        handIn: "Poltae Ledge",
+        sideQuestId: 81
     } as QuestInfo,
     "Matchmaker": {
         name: "Matchmaker",
@@ -292,7 +312,8 @@ export const WildlandsSideQuests = {
             "Round 'Em Up"
         ],
         trigger: Tilda,
-        handIn: Dr_Sheep
+        handIn: Dr_Sheep,
+        sideQuestId: 82
     } as QuestInfo,
     "Mother and Daughter": {
         name: "Mother and Daughter",
@@ -301,6 +322,7 @@ export const WildlandsSideQuests = {
             "tilda_dog_scene": true
         },
         trigger: Brella,
-        handIn: Brella
+        handIn: Brella,
+        sideQuestId: 83
     } as QuestInfo
 }

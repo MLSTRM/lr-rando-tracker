@@ -11,7 +11,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Lux_1_1"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "Gift of Gratitude": {
             name: "Gift of Gratitude",
@@ -20,7 +22,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Lux_1_1"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x02
         } as QuestInfo,
          "Inventive Seamstress": {
             name: "Inventive Seamstress",
@@ -29,23 +33,30 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Lux_1_1"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "Trapped": {
             name: "Trapped",
             requirements: {
                 "niblet_hairball": 60,
-                "tattered_leather": 60
+                "tattered_leather": 80
             },
             prerequisiteQuests: [
+                "Revenge is Sweet",
                 "Gift of Gratitude"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x80
         } as QuestInfo,
          "A Song for God": {
             name: "A Song for God",
             requirements: {
                 "demon_spicule": 3
-            }
+            },
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "Slay the Machine": {
             name: "Slay the Machine",
@@ -54,7 +65,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Mythical Badge": {
             name: "Mythical Badge",
@@ -63,7 +76,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Grave of a Bounty Hunter": {
             name: "Grave of a Bounty Hunter",
@@ -72,16 +87,20 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_5"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x80
         } as QuestInfo,
-         "puppeteer's Lament": {
-            name: "puppeteer's Lament",
+         "Puppeteer's Lament": {
+            name: "Puppeteer's Lament",
             requirements: {
                 "quality_machine_oil": 1
             },
             prerequisiteOther: [
                 "time_day_5"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "Revenge Has Teeth": {
             name: "Revenge Has Teeth",
@@ -90,7 +109,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_5"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "Enchanted Brush": {
             name: "Enchanted Brush",
@@ -101,7 +122,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "A Song for God",
                 "Grave of a Bounty Hunter"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x20
         } as QuestInfo,
          "Night Patrol": {
             name: "Night Patrol",
@@ -112,7 +135,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "Slay the Machine",
                 "Revenge Has Teeth"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "Heretics' Beasts": {
             name: "Heretics' Beasts",
@@ -123,7 +148,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "Inventive Seamstress",
                 "Puppeteer's Lament"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x40
         } as QuestInfo
     },
     [Areas.YUSNAAN]: {
@@ -134,7 +161,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_1"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "Soulful Horn": {
             name: "Soulful Horn",
@@ -143,7 +172,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_2"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "A Dangerous Cocktail": {
             name: "A Dangerous Cocktail",
@@ -152,7 +183,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x80
         } as QuestInfo,
          "Time Doesn't Heal": {
             name: "Time Doesn't Heal",
@@ -162,7 +195,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "boss_{cyclops}"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x80
         } as QuestInfo,
          "A Man for a Chocobo Girl": {
             name: "A Man for a Chocobo Girl",
@@ -171,7 +206,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Yus_2_2"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "Unfired Firework": {
             name: "Unfired Firework",
@@ -180,7 +217,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Yus_2_3"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "Rebuilding": {
             name: "Rebuilding",
@@ -189,16 +228,20 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Yus_2_3"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x02
         } as QuestInfo,
          "Source of Inspiration": {
             name: "Source of Inspiration",
             requirements: {
-                "shattered_bone": 5
+                "shattered_bone": 3
             },
             prerequisiteOther: [
                 "time_day_5"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "True Colors": {
             name: "True Colors",
@@ -207,7 +250,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_5"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "Beast Summoner": {
             name: "Beast Summoner",
@@ -218,7 +263,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "Soulful Horn",
                 "Source of Inspiration"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Youth Potion": {
             name: "Youth Potion",
@@ -227,7 +274,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_7"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "Spell for Spell": {
             name: "Spell for Spell",
@@ -236,7 +285,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_7"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "What Seekers Seek": {
             name: "What Seekers Seek",
@@ -247,7 +298,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "Youth Potion",
                 "True Colors"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x20
         } as QuestInfo,
          "Ultimate Craving": {
             name: "Ultimate Craving",
@@ -260,7 +313,9 @@ export const prayers = {
                 "Secret Machine",
                 "A Dangerous Cocktail",
                 "Spell for Spell"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x80
         } as QuestInfo
     },
     [Areas.WILDLANDS]: {
@@ -271,7 +326,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_1"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Moon Flower": {
             name: "Moon Flower",
@@ -280,7 +337,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_1"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x20
         } as QuestInfo,
          "Forget Me Not": {
             name: "Forget Me Not",
@@ -289,7 +348,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_1"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x02
         } as QuestInfo,
          "Chocobo Chow": {
             name: "Chocobo Chow",
@@ -298,7 +359,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_1"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "Digging Mole": {
             name: "Digging Mole",
@@ -309,7 +372,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_1"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "Moghan's Plea": {
             name: "Moghan's Plea",
@@ -318,7 +383,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Peace and Quiet, Kupo"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "Moogle Gourmand": {
             name: "Moogle Gourmand",
@@ -327,7 +394,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Peace and Quiet, Kupo"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x20
         } as QuestInfo,
          "Emergency Treatment": {
             name: "Emergency Treatment",
@@ -337,7 +406,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Wild_3_2"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Fresh Fertilizer": {
             name: "Fresh Fertilizer",
@@ -346,7 +417,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Land of Our Forebears"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "Secret of the Chocoborel": {
             name: "Secret of the Chocoborel",
@@ -355,7 +428,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "Wildlands in Danger!": {
             name: "Wildlands in Danger!",
@@ -364,7 +439,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x80
         } as QuestInfo,
          "A Word of Thanks": {
             name: "A Word of Thanks",
@@ -373,7 +450,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "For the Future": {
             name: "For the Future",
@@ -382,7 +461,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Hunter's Challenge": {
             name: "Hunter's Challenge",
@@ -391,7 +472,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "Echoes of a Drum": {
             name: "Echoes of a Drum",
@@ -400,7 +483,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "A Voice from Below": {
             name: "A Voice from Below",
@@ -409,7 +494,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x80
         } as QuestInfo,
          "Two Together": {
             name: "Two Together",
@@ -420,7 +507,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "Sun Flower",
                 "Moon Flower"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "Dumpling Cook-off": {
             name: "Dumpling Cook-off",
@@ -431,7 +520,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "Echoes of a Drum",
                 "A Voice from Below"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x20
         } as QuestInfo,
          "A Secret Wish": {
             name: "A Secret Wish",
@@ -442,7 +533,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "Forget Me Not",
                 "A Word of Thanks"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x02
         } as QuestInfo,
          "Sylkis Secrets": {
             name: "Sylkis Secrets",
@@ -453,7 +546,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Chocobo Chow"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x02
         } as QuestInfo,
          "Hunting the Hunter": {
             name: "Hunting the Hunter",
@@ -462,7 +557,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Hunter's Challenge"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "Gatekeeper's Curiosity": {
             name: "Gatekeeper's Curiosity",
@@ -471,7 +568,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_5"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x20
         } as QuestInfo,
          "What's in a Brew": {
             name: "What's in a Brew",
@@ -484,7 +583,9 @@ export const prayers = {
                 "Fresh Fertilizer",
                 "Moghan's Plea",
                 "Gatekeeper's Curiosity"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "Brain Over Brawn": {
             name: "Brain Over Brawn",
@@ -493,7 +594,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_7"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "A Prayer to a Goddess": {
             name: "A Prayer to a Goddess",
@@ -502,9 +605,11 @@ export const prayers = {
                 "amp_chip": 5
             },
             prerequisiteQuests: [
-                "Fore the Future",
+                "For the Future",
                 "Brain over Brawn"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x20
         } as QuestInfo
     },
     [Areas.DEAD_DUNES]: {
@@ -515,7 +620,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_1"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "Biologically Speaking": {
             name: "Biologically Speaking",
@@ -524,7 +631,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_1"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x80
         } as QuestInfo,
          "Banned Goods": {
             name: "Banned Goods",
@@ -533,7 +642,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_1"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "Desert Cleanup": {
             name: "Desert Cleanup",
@@ -544,7 +655,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "Flower in the Sands",
                 "Biologically Speaking"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x80
         } as QuestInfo,
          "Lucky Charm": {
             name: "Lucky Charm",
@@ -553,7 +666,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "area_yusnaan"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "A New Application": {
             name: "A New Application",
@@ -562,7 +677,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Family Food"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x20
         } as QuestInfo,
          "Supply and Demand": {
             name: "Supply and Demand",
@@ -571,7 +688,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Lucky Charm"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Pride and Greed I": {
             name: "Pride and Greed I",
@@ -580,7 +699,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "For My Child": {
             name: "For My Child",
@@ -589,7 +710,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x02
         } as QuestInfo,
          "Climbing the Ranks I": {
             name: "Climbing the Ranks I",
@@ -598,7 +721,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_3"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Climbing the Ranks II": {
             name: "Climbing the Ranks II",
@@ -607,7 +732,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Climbing the Ranks I"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "Miracle Vintage": {
             name: "Miracle Vintage",
@@ -616,7 +743,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_4"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "Heightened Security": {
             name: "Heightened Security",
@@ -625,7 +754,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_4"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "The Real Client": {
             name: "The Real Client",
@@ -636,10 +767,12 @@ export const prayers = {
             prerequisiteQuests: [
                 "Banned Goods",
                 "Miracle Vintage"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x01
         } as QuestInfo,
-         "Bandits' New Weapon": {
-            name: "Bandits' New Weapon",
+         "Bandit's New Weapon": {
+            name: "Bandit's New Weapon",
             requirements: {
                 "organic_carapace": 5,
                 "cactuar_doll": 5
@@ -647,7 +780,9 @@ export const prayers = {
             prerequisiteQuests: [
                 "For My Child",
                 "Heightened Security"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "Pride and Greed II": {
             name: "Pride and Greed II",
@@ -659,7 +794,9 @@ export const prayers = {
             ],
             prerequisiteQuests: [
                 "Pride and Greed I"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x80
         } as QuestInfo,
          "Pride and Greed III": {
             name: "Pride and Greed III",
@@ -671,7 +808,9 @@ export const prayers = {
             ],
             prerequisiteQuests: [
                 "Pride and Greed II"
-            ]
+            ],
+            canvasByteIndex: 4,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "A Treasure for a God": {
             name: "A Treasure for a God",
@@ -680,7 +819,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Dead_4_5"
-            ]
+            ],
+            canvasByteIndex: 3,
+            canvasByteOffset: 0x04
         } as QuestInfo
     },
     [Areas.GLOBAL]: {
@@ -691,7 +832,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_2"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x80
         } as QuestInfo,
          "Where Moogles Be": {
             name: "Where Moogles Be",
@@ -700,7 +843,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Saving an Angel"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Fading Prayer": {
             name: "Fading Prayer",
@@ -709,7 +854,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Saving an Angel"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x20
         } as QuestInfo,
          "Seeing the Dawn": {
             name: "Seeing the Dawn",
@@ -718,7 +865,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "A Man for a Chocobo"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x04
         } as QuestInfo,
          "Key to Her Heart": {
             name: "Key to Her Heart",
@@ -727,7 +876,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Sazh_5_3"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x10
         } as QuestInfo,
          "Staying Sharp": {
             name: "Staying Sharp",
@@ -736,7 +887,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Death Safari"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x08
         } as QuestInfo,
          "Digging Mysteries": {
             name: "Digging Mysteries",
@@ -745,7 +898,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "accept_rough_beast"
-            ]
+            ],
+            canvasByteIndex: 2,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "A Girl's Challenge": {
             name: "A Girl's Challenge",
@@ -754,7 +909,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Lux_1_5"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x01
         } as QuestInfo,
          "What's Left Behind": {
             name: "What's Left Behind",
@@ -763,7 +920,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Lux_1_5"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x02
         } as QuestInfo,
          "Forbidden Tome": {
             name: "Forbidden Tome",
@@ -772,7 +931,9 @@ export const prayers = {
             },
             prerequisiteQuests: [
                 "Wild_3_3"
-            ]
+            ],
+            canvasByteIndex: 1,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "Roadworks I": {
             name: "Roadworks I",
@@ -782,7 +943,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_9"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x20
         } as QuestInfo,
          "Roadworks II": {
             name: "Roadworks II",
@@ -792,7 +955,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_9"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "Roadworks III": {
             name: "Roadworks III",
@@ -802,7 +967,9 @@ export const prayers = {
             },
             prerequisiteOther: [
                 "time_day_9"
-            ]
+            ],
+            canvasByteIndex: 0,
+            canvasByteOffset: 0x80
         } as QuestInfo
     }
 }

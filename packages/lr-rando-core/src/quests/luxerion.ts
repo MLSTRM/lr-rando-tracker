@@ -75,7 +75,8 @@ export const LuxerionSideQuests = {
         requirements: {
             "info_pieces": 9
         },
-        handIn: "Inquisitor"
+        handIn: "Inquisitor",
+        sideQuestId: 12
     } as QuestInfo,
     "Where are you, Holmes?": {
         name: "Where are you, Holmes?",
@@ -83,7 +84,8 @@ export const LuxerionSideQuests = {
             "holmes_follow": true
         },
         trigger: "Thorton",
-        handIn: "Thorton"
+        handIn: "Thorton",
+        sideQuestId: 2
     } as QuestInfo,
     "The Things She's Lost": {
         name: "The Things She's Lost",
@@ -91,7 +93,8 @@ export const LuxerionSideQuests = {
             "red_carbuncle_doll": true
         },
         trigger: Dolce,
-        handIn: Dolce
+        handIn: Dolce,
+        sideQuestId: 1
     } as QuestInfo,
     "Like Clockwork": {
         name: "Like Clockwork",
@@ -102,7 +105,8 @@ export const LuxerionSideQuests = {
             "Lux_1_4"
         ],
         handIn: Armena,
-        trigger: Armena
+        trigger: Armena,
+        sideQuestId: 3
     } as QuestInfo,
     "Dying Wish": {
         name: "Dying Wish",
@@ -116,7 +120,8 @@ export const LuxerionSideQuests = {
             "Lux_1_2"
         ],
         trigger: Blythe,
-        handIn: Blythe
+        handIn: Blythe,
+        sideQuestId: 4
     } as QuestInfo,
     "Suspicious Spheres": {
         name: "Suspicious Spheres",
@@ -129,7 +134,8 @@ export const LuxerionSideQuests = {
             "Lux_1_2"
         ],
         trigger: Virgil,
-        handIn: Virgil
+        handIn: Virgil,
+        sideQuestId: 5
     } as QuestInfo,
     "Born from Chaos": {
         name: "Born from Chaos",
@@ -140,7 +146,8 @@ export const LuxerionSideQuests = {
             "Lux_1_2"
         ],
         trigger: "Solandra",
-        handIn: "Solandra"
+        handIn: "Solandra",
+        sideQuestId: 6
     } as QuestInfo,
     "Soul Seeds": {
         name: "Soul Seeds",
@@ -151,7 +158,8 @@ export const LuxerionSideQuests = {
             "Lux_1_2"
         ],
         trigger: "Baird",
-        handIn: "Baird"
+        handIn: "Baird",
+        sideQuestId: 7
     } as QuestInfo,
     "Faster Than Lightning": {
         name: "Faster Than Lightning",
@@ -159,7 +167,8 @@ export const LuxerionSideQuests = {
         prerequisiteQuests: [
             "Lux_1_2"
         ],
-        trigger: Lamont
+        trigger: Lamont,
+        sideQuestId: 8
     } as QuestInfo,
     "Treasured Ball": {
         name: "Treasured Ball",
@@ -170,7 +179,8 @@ export const LuxerionSideQuests = {
             "Lux_1_5"
         ],
         trigger: Talbot,
-        handIn: Talbot
+        handIn: Talbot,
+        sideQuestId: 9
     } as QuestInfo,
     "The Angel's Tears": {
         name: "The Angel's Tears",
@@ -183,7 +193,8 @@ export const LuxerionSideQuests = {
             "Lux_1_2"
         ],
         trigger: Luka,
-        handIn: Luka
+        handIn: Luka,
+        sideQuestId: 10
     } as QuestInfo,
     "The Saint's Stone": {
         name: "The Saint's Stone",
@@ -194,15 +205,18 @@ export const LuxerionSideQuests = {
         handIn: Aremiah,
         prerequisiteQuests: [
             "Lux_1_5"
-        ]
+        ],
+        sideQuestId: 11
     } as QuestInfo,
     "The Avid Reader": {
         name: "The Avid Reader",
-        requirements: false //TODO this one is a mess
+        requirements: false, //TODO this one is a mess
+        sideQuestId: 13
     } as QuestInfo,
     "To Save the Sinless": {
         name: "To Save the Sinless",
-        requirements: false //TODO So is this one
+        requirements: false, //TODO So is this one
+        sideQuestId: 91
     } as QuestInfo,
     "Buried Passion": {
         name: "Buried Passion",
@@ -216,7 +230,8 @@ export const LuxerionSideQuests = {
             "Lux_1_5"
         ],
         trigger: Armand,
-        handIn: Armand
+        handIn: Armand,
+        sideQuestId: 14
     } as QuestInfo,
     "The Girl Who Cried Wolf": {
         name: "The Girl Who Cried Wolf",
@@ -229,7 +244,8 @@ export const LuxerionSideQuests = {
             "Lux_1_5"
         ],
         trigger: "North_station_phone",
-        handIn: "Louise"
+        handIn: "Louise",
+        sideQuestId: 15
     } as QuestInfo,
     "Stuck in a Gem": {
         name: "Stuck in a Gem",
@@ -237,7 +253,8 @@ export const LuxerionSideQuests = {
             "starlit_spice": true
         },
         trigger: Gem,
-        handIn: "Ronan"
+        handIn: "Ronan",
+        sideQuestId: 16
     } as QuestInfo,
     "Get the Girl": {
         name: "Get the Girl",
@@ -250,7 +267,8 @@ export const LuxerionSideQuests = {
             "Lux_1_5"
         ],
         trigger: Lackley,
-        handIn: "Seila"
+        handIn: "Seila",
+        sideQuestId: 17
     } as QuestInfo,
     "A Rose by Any Other Name": {
         name: "A Rose by Any Other Name",
@@ -261,7 +279,8 @@ export const LuxerionSideQuests = {
             "Lux_1_5"
         ],
         trigger: Alrick,
-        handIn: Alrick
+        handIn: Alrick,
+        sideQuestId: 19
     } as QuestInfo,
     "Voices from the Grave": {
         name: "Voices from the Grave",
@@ -271,6 +290,7 @@ export const LuxerionSideQuests = {
             "white_brown_woman": true,
             "ghosts_found": 3
         },
-        trigger: "Clock tower guard"
+        trigger: "Clock tower guard",
+        sideQuestId: 20
     } as QuestInfo
 }

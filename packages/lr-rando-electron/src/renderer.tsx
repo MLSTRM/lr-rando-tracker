@@ -7,6 +7,7 @@
 
 import { ipcRenderer } from "electron";
 import type { RandoMemoryState } from "lr-rando-autotracker";
+import type { SideQuestProgress } from "lr-rando-core";
 
 let pollInterval: NodeJS.Timer;
 
@@ -146,8 +147,18 @@ function beginPoll() {
       setPropOnElem('#basic_items', convertMapToTable(result.items));
       setPropOnElem('#basic_odin', result.odinHealth);
 
+      if(result.sideQuestProgress){
+        setPropOnElem('#base_side_quests', convertSideQuestProgressToTable(result.sideQuestProgress));
+      }
+      if(result.canvasOfPrayers){
+        setPropOnElem('#base_canvas_acc', convertCanvasProgressToTable(result.canvasOfPrayers?.accepted));
+        setPropOnElem('#base_canvas_done', convertCanvasProgressToTable(result.canvasOfPrayers?.completed));
+      }
+
       setPropOnElem('#auto-trueday', result.time?.trueDay);
+      if(result.time){
       setPropOnElem('#auto-time', `${result.time?.hour.toString().padStart(2,'0')}:${result.time?.minute.toString().padStart(2,'0')}`);
+      }
       setPropOnElem('#auto-region', result.region?.map);
       setPropOnElem('#auto-zone', !!result.region?.known ? `- ${result.region?.zone}` : '');
       setPropOnElem('#auto-schema', result.schemas?.active);
@@ -304,19 +315,59 @@ function convertMapToTable(map?: Map<any, any>): string | undefined {
   return [...map].map(obj => `<tr><td>${obj[0]}</td><td>${obj[1]}</td></tr>`).join('');
 }
 
+function convertSideQuestProgressToTable(obj?: {[key: string]: SideQuestProgress[]}): string | undefined {
+  if(!obj){
+    return undefined;
+  }
+  const arr = Object.values(obj).filter(val => val.length > 0).flatMap(val => val.sort(orderQuestInfo).map(obj => `<tr><td>${obj.name}</td><td>${obj.status.substr(0,2)}</td></tr>`));
+  if(arr.length === 0){
+    return undefined;
+  }
+  //console.log(JSON.stringify(obj));
+  return arr.join('');
+}
+
+function orderQuestInfo(a: SideQuestProgress, b: SideQuestProgress): number {
+  return -1*a.status.localeCompare(b.status) || a.name.localeCompare(b.name);
+}
+
+function convertCanvasProgressToTable(obj?: {[key: string]: string[]}): string | undefined {
+  if(!obj){
+    return undefined;
+  }
+  const arr = Object.values(obj).filter(val => val.length > 0).flatMap(val => [...val]);
+  if(arr.length === 0){
+    return undefined;
+  }
+  //console.log(JSON.stringify(obj));
+  return arr.map(obj => `<tr><td>${obj}</td></tr>`).join('');
+}
+
 // Todo:
 // Check if I can have ipc renderer hooks in both directions maybe (seems yes - that will be helpful for settings etc.)
-// Scan for quest text and quest completion flags maybe also (not found :/)
-// use bartz hint mapping to find quest names? (not found :/)
 // Start hooking up quest/npc info sections (done the backing, need to do the UI side)
 
 // Start working on NPC availability based on time (clamp view window into range[], convert to rectangles?)
 // Create quests section with auto scanning of inventory/completion requirements
-// pull icons from the thing bartz pointed me at / I unpacked
+
+// use library on ark for boss tracking (?) - works for location but not name.
+
+// find where text pointer moves if hint is open and use that to add to list
+// quest hints as well as libras.
+
+// sort sidequest data and canvas stuff regionally (fill in non-lux canvas data)
+// Check MQ5 hook
+
+/*
+add key item boxes for:
+midnight mauve
+beloved's gift?
+split saints crux
+main greens
+aeronite
 
 
-//curaga and escape show up in the intro?
+EP ability cost selection
 
-//disconnecting and reconnecting bugs out
-
-// use library on ark for boss tracking (?)
+hint tracking (i.e. click up/down per location, give total and obtained - all manual probably)
+*/

@@ -61,7 +61,8 @@ export const YusnaanSideQuests = {
             "keyItem_boss_note"
         ],
         trigger: DrunkPyro,
-        handIn: DrunkPyro
+        handIn: DrunkPyro,
+        sideQuestId: 61
     } as QuestInfo,
     "The Fighting Actress": {
         name: "The Fighting Actress",
@@ -70,7 +71,8 @@ export const YusnaanSideQuests = {
             "match_2": true,
             "match_3": true
         },
-        trigger: Zoe
+        trigger: Zoe,
+        sideQuestId: 62
     } as QuestInfo,
     "Songless Diva": {
         name: "Songless Diva",
@@ -79,7 +81,8 @@ export const YusnaanSideQuests = {
             "music_satchel": true,
         },
         trigger: Olga,
-        handIn: Berdy
+        handIn: Berdy,
+        sideQuestId: 63
     } as QuestInfo,
     "Stolen Things": {
         name: "Stolen Things",
@@ -90,7 +93,8 @@ export const YusnaanSideQuests = {
             "event_pickett_steal"
         ],
         trigger: Gregory,
-        handIn: Gregory
+        handIn: Gregory,
+        sideQuestId: 64
     } as QuestInfo,
     "Fireworks for a Steal": {
         name: "Fireworks for a Steal",
@@ -105,7 +109,8 @@ export const YusnaanSideQuests = {
             "keyItem_boss_note"
         ],
         trigger: Funicula,
-        handIn: Funicula
+        handIn: Funicula,
+        sideQuestId: 65
     } as QuestInfo,
     "A Testing Proposition": {
         name: "A Testing Proposition",
@@ -119,7 +124,8 @@ export const YusnaanSideQuests = {
             "slaughterhouse_demo": true
         },
         trigger: Velno,
-        handIn: Velno
+        handIn: Velno,
+        sideQuestId: 66
     } as QuestInfo,
     "Last Date": {
         name: "Last Date",
@@ -130,7 +136,8 @@ export const YusnaanSideQuests = {
             "Yus_2_3"
         ],
         trigger: Lennet,
-        handIn: Lennet_Date
+        handIn: Lennet_Date,
+        sideQuestId: 67
     } as QuestInfo,
     "Free Will": {
         name: "Free Will",
@@ -140,7 +147,8 @@ export const YusnaanSideQuests = {
             "niblet_omega": true
         },
         trigger: "Diviner",
-        handIn: "Diviner"
+        handIn: "Diviner",
+        sideQuestId: 68
     } as QuestInfo,
     "Friends Forever": {
         name: "Friends Forever",
@@ -156,7 +164,8 @@ export const YusnaanSideQuests = {
             "Yus_2_3"
         ],
         trigger: Primrose,
-        handIn: Primrose
+        handIn: Primrose,
+        sideQuestId: 69
     } as QuestInfo,
     "Family Food": {
         name: "Family Food",
@@ -167,7 +176,8 @@ export const YusnaanSideQuests = {
             "recipe": true
         },
         trigger: Seedy_Owner,
-        handIn: Gordon_Gourmet
+        handIn: Gordon_Gourmet,
+        sideQuestId: 70
     } as QuestInfo,
     "Tanbam's Taboo": {
         name: "Tanbam's Taboo",
@@ -178,7 +188,8 @@ export const YusnaanSideQuests = {
             "Yus_2_3"
         ],
         trigger: Tanbam,
-        handIn: Tanbam
+        handIn: Tanbam,
+        sideQuestId: 71
     } as QuestInfo,
     "Play It for Me": {
         name: "Play It for Me",
@@ -188,7 +199,8 @@ export const YusnaanSideQuests = {
             "nostalgic_score_refrain": true
         },
         trigger: Morris,
-        handIn: Morris
+        handIn: Morris,
+        sideQuestId: 72
     } as QuestInfo,
     "Adoring Adornments": {
         name: "Adoring Adornments",
@@ -199,7 +211,8 @@ export const YusnaanSideQuests = {
             "Yus_2_1"
         ],
         trigger: Candice,
-        handIn: Candice
+        handIn: Candice,
+        sideQuestId: 73
     } as QuestInfo,
     "Adoring Candice": {
         name: "Adoring Candice",
@@ -210,7 +223,8 @@ export const YusnaanSideQuests = {
             "Adoring Adornments"
         ],
         trigger: Tomesso,
-        handIn: Tomesso
+        handIn: Tomesso,
+        sideQuestId: 74
     } as QuestInfo,
     "Death Safari": {
         name: "Death Safari",
@@ -221,7 +235,8 @@ export const YusnaanSideQuests = {
             "Yus_2_1"
         ],
         trigger: "Gatekeeper",
-        handIn: "Gatekeeper"
+        handIn: "Gatekeeper",
+        sideQuestId: 76
     } as QuestInfo,
     "Death Game": {
         name: "Death Game",
@@ -232,6 +247,7 @@ export const YusnaanSideQuests = {
             "Death Safari"
         ],
         trigger: Biggs,
-        handIn: Biggs
+        handIn: Biggs,
+        sideQuestId: 77
     } as QuestInfo
 }

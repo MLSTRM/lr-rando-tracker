@@ -2,5 +2,6 @@ node_modules/
 packages/**/node_modules/
 packages/**/build/
 packages/**/dist/
+packages/**/tsconfig.tsbuildinfo
 packages/hidden-resources/
 lr-rando-tracker*/

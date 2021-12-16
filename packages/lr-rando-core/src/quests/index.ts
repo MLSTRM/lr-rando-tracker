@@ -20,7 +20,7 @@ const sideQuests = {
     [Areas.YUSNAAN]: YusnaanSideQuests,
     [Areas.WILDLANDS]: WildlandsSideQuests,
     [Areas.DEAD_DUNES]: DeadDunesSideQuests,
-    [Areas.GLOBAL]: {}
+    [Areas.GLOBAL]: {"Main Quest 5": SazhMainQuest.Sazh_5_1}
 }
 
 type CanvasLuxNames = keyof typeof prayers[Areas.LUXERION];
@@ -108,6 +108,7 @@ export interface MainQuestProgressValues {
     wildlands1: number; //This is the one with the HIGHER memory address
     wildlands2: number;
     deaddunes: number;
+    sazh: number;
 }
 
 export interface MainQuestPosition {
@@ -115,6 +116,7 @@ export interface MainQuestPosition {
     yusnaan: number;
     wildlands: number;
     deaddunes: number;
+    sazh: number;
 }
 
 export function resolveMainQuestProgress(input: MainQuestProgressValues): MainQuestPosition {
@@ -122,11 +124,13 @@ export function resolveMainQuestProgress(input: MainQuestProgressValues): MainQu
     const {num: yusnaan} = processValueBoundaries(YusMainQuestCompletionValues, input.yusnaan);
     const {num: wildlands} = processValueBoundaries(WildMainQuestCompletionValues, input.wildlands1, input.wildlands2);
     const {num: deaddunes} = processValueBoundaries(DeadMainQuestCompletionValues, input.deaddunes);
+    const sazh = getSideQuestProgress(Areas.GLOBAL, 34, input.sazh).status === 'Complete' ? 1 : 0;
     return {
         luxerion,
         yusnaan,
         wildlands,
-        deaddunes
+        deaddunes,
+        sazh
     };
 }
 
@@ -159,4 +163,61 @@ function processValueBoundaries(mapping: {[key: string]: {num: number; complete:
         }
     }
     return highest;
+}
+
+const Available = 1000;
+const Accepted = 1010;
+const Cleared = 9000;
+const Failed = 9900;
+function resolveProgress(input: number): string {
+    if(input === Available){
+        return 'Available';
+    } else if (input === Accepted){
+        return 'Accepted';
+    } else if (input === Failed){
+        return 'Failed / Missed';
+    } else if (input >= Cleared){
+        return 'Complete';
+    }
+    return `In Progress`;
+}
+
+export interface SideQuestProgress {
+    known: boolean;
+    name: string;
+    status: string;
+    progress?: string;
+}
+
+export function getSideQuestProgress(region: SideQuestAreas | undefined, id: number, progress: number): SideQuestProgress {
+    const questsToScan: {[key: string]: QuestInfo} = region !== undefined ? sideQuests[region] : {
+        ...sideQuests[Areas.LUXERION],
+        ...sideQuests[Areas.YUSNAAN],
+        ...sideQuests[Areas.WILDLANDS],
+        ...sideQuests[Areas.DEAD_DUNES],
+        'Main Quest 5': SazhMainQuest.Sazh_5_1
+    };
+    const name = Object.entries(questsToScan).find(entry => {
+        const [, info] = entry;
+        return info.sideQuestId === id;
+    })?.[0];
+    const status = resolveProgress(progress);
+    return {
+        known: !!name,
+        name: name ?? 'Unknown',
+        status,
+        progress: status === 'In Progress' ? progress.toString() : undefined 
+    }
+}
+
+export function inflateCanvasBytes(region: SideQuestAreas, bytes: Uint8Array): string[] {
+    const questsToScan = prayers[region];
+    return Object.entries(questsToScan).filter(v => checkByteOffset(v[1], bytes)).map(v => v[0]);
+}
+
+function checkByteOffset(info: QuestInfo, bytes: Uint8Array): boolean {
+    if(info.canvasByteIndex === undefined || info.canvasByteOffset === undefined){
+        return false;
+    }
+    return (bytes[info.canvasByteIndex] & info.canvasByteOffset) !== 0;
 }

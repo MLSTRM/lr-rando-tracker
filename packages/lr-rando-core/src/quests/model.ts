@@ -12,6 +12,10 @@ export interface QuestInfo {
     trigger?: string | NpcAvailable; //narrow to only NpcAvailable struct
     handIn?: string | NpcAvailable;
     failable?: boolean;
+    sideQuestId?: number;
+    sideQuestProgress?: Map<number, string>;
+    canvasByteIndex?: number,
+    canvasByteOffset?: number;
 }
 
 export interface MainQuestLine {

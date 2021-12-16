@@ -1,5 +1,6 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem } from "lr-rando-core";
+import _ from 'lodash';
 
 const reservedKeys = ['time', 'region'];
 
@@ -8,6 +9,7 @@ export class RandoBackend {
     private readerLoaded: boolean = false;
     private oldUnknownEp: string[] = [];
     private unknownRegions: Set<string> = new Set();
+    private stateValid: boolean = false;
 
     private oldState: Partial<RandoMemoryState>;
 
@@ -27,9 +29,15 @@ export class RandoBackend {
                 return undefined;
             }
         }
-        const newState =  scrapeRandoState(this.reader);
-        this.oldState = newState;
-        return this.prettifyState(newState);
+        const newState = scrapeRandoState(this.reader);
+        if(this.checkStateValid(newState)){
+            this.stateValid = true;
+            this.oldState = newState;
+            return this.prettifyState(newState);
+        } else {
+            this.stateValid = false;
+            return undefined;
+        }
     }
 
     public getStateChanges(): Partial<RandoMemoryState> {
@@ -38,17 +46,36 @@ export class RandoBackend {
             return {};
         } else {
             const newState = scrapeRandoState(this.reader);
-            this.removeDuplicatesRecursive(this.oldState, newState);
-            this.oldState = Object.assign(this.oldState, newState);
-            return this.prettifyState(newState);
+            if(this.checkStateValid(newState)){
+                this.stateValid = true;
+                this.removeDuplicatesRecursive(this.oldState, newState);
+                this.oldState =_.merge(this.oldState, newState);
+                return this.prettifyState(newState);
+            } else {
+                this.stateValid = false;
+                return {};
+            }
         }
     }
 
+    checkStateValid(state: RandoMemoryState): boolean {
+        if(state.maxEP > 20){
+            return false;
+        }
+        return true;
+    }
 
     removeDuplicatesRecursive(obj1: any, obj2: any): any {
         for(const key of Object.keys(obj1).filter(k => !reservedKeys.includes(k))){
-            if(Array.isArray(obj1[key]) || Array.isArray(obj2[key]) || obj1[key] instanceof Map || obj2[key] instanceof Map){
+            if(obj1[key] instanceof Map || obj2[key] instanceof Map){
                 continue;
+            } 
+            else if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])){
+                if(obj1[key].length === obj2[key].length){
+                    if(obj1[key].every((v: any) => obj2[key].includes(v)) && obj2[key].every((v: any) => obj1[key].includes(v)) ){
+                        delete obj2[key];
+                    }
+                }
             }
             else if(typeof obj1[key] === "object" && typeof obj2[key] === "object"){
                 this.removeDuplicatesRecursive(obj1[key], obj2[key]);
@@ -104,22 +131,39 @@ export class RandoBackend {
             state.keyItems = new Map([...state.keyItems].map(kv => [prettyPrintKeyItem(kv[0]).name,kv[1]]));
         }
 
+        if(state.canvasOfPrayers){
+            // Only show accepted quests which are not completed
+            const completed = this.oldState.canvasOfPrayers?.completed ?? {};
+            const accepted = this.oldState.canvasOfPrayers?.accepted ?? {};
+            Object.keys(completed).forEach(key => {
+                if(accepted[key]){
+                    accepted[key] = accepted[key]?.filter(i => !completed[key]?.includes(i)) ?? [];
+                }
+            });
+            state.canvasOfPrayers = {
+                completed,
+                accepted
+            };
+        } else {
+            delete state.canvasOfPrayers;
+        }
+
         return state;
     }
 
     public checkItemCount(name: string): number {
-        return this.oldState.items?.get(name) ?? 0;
+        return this.stateValid ? this.oldState.items?.get(name) ?? 0 : 0;
     }
 
     public checkKeyItemCount(name: string): number {
-        return this.oldState.keyItems?.get(name) ?? 0;
+        return this.stateValid ? this.oldState.keyItems?.get(name) ?? 0 : 0;
     }
 
     public checkEPAbility(name: string): boolean {
-        return !!this.oldState.epAbilities?.includes(name);
+        return this.stateValid && !!this.oldState.epAbilities?.includes(name);
     }
 
     public checkMainQuest(main: string): number {
-        return this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0;
+        return this.stateValid ? this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0 : 0;
     }
 }

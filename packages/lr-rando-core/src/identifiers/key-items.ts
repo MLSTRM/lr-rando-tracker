@@ -163,7 +163,7 @@ export const keyItemNameMap = Object.freeze({
     'libra_m897': 'Ectopudding Notes',
     'libra_m898': 'Aster Protoflorian Notes',
     // Rando specific
-    'key_r_kanki': 'Rando Proof of Slaughterhouse Fragment'
+    'key_r_kanki': 'Rando: Slaughterhouse Special'
 });
 
 function isValidKeyItem(name: string): name is KeyItem {

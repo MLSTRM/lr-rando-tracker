@@ -58,7 +58,8 @@ const Sazh_5_1: QuestInfo = {
         "fragment_of_smiles": true
     },
     trigger: "Sazh",
-    handIn: "Sazh"
+    handIn: "Sazh",
+    sideQuestId: 34
 }
 
 export const SazhMainQuest= {
