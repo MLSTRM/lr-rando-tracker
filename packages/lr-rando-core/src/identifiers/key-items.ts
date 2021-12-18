@@ -12,7 +12,7 @@ export const keyItemNameMap = Object.freeze({
     'key_b_04': 'Moogle Dust',
     'key_b_05': 'Old-Fashioned Photo Frame',
     'key_b_06': 'Etro\'s Forbidden Tome',
-    'key_b_07': 'Mystery Egg',
+    'key_b_07': 'Broken Gyroscope',
     'key_b_08': 'Golden Scarab',
     'key_b_09': 'Key to the Sand Gate',
     'key_b_10': 'Key to the Green Gate',
@@ -69,7 +69,7 @@ export const keyItemNameMap = Object.freeze({
     'key_y_id': 'ID Card',
     'key_y_shiji': 'Boss\'s Note',
     'key_y_fire': 'Fireworks',
-    'key_y_serahp': 'Serah\'s Pendant',
+    'key_y_serap': 'Serah\'s Pendant',
     // Yusnaan (side)
     'key_y_bashira': 'Civet Musk',
     'key_y_cream': 'Steak a la Civet',
