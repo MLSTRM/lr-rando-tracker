@@ -356,16 +356,24 @@ function convertCanvasProgressToTable(obj?: {[key: string]: string[]}): string |
 // quest hints as well as libras.
 
 // sort sidequest data and canvas stuff regionally (fill in non-lux canvas data)
-// Check MQ5 hook
 
 /*
 add key item boxes for:
-midnight mauve
-beloved's gift?
-split saints crux
-main greens
-aeronite
+-midnight mauve
+-beloved's gift?
+-main greens
+-locked sphere key
+-musical key
 
+-noel -snow -caiu -para -zalt [boss]
+-gren -gift -LKey -YKey -eres [random]
+-tick -card -note -fire -mauv [yusnaan]
+-crux -tabl -scru -seed -frag [mq4/5 line]
+-------------dajh------------ [mq5 line]
+
+garb autotracking for mauve.
+handed in soul seeds?
+handed in uappraised?
 
 EP ability cost selection
 
