@@ -28,11 +28,11 @@ const canvasOffsetMaybe = 0xC0F0;
 
 const epAbilitiesMaybe = 0x17B50;
 
-const interval = setInterval(() => {
+const interval = setInterval(async () => {
     try {
         if(!reader.isAttached()){
             console.log(`Attaching to process`);
-            reader.tryAttach();
+            await reader.tryAttach();
             if(reader.isAttached()){
                 const pSomeStatsBase = reader.readMemoryAddress(someStatsBaseLocation, DWORD);
                 const headerLocation = pSomeStatsBase + gameHeader;
