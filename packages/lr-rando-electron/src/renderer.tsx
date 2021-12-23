@@ -175,6 +175,7 @@ function beginPoll() {
           healthElem?.classList.remove(inactive);
         }
       }
+      setPropOnElem('#auto-seeds', result.soulSeeds);
       
     } else {
       setPropOnElem('#basicInfoLoading', 'Loading');
@@ -343,6 +344,15 @@ function convertCanvasProgressToTable(obj?: {[key: string]: string[]}): string |
   return arr.map(obj => `<tr><td>${obj}</td></tr>`).join('');
 }
 
+function updateTheme(){
+  const theme = (document.getElementById('theme') as HTMLSelectElement).value;
+  const metaRegion = document.getElementById('pretty_region_meta_1');
+  if(metaRegion){
+    metaRegion.classList.value = '';
+    metaRegion.classList.add('row', theme);
+  }
+}
+
 // Todo:
 // Check if I can have ipc renderer hooks in both directions maybe (seems yes - that will be helpful for settings etc.)
 // Start hooking up quest/npc info sections (done the backing, need to do the UI side)
@@ -362,20 +372,36 @@ add key item boxes for:
 -midnight mauve
 -beloved's gift?
 -main greens
--locked sphere key
--musical key
+-locked sphere key?
+-musical key?
 
 -noel -snow -caiu -para -zalt [boss]
--gren -gift -LKey -YKey -eres [random]
+-soul seeds -loup/unapp -eres [extras]
 -tick -card -note -fire -mauv [yusnaan]
--crux -tabl -scru -seed -frag [mq4/5 line]
+-gren -crux -tabl -scru -frag [mq3/4/5 line]
 -------------dajh------------ [mq5 line]
 
 garb autotracking for mauve.
 handed in soul seeds?
 handed in uappraised?
 
+allow for persistence, save state to file, push state back from UI to backend for non-auto use
+
 EP ability cost selection
 
 hint tracking (i.e. click up/down per location, give total and obtained - all manual probably)
+
+pane selection (rather than pop in/out)
+-tracker grid (large)
+-inventory panes
+-side quest lookup
+-canvas lookup
+-npc lookup
+
+pane ordering
+
+visual customisation (basic themes for now)
+-need to auto invert images, probably pick a default colour set and use filters.
+
+condensed layout for stream purposes probably
 */

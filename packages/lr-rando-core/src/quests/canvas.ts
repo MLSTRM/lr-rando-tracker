@@ -864,7 +864,8 @@ export const prayers = {
                 "lapis_lazuli": 1
             },
             prerequisiteQuests: [
-                "A Man for a Chocobo"
+                "A Man for a Chocobo",
+                "Yus_2_3"
             ],
             canvasByteIndex: 1,
             canvasByteOffset: 0x04

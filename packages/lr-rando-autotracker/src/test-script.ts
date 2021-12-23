@@ -8,8 +8,8 @@ const reader = new LrMemoryReader(false);
 const showItems = false;
 const showSchemaInfo = false;
 const showEpAbilitiesEtc = false;
-const showSideQuests = true;
-const showCanvasQuests = true;
+const showSideQuests = false;
+const showCanvasQuests = false;
 const loop = false;
 
 //Info
@@ -64,11 +64,12 @@ const interval = setInterval(() => {
             console.log(`Wildlands main quest progress: ${reader.readMemoryAddress(pSomeStatsBase + gameHeader+0x50+0x94, SHORT, true)}`);
             console.log(`Wildlands main quest second marker: ${reader.readMemoryAddress(pSomeStatsBase + gameHeader+0x50+0x8c, SHORT, true)}`);
             console.log(`Dead dunes main quest progress: ${reader.readMemoryAddress(pSomeStatsBase + gameHeader+0x50+0xA0, SHORT, true)}`);
+            console.log(`Soul seeds: ${reader.readMemoryAddress(pSomeStatsBase + gameHeader+0x50+(57*8)+6, BYTE, true)}`);
 
             const pItems = reader.readMemoryAddress(pSomeStatsBase + recoveryItemOffset+0x294, DWORD, true);
-            console.log(`item pointer: ${pItems}`);
+            console.log(`item pointer: ${pItems.toString(16)}`);
             const pKeyItems = reader.readMemoryAddress(pSomeStatsBase + recoveryItemOffset+0x174, DWORD, true);
-            console.log(`key item pointer: ${pKeyItems}`);
+            console.log(`key item pointer: ${pKeyItems.toString(16)}`);
 
 
             if(showEpAbilitiesEtc){

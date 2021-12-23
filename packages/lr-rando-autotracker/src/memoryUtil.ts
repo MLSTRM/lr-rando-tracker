@@ -90,7 +90,8 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
         canvasOfPrayers: {
             accepted: extractCanvasInfo(reader, pSomeStatsBase + canvasOffsetMaybe),
             completed: extractCanvasInfo(reader, pSomeStatsBase + canvasOffsetMaybe + 0x40),
-        }
+        },
+        soulSeeds: reader.readMemoryAddress(pSomeStatsBase + gameHeader+0x50+(57*8)+6, BYTE, true)
     }
 }
 

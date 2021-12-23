@@ -27,5 +27,6 @@ export interface RandoMemoryState {
     canvasOfPrayers: {
         accepted: {[key: string]: string[]},
         completed: {[key: string]: string[]}
-    }
+    };
+    soulSeeds: number;
 }
