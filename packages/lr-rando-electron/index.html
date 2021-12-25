@@ -37,6 +37,11 @@
       width: 100px;
     }
 
+    .column30 {
+      float: left;
+      width: 150px;
+    }
+
     .column40 {
       float: left;
       width: 200px;
@@ -461,6 +466,31 @@
           <div class="column40 columnHalf" id="canvas-completed">
             <table id="base_canvas_done">
             </table>
+          </div>
+        </div>
+      </div>
+      <div id="canvasLookup" class="flexRegion">
+        <div class="row column60">
+          Canvas of Prayers
+          <br/>
+          <div class="column30 columnTall">
+            Region: <select name="canvasRegion" id="canvasRegion" onchange="updateCanvasRegion()">
+              <option value="-1">All</option>
+              <option value="0">Luxerion</option>
+              <option value="1">Yusnaan</option>
+              <option value="2">Wildlands</option>
+              <option value="3">Dead Dunes</option>
+              <option value="4">Global</option>
+            </select>
+            <br/>
+            <table id="canvasLookupList">
+            </table>
+          </div>
+          <div class="column30">
+            Selected:
+            <div id="canvasLookupSelected">
+              
+            </div>
           </div>
         </div>
       </div>

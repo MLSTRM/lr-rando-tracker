@@ -83,3 +83,11 @@ ipcMain.handle('randoEPCheck', async (event, ability) => {
 ipcMain.handle('randoMainQuestCheck', async (event, main) => {
   return backend.checkMainQuest(main);
 });
+
+ipcMain.handle('canvasList', async (event, area) => {
+  return backend.getCanvasList(area);
+});
+
+ipcMain.handle('canvasNamedInfo', async (event, name) => {
+  return backend.getCanvasInfoByName(name);
+})

@@ -1,5 +1,5 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
-import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem } from "lr-rando-core";
+import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem, getCanvasNamesList, getCanvasQuestInfo } from "lr-rando-core";
 import _ from 'lodash';
 
 const reservedKeys = ['time', 'region'];
@@ -165,5 +165,13 @@ export class RandoBackend {
 
     public checkMainQuest(main: string): number {
         return this.stateValid ? this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0 : 0;
+    }
+
+    public getCanvasList(area?: number): string[] {
+        return getCanvasNamesList(area);
+    }
+
+    public getCanvasInfoByName(name: string): any {
+        return getCanvasQuestInfo(name);
     }
 }

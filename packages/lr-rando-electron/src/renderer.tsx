@@ -19,6 +19,8 @@ window.onload = () => {
   setupClickToggle();
   setupClickRange();
   hideAutotrackerElements();
+  updateTheme();
+  updateCanvasRegion();
 }
 
 function setupClickToggle() {
@@ -351,6 +353,23 @@ function updateTheme(){
     metaRegion.classList.value = '';
     metaRegion.classList.add('row', theme);
   }
+}
+
+async function updateCanvasRegion(){
+  const area = (document.getElementById('canvasRegion') as HTMLSelectElement).value;
+  const names = await ipcRenderer.invoke('canvasList', area);
+  const tableOut = names.map((name: string) => `<tr><td onclick="getCanvasQuestInfo(this)">${name}</td><td>N</td></tr>`).join('');
+  setPropOnElem('#canvasLookupList', tableOut);
+}
+
+async function getCanvasQuestInfo(el: HTMLElement){
+  const info = await ipcRenderer.invoke('canvasNamedInfo', el.textContent);
+  //TODO:
+  //extract pre-requisites
+  //extract requirements
+  //hook into inventory to check possibility
+  //add in status (accepted / completed)
+  setPropOnElem('#canvasLookupSelected', JSON.stringify(info));
 }
 
 // Todo:

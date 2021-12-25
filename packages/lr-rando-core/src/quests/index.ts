@@ -221,3 +221,28 @@ function checkByteOffset(info: QuestInfo, bytes: Uint8Array): boolean {
     }
     return (bytes[info.canvasByteIndex] & info.canvasByteOffset) !== 0;
 }
+
+export function getCanvasNamesList(region?: number): string[] {
+    const area = numberToSideQuestArea(region);
+    if(area){
+        return Object.keys(prayers[area]);
+    }
+    return Object.values(prayers).flatMap(o => Object.keys(o));
+}
+
+function numberToSideQuestArea(area?: number): SideQuestAreas | undefined {
+    if(!area || area>4 || area<0){
+        return undefined;
+    }
+    return area;
+}
+
+export function getCanvasQuestInfo(name: string): QuestInfo | undefined {
+    for(const area of Object.values(prayers)){
+        if(name in area){
+            //@ts-ignore
+            return area[name];
+        }
+    }
+    return undefined;
+}
