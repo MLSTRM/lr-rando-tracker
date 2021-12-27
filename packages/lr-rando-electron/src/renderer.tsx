@@ -19,7 +19,8 @@ window.onload = () => {
   setupClickToggle();
   setupClickRange();
   hideAutotrackerElements();
-  updateTheme();
+  updateTheme(true);
+  updateColumnWidth(true);
   updateCanvasRegion();
 }
 
@@ -346,13 +347,24 @@ function convertCanvasProgressToTable(obj?: {[key: string]: string[]}): string |
   return arr.map(obj => `<tr><td>${obj}</td></tr>`).join('');
 }
 
-function updateTheme(){
-  const theme = (document.getElementById('theme') as HTMLSelectElement).value;
+function updateTheme(initial?: boolean){
+  const themeElement = document.getElementById('theme') as HTMLSelectElement;
+  const theme = (initial ? localStorage.getItem('display-theme') : undefined) ?? themeElement.value;
+  themeElement.value = theme;
+  localStorage.setItem('display-theme', theme);
   const metaRegion = document.getElementById('pretty_region_meta_1');
   if(metaRegion){
     metaRegion.classList.value = '';
-    metaRegion.classList.add('row', theme);
+    metaRegion.classList.add('row', 'column100', theme);
   }
+}
+
+function updateColumnWidth(initial?: boolean){
+  const widthElement = document.getElementById('columnWidth') as HTMLSelectElement;
+  const width = (initial ? localStorage.getItem('display-columnWidth') : undefined) ?? widthElement.value;
+  widthElement.value = width;
+  localStorage.setItem('display-columnWidth', width);
+  document.documentElement.style.setProperty('--column-width', `${width}px`);
 }
 
 async function updateCanvasRegion(){

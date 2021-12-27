@@ -32,34 +32,38 @@
       clear: both;
     }
 
+    :root {
+      --column-width: 100px;
+    }
+
     .column20 > img.top {
       float: left;
-      width: 100px;
+      width: var(--column-width);
     }
 
     .column30 {
       float: left;
-      width: 150px;
+      width: calc(var(--column-width)*1.5);
     }
 
     .column40 {
       float: left;
-      width: 200px;
+      width: calc(var(--column-width)*2);
     }
 
     .column60 {
       float: left;
-      width: 300px;
+      width: calc(var(--column-width)*3);
     }
 
     .column80 {
       float: left;
-      width: 400px;
+      width: calc(var(--column-width)*4);
     }
 
     .column100 {
       float: left;
-      width: 500px;
+      width: calc(var(--column-width)*5);
       min-height: 40px;
     }
 
@@ -104,10 +108,26 @@
       line-height: 50px;
     }
 
-    .cell20s span img {
+    .cell20  img.boss {
+      object-position: center;
+      align-self: center;
+      overflow: hidden;
+      height: 50px;
+      --width-trim: calc((100px - var(--column-width)) / 2);
+      margin-left: calc(-1 * var(--width-trim));
+      clip-path: polygon(calc(var(--width-trim)) 0%, calc(100px - var(--width-trim)) 0%, calc(100px - var(--width-trim)) 100%, calc(var(--width-trim)) 100%)
+    }
+
+    .cell20s img.icon {
       vertical-align: middle;
-      height: "30";
-      width: "30";
+      height: 30px;
+      width: 30px;
+    }
+
+    .cell20s img.iconmono {
+      vertical-align: middle;
+      height: 30px;
+      width: 30px;
     }
 
     .row.checkerboard .cell20:nth-of-type(odd) div:nth-of-type(odd),
@@ -138,12 +158,18 @@
       color: #ffffff;
     }
 
+    .row.checkerboard .cell20:nth-of-type(odd) div:nth-of-type(odd) img.iconmono,
+    .row.checkerboard .cell20:nth-of-type(even) div:nth-of-type(even) img.iconmono,
+    .row.light .cell20 img.iconmono{
+      filter:invert(1);
+    }
+
     .inactive {
       /*opacity: 10%;*/
       filter: grayscale(100%);
     }
 
-    .inactive > img {
+    .inactive img {
       opacity: 50%;
     }
 
@@ -200,8 +226,8 @@
     }
 
     .columnGrid {
-      min-width: 500px;
-      max-width: 500px;
+      min-width: calc(var(--column-width)*5);
+      max-width: calc(var(--column-width)*5);
     }
 
     .mainFlex {
@@ -229,6 +255,7 @@
 
     .mainFlex .flexRegion {
       max-height: 550px;
+      min-width: 30px;
     }
 
     .centreSpan {
@@ -250,6 +277,10 @@
       <option value="dark">Dark</option>
       <option value="light">Light</option>
     </select>
+    <select name="columnWidth" id="columnWidth" onchange="updateColumnWidth()">
+      <option value=100>Wide (default)</option>
+      <option value=65>Narrow</option>
+    </select>
   </div>
   <br/>
   <div class="mainHolder" style="width: 100%;">
@@ -264,7 +295,7 @@
             <img src="resources/images/icon-garb.png" alt="Active Garb: " height="40" width="40" /><span id="auto-schema" class="centreSpan"></span>
           </div>
         </div>
-        <div class="row checkerboard" id="pretty_region_meta_1">
+        <div class="row column100 checkerboard" id="pretty_region_meta_1">
           <div class="cell20">
             <div class="clickRange" data-min="0" data-max="14" data-threshold="-1">
               <!-- Only day if not auto tracking -->
@@ -285,146 +316,147 @@
           </div>
           <div class="cell20 cell20s">
             <div class="clickToggle" data-epkey="ti900_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:"/><img src="resources/images/icon-rising.png" alt="Overclock" title="Overclock" /></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-rising.png" alt="Overclock" title="Overclock" class="iconmono"/></span>
             </div>
             <div class="clickToggle" data-epkey="ti000_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" style="filter:invert(1)"/><img src="resources/images/icon-heal.png" alt="Curaga" title="Curaga" style="filter:invert(1)" /></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-heal.png" alt="Curaga" title="Curaga" class="iconmono" /></span>
             </div>
             <div class="clickToggle" data-epkey="ti020_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:"/><img src="resources/images/icon-phoenix.png" alt="Arise" title="Arise" /></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-phoenix.png" alt="Arise" title="Arise" class="iconmono" /></span>
             </div>
             <div class="clickToggle" data-epkey="ti030_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" style="filter:invert(1)"/><img src="resources/images/icon-debuff.png" alt="Esunada" title="Esunada" style="filter:invert(1)"/></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-debuff.png" alt="Esunada" title="Esunada" class="iconmono"/></span>
             </div>
             <div class="clickToggle" data-epkey="ti600_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:"/><img src="resources/images/icon-shield.png" alt="Decoy" title="Decoy" /></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-shield.png" alt="Decoy" title="Decoy" class="iconmono"/></span>
             </div>
           </div>
           <div class="cell20 cell20s">
             <div class="clickToggle" data-epkey="ti500_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" style="filter:invert(1)"/><img src="resources/images/icon-earth.png" alt="Quake" title="Quake" style="filter:invert(1)"/></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-earth.png" alt="Quake" title="Quake" class="iconmono"/></span>
             </div>
             <div class="clickToggle" data-epkey="at900_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:"/><img src="resources/images/icon-weapon.png" alt="Army of One" title="Army of One" /></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-weapon.png" alt="Army of One" title="Army of One" class="iconmono"/></span>
             </div>
             <div class="clickToggle" data-epkey="ti830_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" style="filter:invert(1)"/><img src="resources/images/icon-run.png" alt="Escape" title="Escape" style="filter:invert(1)"/></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-run.png" alt="Escape" title="Escape" class="iconmono"/></span>
             </div>
             <div class="clickToggle" data-epkey="ti840_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:"/><img src="resources/images/icon-clock.png" alt="Chronostasis" title="Chronostasis" /></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-clock.png" alt="Chronostasis" title="Chronostasis" class="iconmono"/></span>
             </div>
             <div class="clickToggle" data-epkey="ti810_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" style="filter:invert(1)"/><img src="resources/images/icon-map.png" alt="Teleport" title="Teleport" style="filter:invert(1)"/></span>
+              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-map.png" alt="Teleport" title="Teleport" class="iconmono"/></span>
             </div>
           </div>
           <div class="cell20">
             <div class="centerImage clickRange" data-min="0" data-max="5" data-threshold="4" data-mainquest="luxerion">
-              <img src="resources/images/Luxerion-lrffxiii-icon.png"  class="top" alt="Main quest 1" height="40" width="40" /><br/>1-<span class="value">0</span>
+              <img src="resources/images/Luxerion-lrffxiii-icon.png" class="top" alt="Main quest 1" height="40" width="40" /><br/>1-<span class="value">0</span>
             </div>
             <div class="centerImage clickRange" data-min="0" data-max="3" data-threshold="2" data-mainquest="yusnaan">
-              <img src="resources/images/Yusnaan-lrffxiii-icon.png"  class="top" alt="Main quest 2" height="40" width="40"/><br/>2-<span class="value">0</span>
+              <img src="resources/images/Yusnaan-lrffxiii-icon.png" class="top" alt="Main quest 2" height="40" width="40"/><br/>2-<span class="value">0</span>
             </div>
             <div class="centerImage clickRange" data-min="0" data-max="3" data-threshold="2" data-mainquest="wildlands">
-              <img src="resources/images/Wildlands-lrffxiii-icon.png"  class="top" alt="Main quest 3" height="40" width="40" /><br/>3-<span class="value">0</span>
+              <img src="resources/images/Wildlands-lrffxiii-icon.png" class="top" alt="Main quest 3" height="40" width="40" /><br/>3-<span class="value">0</span>
             </div>
             <div class="centerImage clickRange" data-min="0" data-max="5" data-threshold="4" data-mainquest="deaddunes">
-              <img src="resources/images/DeadDunes-lrffxiii-icon.png"  class="top" alt="Main quest 4" height="40" width="40" /><br/>4-<span class="value">0</span>
+              <img src="resources/images/DeadDunes-lrffxiii-icon.png" class="top" alt="Main quest 4" height="40" width="40" /><br/>4-<span class="value">0</span>
             </div>
             <div class="centerImage clickRange" data-min="0" data-max="1" data-threshold="0" data-mainquest="sazh">
-              <img src="resources/images/Wildlands-lrffxiii-icon.png"  class="top" alt="Main quest 5" height="40" width="40" /><br/>5-<span class="value">0</span>
+              <img src="resources/images/Wildlands-lrffxiii-icon.png" class="top" alt="Main quest 5" height="40" width="40" /><br/>5-<span class="value">0</span>
             </div>
           </div>
           <div class="cell20 cell20s">
             <div class="clickToggle">
-              <img src="resources/images/boss-noel.png" alt="Noel Kreiss" width="100"/>
+              <img src="resources/images/boss-noel.png" alt="Noel Kreiss" width="100" class="boss"/>
             </div>
             <div class="clickToggle">
-              <img src="resources/images/boss-snow.png" alt="Snow Villiers" width="100"/>
+              <img src="resources/images/boss-snow.png" alt="Snow Villiers" width="100" class="boss"/>
             </div>
             <div class="clickToggle">
-              <img src="resources/images/boss-caius.png" alt="Caius Ballad" width="100"/>
+              <img src="resources/images/boss-caius.png" alt="Caius Ballad" width="100" class="boss"/>
             </div>
             <div class="clickToggle">
-              <img src="resources/images/boss-gren.png" alt="Grendel" width="100" />
+              <img src="resources/images/boss-gren.png" alt="Grendel" width="100" class="boss"/>
             </div>
             <div class="clickToggle">
-              <img src="resources/images/boss-zaltys.png" alt="Zaltys" width="100" />
+              <img src="resources/images/boss-zaltys.png" alt="Zaltys" width="100" class="boss" />
             </div>
           </div>
 
           <div class="cell20 cell20s">
             <div class="clickToggle" data-key="key_soulcd">
-              <span>Seed card</span>
+              <img src="resources/images/seedcard.jpg" alt="Seedhunter Membership Card" title="Seedhunter Membership Card" class="iconmono"/>
             </div>
             <div class="clickRange" data-min="0" data-max="100" data-threshold="0" id="seed-parent">
-              <span><img src="resources/images/icon-item.png" alt="Seeds:"><span id="auto-seeds" class="value">0</span>
+              <img src="resources/images/icon-item.png" alt="Seeds:" class="iconmono"><span id="auto-seeds" class="value">0</span>
             </div>
             <div class="clickToggle" data-key="key_kyu_pass">
-              <span>Loupe</span>
+              <img src="resources/images/icon-loupe.jpg" alt="Loupe" title="Loupe" class="iconmono"/>
             </div>
             <div class="clickRange" data-min="0" data-max="50" data-threshold="0" id="appraised-parent">
-              <span><img src="resources/images/icon-unappraised.png" alt="Unapp:"><span id="auto-unappraised" class="value">0</span></span>
+              <img src="resources/images/icon-unappraised.png" alt="Unapp:" class="iconmono"><span id="auto-unappraised" class="value">0</span>
             </div>
             <div class="centerImage clickToggle">
-              <img src="resources/images/boss-eres.png" alt="Ereshkigal" width="100" />
+              <img src="resources/images/boss-eres.png" alt="Ereshkigal" width="100" class="boss"/>
             </div>
           </div>
 
           <div class="cell20 cell20s">
             <div class="clickToggle" data-key="key_y_ticket">
-              <img src="resources/images/ticket.png" alt="Ticket" style="vertical-align: middle;" height="30" width="30" />Ticket
+              <img src="resources/images/ticket.png" alt="Ticket" title="Sneaking in special ticket" class="iconmono" />
             </div>
             <div class="clickToggle" data-key="key_y_id">
-              <img src="resources/images/idcard.png" alt="ID Card" style="vertical-align: middle;" height="30" width="30" />ID
+              <img src="resources/images/idcard.png" alt="ID Card" title="ID Card" class="iconmono" />
             </div>
             <div class="clickToggle" data-key="key_y_shiji">
-              <img src="resources/images/note.png" alt="Boss's Note" style="vertical-align: middle; filter:invert(1)" height="30" width="30" />Note
+              <img src="resources/images/note.png" alt="Boss's Note" title="Boss's Note" class="iconmono"/>
             </div>
             <div class="clickRange" data-min="0" data-max="10" data-key="key_y_fire">
-              <img src="resources/images/firework.png" alt="Fireworks" style="vertical-align: middle;" height="30" width="30" /> <span class="value">0</span>
+              <img src="resources/images/firework.png" alt="Fireworks" title="Fireworks" class="iconmono"/> <span class="value">0</span>
             </div>
             <div class="centerImage clickToggle" data-garb="Midnight Mauve">
-              <img src="resources/images/icon-garb.png" alt="Midnight Mauve" width="40" />
+              <img src="resources/images/icon-garb.png" alt="Midnight Mauve" title="Midnight Mauve" class="iconmono"/>
             </div>
           </div>
 
           <div class="cell20 cell20s">
             <div class="clickToggle" data-key="key_w_yasai_t">
-              <span><img src="resources/images/icon-greens.png" alt="Main Greens" /></span>
+              <img src="resources/images/icon-greens.png" alt="Main Greens" class="iconmono" />
             </div>
             <div class="clickRange" data-min="0" data-key="key_d_key">
-              <span><img src="resources/images/pilgrims-crux.png" alt="Pilgrim's Crux:" height="35"> <span class="value">0</span></span>
+              <img src="resources/images/pilgrims-crux.png" alt="Pilgrim's Crux:" class="icon" style="height: 35px"> <span class="value">0</span>
             </div>
             <div class="clickRange" data-min="0" data-max="3" data-key="key_d_sekiban" data-oneway="true">
-              <span><img src="resources/images/tablet.png" alt="Tablet:" width="30" height="30"/><span class="value">0</span></span>
+              <img src="resources/images/tablet.png" alt="Tablet:" class="icon"/> <span class="value">0</span>
             </div>
             <div class="clickRange" data-min="0" data-max="3" data-key="key_d_wing,key_d_top,key_d_base" data-oneway="true">
-              <span>SCrux <span class="value">0</span></span>
+              <img src="resources/images/saints-crux.png" alt="Saint's Crux" title="Saint's Crux Pieces" class="icon" style="height: 35px"/> <span class="value">0</span>
             </div>
             <div class="clickToggle" data-key="key_w_mogsoul" data-oneway="true">
-              <span>Mog Frag</span>
+              <img src="resources/images/icon-moogle.jpg" class="iconmono" title="Moogle Fragment"/>
             </div>
           </div>
 
           <div class="cell20 cell20s">
             <div class="column20 clickToggle" data-key="key_s_zyouai" data-oneway="true">
-              <span>Smiles</span>
+              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Smiles"/>S</span>
             </div>
             <div class="column20 clickToggle" data-key="key_s_hiai" data-oneway="true">
-              <span>Radiance</span>
+              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Radiance"/>R</span>
             </div>   
             <div class="column20 clickToggle" data-key="key_s_kairaku" data-oneway="true">
-              <span>Mischief</span>
+              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Mischief"/>M</span>
             </div>
             <div class="column20 clickToggle" data-key="key_s_kanki" data-oneway="true">
-              <span>Courage</span>
+              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Courage"/>C</span>
             </div>
             <div class="column20 clickToggle" data-key="key_s_hunnu" data-oneway="true">
-              <span>Kindness</span>
+              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Kindness"/>K</span>
             </div>
           </div>
         </div>
       </div>
+      <div id="spacer" class="flexRegion">&nbsp;</div>
       <div id="keyInventory" class="autoTracker flexRegion">
         <div class="row">
           Key Items:
