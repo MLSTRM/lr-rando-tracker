@@ -172,7 +172,7 @@ function beginPoll() {
       if(result.odinHealth){
         const {level, next} = getOdinLevels(result.odinHealth);
         setPropOnElem('#auto-odin-level', level);
-        setPropOnElem('#auto-odin-next', !!next ? `/ ${next}` : '');
+        setPropOnElem('#auto-odin-next', !!next ? `/${next}` : '');
         if(level > 0){
           const healthElem = document.getElementById('odin-parent');
           healthElem?.classList.remove(inactive);
