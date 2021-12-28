@@ -50,21 +50,25 @@
     .column40 {
       float: left;
       width: calc(var(--column-width)*2);
+      min-width: calc(var(--column-width)*2);
     }
 
     .column60 {
       float: left;
       width: calc(var(--column-width)*3);
+      min-width: calc(var(--column-width)*3);
     }
 
     .column80 {
       float: left;
       width: calc(var(--column-width)*4);
+      min-width: calc(var(--column-width)*4);
     }
 
     .column100 {
       float: left;
       width: calc(var(--column-width)*5);
+      min-width: calc(var(--column-width)*5);
       min-height: 40px;
     }
 
@@ -262,7 +266,10 @@
 
     .mainFlex .flexRegion {
       max-height: 550px;
-      min-width: 30px;
+    }
+
+    .mainFlex .spacer {
+      min-width: 10px;
     }
 
     .centreSpan {
@@ -464,10 +471,11 @@
           </div>
         </div>
       </div>
-      <div id="spacer" class="flexRegion">&nbsp;</div>
+      <div id="spacer" class="flexRegion spacer">&nbsp;</div>
       <div id="keyInventory" class="autoTracker flexRegion">
-        <div class="row">
+        <div class="row column40">
           Key Items:
+          <br/>
           <div class="column40 columnTall" id="keyItems">
             <table id="basic_keyItems">
             </table>
@@ -475,62 +483,65 @@
         </div>
       </div>
       <div id="inventory" class="autoTracker flexRegion">
-        <div class="row">
+        <div class="row column40">
           Items: 
+          <br/>
           <div class="column40 columnTall" id="items">
             <table id="basic_items">
             </table>
           </div>
         </div>
       </div>
-      <div id="sideQuests" class="autoTracker flexRegion">
-        <div class="row">
+      <div id="spacer" class="flexRegion spacer">&nbsp;</div>
+
+      <div id="sideQuests" class="flexRegion">
+        <div class="row column40">
           Side quests:
+          <br/>
+          Region: <select name="sideQuestRegion" id="sideQuestRegion" onchange="updateSideQuestRegion()">
+            <option value="-1">All</option>
+            <option value="0">Luxerion</option>
+            <option value="1">Yusnaan</option>
+            <option value="2">Wildlands</option>
+            <option value="3">Dead Dunes</option>
+          </select>
+          <br/>
           <div class="column40 columnTall" id="side-quests">
             <table id="base_side_quests">
             </table>
           </div>
         </div>
       </div>
-      <div id="canvas" class="autoTracker flexRegion">
-        <div class="row">
-          Canvas of Prayers:
-          <br />
-          Accepted:
-          <div class="column40 columnHalf" id="canvas-accepted">
-            <table id="base_canvas_acc">
-            </table>
-          </div>
-          <br/>
-          Completed:
-          <div class="column40 columnHalf" id="canvas-completed">
-            <table id="base_canvas_done">
-            </table>
-          </div>
-        </div>
-      </div>
+      <div id="spacer" class="flexRegion spacer">&nbsp;</div>
       <div id="canvasLookup" class="flexRegion">
-        <div class="row column60">
+        <div class="row column100">
           Canvas of Prayers
           <br/>
-          <div class="column30 columnTall">
-            Region: <select name="canvasRegion" id="canvasRegion" onchange="updateCanvasRegion()">
-              <option value="-1">All</option>
-              <option value="0">Luxerion</option>
-              <option value="1">Yusnaan</option>
-              <option value="2">Wildlands</option>
-              <option value="3">Dead Dunes</option>
-              <option value="4">Global</option>
-            </select>
-            <br/>
+          Region: <select name="canvasRegion" id="canvasRegion" onchange="updateCanvasRegion()">
+            <option value="-1">All</option>
+            <option value="0">Luxerion</option>
+            <option value="1">Yusnaan</option>
+            <option value="2">Wildlands</option>
+            <option value="3">Dead Dunes</option>
+            <option value="4">Global</option>
+          </select>
+          <br/>
+          <div class="column40 columnTall">
             <table id="canvasLookupList">
             </table>
           </div>
-          <div class="column30">
-            Selected:
-            <div id="canvasLookupSelected">
-              
-            </div>
+          <div class="column60">
+            Selected: <span id="canvasLookupSelectedName"></span>
+            <br/>
+            Status: <span id="canvasLookupSelectedStatus"></span>
+            <br/>
+            Prerequisites:
+            <ul id="canvasLookupSelectedPrerequisites"></ul>
+            <br/>
+            Requirements:
+            <table id="canvasLookupSelectedRequirements" style="width: inherit;"></table>
+            <br/>
+            <!-- <div id="canvasLookupSelected"></div> -->
           </div>
         </div>
       </div>

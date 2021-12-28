@@ -21,7 +21,7 @@ const sideQuests = {
     [Areas.WILDLANDS]: WildlandsSideQuests,
     [Areas.DEAD_DUNES]: DeadDunesSideQuests,
     [Areas.GLOBAL]: {"Main Quest 5": SazhMainQuest.Sazh_5_1}
-}
+} as {[key: number]: any};
 
 type CanvasLuxNames = keyof typeof prayers[Areas.LUXERION];
 type CanvasYusNames = keyof typeof prayers[Areas.YUSNAAN];
@@ -220,6 +220,14 @@ function checkByteOffset(info: QuestInfo, bytes: Uint8Array): boolean {
         return false;
     }
     return (bytes[info.canvasByteIndex] & info.canvasByteOffset) !== 0;
+}
+
+export function getSideQuestNamesList(region?: number): string[] {
+    const area = numberToSideQuestArea(region);
+    if(area){
+        return Object.keys(sideQuests[area]);
+    }
+    return [0,1,2,3].map(v => sideQuests[v]).flatMap(o => Object.keys(o));
 }
 
 export function getCanvasNamesList(region?: number): string[] {

@@ -23,10 +23,10 @@ export interface RandoMemoryState {
     keyItems: Map<string, number>;
     items: Map<string, number>;
     mainQuestProgress: MainQuestPosition;
-    sideQuestProgress: {[key: string]: SideQuestProgress[]};
+    sideQuestProgress: {[key: number]: SideQuestProgress[]};
     canvasOfPrayers: {
-        accepted: {[key: string]: string[]},
-        completed: {[key: string]: string[]}
+        accepted: {[key: number]: string[]},
+        completed: {[key: number]: string[]}
     };
     soulSeeds: number;
 }

@@ -9,8 +9,8 @@ function createWindow() {
     minHeight: 670,
     width: 950,
     height: 730,
-    maxWidth: 1400,
-    maxHeight: 800,
+    maxWidth: 1920,
+    maxHeight: 1080,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -82,6 +82,10 @@ ipcMain.handle('randoEPCheck', async (event, ability) => {
 
 ipcMain.handle('randoMainQuestCheck', async (event, main) => {
   return backend.checkMainQuest(main);
+});
+
+ipcMain.handle('sideQuestList', async (event, area) => {
+  return backend.getSideQuestList(area);
 });
 
 ipcMain.handle('canvasList', async (event, area) => {

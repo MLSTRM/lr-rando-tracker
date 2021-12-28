@@ -95,26 +95,26 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
     }
 }
 
-function extractCanvasInfo(reader: LrMemoryReader, base: number): {[key: string]: string[]} {
+function extractCanvasInfo(reader: LrMemoryReader, base: number): {[key: number]: string[]} {
     const canvasAcceptBuffer = reader.readBuffer(base, 40, true);
     const canvasAcceptArr = Uint8Array.from(canvasAcceptBuffer);
     return {
-        'Luxerion': inflateCanvasBytes(Areas.LUXERION, canvasAcceptArr.slice(0,3)),
-        'Yusnaan': inflateCanvasBytes(Areas.YUSNAAN, canvasAcceptArr.slice(6,10)),
-        'Wildlands': inflateCanvasBytes(Areas.WILDLANDS, canvasAcceptArr.slice(12,16)),
-        'Dead dunes':inflateCanvasBytes(Areas.DEAD_DUNES, canvasAcceptArr.slice(18,23)),
-        'Global': inflateCanvasBytes(Areas.GLOBAL, canvasAcceptArr.slice(37,40))
+        0: inflateCanvasBytes(Areas.LUXERION, canvasAcceptArr.slice(0,3)),
+        1: inflateCanvasBytes(Areas.YUSNAAN, canvasAcceptArr.slice(6,10)),
+        3: inflateCanvasBytes(Areas.WILDLANDS, canvasAcceptArr.slice(12,16)),
+        2: inflateCanvasBytes(Areas.DEAD_DUNES, canvasAcceptArr.slice(18,23)),
+        4: inflateCanvasBytes(Areas.GLOBAL, canvasAcceptArr.slice(37,40))
     }
 }
 
-function extractSideQuestProgress(reader: LrMemoryReader, base: number): {[key: string]: SideQuestProgress[]} {
+function extractSideQuestProgress(reader: LrMemoryReader, base: number): {[key: number]: SideQuestProgress[]} {
     const maxMainQuests = 99;
     const mainQuest5 = 34;
-    const progress: {[key: string]: SideQuestProgress[]} = {
-        'Luxerion': [],
-        'Yusnaan': [],
-        'Wildlands': [],
-        'Dead dunes': []
+    const progress: {[key: number]: SideQuestProgress[]} = {
+        0: [],
+        1: [],
+        3: [],
+        2: []
     };
     for(var i = 0; i <= maxMainQuests; i++){
         if(i===mainQuest5){
@@ -124,22 +124,22 @@ function extractSideQuestProgress(reader: LrMemoryReader, base: number): {[key: 
         if(questProgress > 0){
             let resolvedProgress = getSideQuestProgress(Areas.LUXERION, i, questProgress);
             if(resolvedProgress.known){
-                progress['Luxerion'].push(resolvedProgress);
+                progress[0].push(resolvedProgress);
                 continue;
             }
             resolvedProgress = getSideQuestProgress(Areas.YUSNAAN, i, questProgress);
             if(resolvedProgress.known){
-                progress['Yusnaan'].push(resolvedProgress);
+                progress[1].push(resolvedProgress);
                 continue;
             }
             resolvedProgress = getSideQuestProgress(Areas.WILDLANDS, i, questProgress);
             if(resolvedProgress.known){
-                progress['Wildlands'].push(resolvedProgress);
+                progress[3].push(resolvedProgress);
                 continue;
             }
             resolvedProgress = getSideQuestProgress(Areas.DEAD_DUNES, i, questProgress);
             if(resolvedProgress.known){
-                progress['Dead dunes'].push(resolvedProgress);
+                progress[2].push(resolvedProgress);
                 continue;
             }
         }

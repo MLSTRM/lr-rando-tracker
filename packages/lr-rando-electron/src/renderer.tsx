@@ -8,6 +8,7 @@
 import { ipcRenderer } from "electron";
 import type { RandoMemoryState } from "lr-rando-autotracker";
 import type { SideQuestProgress } from "lr-rando-core";
+import type { QuestInfo } from "lr-rando-core/build/quests/model";
 
 let pollInterval: NodeJS.Timer;
 
@@ -22,6 +23,7 @@ window.onload = () => {
   updateTheme(true);
   updateColumnWidth(true);
   updateCanvasRegion();
+  updateSideQuestRegion();
 }
 
 function setupClickToggle() {
@@ -150,13 +152,13 @@ function beginPoll() {
       setPropOnElem('#basic_items', convertMapToTable(result.items));
       setPropOnElem('#basic_odin', result.odinHealth);
 
-      if(result.sideQuestProgress){
-        setPropOnElem('#base_side_quests', convertSideQuestProgressToTable(result.sideQuestProgress));
-      }
-      if(result.canvasOfPrayers){
-        setPropOnElem('#base_canvas_acc', convertCanvasProgressToTable(result.canvasOfPrayers?.accepted));
-        setPropOnElem('#base_canvas_done', convertCanvasProgressToTable(result.canvasOfPrayers?.completed));
-      }
+      //if(result.sideQuestProgress){
+        //setPropOnElem('#base_side_quests', convertSideQuestProgressToTable(result.sideQuestProgress));
+      //}
+      //if(result.canvasOfPrayers){
+        //setPropOnElem('#base_canvas_acc', convertCanvasProgressToTable(result.canvasOfPrayers?.accepted));
+        //setPropOnElem('#base_canvas_done', convertCanvasProgressToTable(result.canvasOfPrayers?.completed));
+      //}
 
       setPropOnElem('#auto-trueday', result.time?.trueDay);
       if(result.time){
@@ -265,6 +267,8 @@ function beginPoll() {
       });
     }
     //Add garb autotrack polling here for MM
+    setInterval(updateCanvasRegion, 5000);
+    setInterval(updateSideQuestRegion, 5000);
   }
 }
 
@@ -321,6 +325,13 @@ function convertMapToTable(map?: Map<any, any>): string | undefined {
   return [...map].map(obj => `<tr><td>${obj[0]}</td><td>${obj[1]}</td></tr>`).join('');
 }
 
+function convertObjectToTable(obj?: Record<string, any>): string | undefined {
+  if(!obj){
+    return undefined;
+  }
+  return Object.entries(obj).map(v => `<tr><td>${v[0]}</td><td>${v[1]}</td></tr>`).join('');
+}
+
 function convertSideQuestProgressToTable(obj?: {[key: string]: SideQuestProgress[]}): string | undefined {
   if(!obj){
     return undefined;
@@ -372,22 +383,36 @@ function updateColumnWidth(initial?: boolean){
 
 //Display config region end
 
+async function updateSideQuestRegion(){
+  const area = (document.getElementById('sideQuestRegion') as HTMLSelectElement).value;
+  const names = await ipcRenderer.invoke('sideQuestList', area) as Map<string, SideQuestProgress | undefined>;
+  //TODO: N here should be replaced by completion status (and allow manual change if not autotracking)
+  const tableOut = [...names].map((name) => `<tr><td>${name[0]}</td><td>${name[1]?.status ?? ''}</td></tr>`).join('');
+  setPropOnElem('#base_side_quests', tableOut);
+}
+
 async function updateCanvasRegion(){
   const area = (document.getElementById('canvasRegion') as HTMLSelectElement).value;
-  const names = await ipcRenderer.invoke('canvasList', area);
+  const names = await ipcRenderer.invoke('canvasList', area) as Map<string, string>;
   //TODO: N here should be replaced by completion status (and allow manual change if not autotracking)
-  const tableOut = names.map((name: string) => `<tr><td onclick="getCanvasQuestInfo(this)">${name}</td><td>N</td></tr>`).join('');
+  const tableOut = [...names].map((name) => `<tr><td onclick="getCanvasQuestInfo(this)">${name[0]}</td><td>${name[1]}</td></tr>`).join('');
   setPropOnElem('#canvasLookupList', tableOut);
 }
 
 async function getCanvasQuestInfo(el: HTMLElement){
-  const info = await ipcRenderer.invoke('canvasNamedInfo', el.textContent);
+  const info = await ipcRenderer.invoke('canvasNamedInfo', el.textContent) as QuestInfo & {status: string};
   //TODO:
   //extract pre-requisites
   //extract requirements
   //hook into inventory to check possibility
   //add in status (accepted / completed)
   setPropOnElem('#canvasLookupSelected', JSON.stringify(info));
+  setPropOnElem('#canvasLookupSelectedName', info.name);
+  setPropOnElem('#canvasLookupSelectedStatus', info.status);
+  setPropOnElem('#canvasLookupSelectedPrerequisites', convertArrayToList([...(info.prerequisiteQuests ?? []), ...(info.prerequisiteOther ?? [])]));
+  if(info.requirements){
+    setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Item</th><th>#</th></tr>' + convertObjectToTable(info.requirements));
+  }
 }
 
 // Todo:

@@ -1,5 +1,5 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
-import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem, getCanvasNamesList, getCanvasQuestInfo } from "lr-rando-core";
+import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem, getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress } from "lr-rando-core";
 import _ from 'lodash';
 
 const reservedKeys = ['time', 'region'];
@@ -135,7 +135,7 @@ export class RandoBackend {
             // Only show accepted quests which are not completed
             const completed = this.oldState.canvasOfPrayers?.completed ?? {};
             const accepted = this.oldState.canvasOfPrayers?.accepted ?? {};
-            Object.keys(completed).forEach(key => {
+            [0,1,2,3,4].forEach(key => {
                 if(accepted[key]){
                     accepted[key] = accepted[key]?.filter(i => !completed[key]?.includes(i)) ?? [];
                 }
@@ -167,11 +167,53 @@ export class RandoBackend {
         return this.stateValid ? this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0 : 0;
     }
 
-    public getCanvasList(area?: number): string[] {
-        return getCanvasNamesList(area);
+    public getSideQuestList(area?: number): Map<string, SideQuestProgress | undefined> {
+        const keys = getSideQuestNamesList(area);
+        const areas = area ? [area] : [0, 1, 2, 3];
+        const map = new Map();
+        key: for(const key of keys){
+            for(const locs of areas){
+                if(this.oldState.sideQuestProgress?.[locs]?.map(q => q.name).includes(key)){
+                    map.set(key, this.oldState.sideQuestProgress?.[locs].find(q => q.name === key));
+                    continue key;
+                }
+            }
+            map.set(key, undefined);
+        }
+        return map;
+    }
+
+    public getCanvasList(area?: number): Map<string, string> {
+        const keys = getCanvasNamesList(area);
+        const areas = area ? [area] : [0, 1, 2, 3, 4];
+        const map = new Map();
+        key: for(const key of keys){
+            for(const locs of areas){
+                if(this.oldState.canvasOfPrayers?.completed[locs]?.includes(key)){
+                    map.set(key, 'Completed');
+                    continue key;
+                } else if (this.oldState.canvasOfPrayers?.accepted[locs]?.includes(key)){
+                    map.set(key, 'Accepted');
+                    continue key;
+                }
+            }
+            map.set(key, '');
+        }
+        return map;
     }
 
     public getCanvasInfoByName(name: string): any {
-        return getCanvasQuestInfo(name);
+        let status = '';
+        const areas = [0, 1, 2, 3, 4];
+        for(const locs of areas){
+            if(this.oldState.canvasOfPrayers?.completed[locs]?.includes(name)){
+                status = 'Completed';
+                break;
+            } else if (this.oldState.canvasOfPrayers?.accepted[locs]?.includes(name)){
+                status = 'Accepted';
+                break;
+            }
+        }
+        return Object.assign(getCanvasQuestInfo(name), {status});
     }
 }
