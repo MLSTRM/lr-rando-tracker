@@ -32,6 +32,7 @@
       clear: both;
     }
 
+    /*TODO: make this only apply to the grid columns and not other panes. Probably have different classes for the other panes honestly*/
     :root {
       --column-width: 100px;
     }
@@ -186,9 +187,12 @@
       left: 0px;
       top: 0px;
       width: 30%;
+      height: 20px;
+      line-height: 20px;
       z-index: 1;
       float: left;
       display: none;
+      opacity: 70%;
     }
 
     .clickRange:hover .rangeLeft {
@@ -200,9 +204,12 @@
       right: 0px;
       top: 0px;
       width: 30%;
+      height: 20px;
+      line-height: 20px;
       z-index: 1;
       float: right;
       display: none;
+      opacity: 70%;
     }
 
     .clickRange:hover .rangeRight {

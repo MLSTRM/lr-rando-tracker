@@ -264,9 +264,11 @@ function beginPoll() {
         });
       });
     }
+    //Add garb autotrack polling here for MM
   }
 }
 
+//Push to backend?
 function getOdinLevels(health?: number): {level: number; next?: number} {
   if(!health || health<120){
     return {
@@ -347,6 +349,7 @@ function convertCanvasProgressToTable(obj?: {[key: string]: string[]}): string |
   return arr.map(obj => `<tr><td>${obj}</td></tr>`).join('');
 }
 
+//Display config region start - move to separate file?
 function updateTheme(initial?: boolean){
   const themeElement = document.getElementById('theme') as HTMLSelectElement;
   const theme = (initial ? localStorage.getItem('display-theme') : undefined) ?? themeElement.value;
@@ -367,9 +370,12 @@ function updateColumnWidth(initial?: boolean){
   document.documentElement.style.setProperty('--column-width', `${width}px`);
 }
 
+//Display config region end
+
 async function updateCanvasRegion(){
   const area = (document.getElementById('canvasRegion') as HTMLSelectElement).value;
   const names = await ipcRenderer.invoke('canvasList', area);
+  //TODO: N here should be replaced by completion status (and allow manual change if not autotracking)
   const tableOut = names.map((name: string) => `<tr><td onclick="getCanvasQuestInfo(this)">${name}</td><td>N</td></tr>`).join('');
   setPropOnElem('#canvasLookupList', tableOut);
 }
@@ -394,45 +400,29 @@ async function getCanvasQuestInfo(el: HTMLElement){
 // use library on ark for boss tracking (?) - works for location but not name.
 
 // find where text pointer moves if hint is open and use that to add to list
-// quest hints as well as libras.
-
-// sort sidequest data and canvas stuff regionally (fill in non-lux canvas data)
+// quest hints as well as libras. - do some CE stuff to see if it can be scraped from display text somewhere
 
 /*
 add key item boxes for:
--midnight mauve
 -beloved's gift?
--main greens
 -locked sphere key?
 -musical key?
 
--noel -snow -caiu -para -zalt [boss]
--soul seeds -loup/unapp -eres [extras]
--tick -card -note -fire -mauv [yusnaan]
--gren -crux -tabl -scru -frag [mq3/4/5 line]
--------------dajh------------ [mq5 line]
-
 garb autotracking for mauve.
-handed in soul seeds?
-handed in uappraised?
 
-allow for persistence, save state to file, push state back from UI to backend for non-auto use
+handed in uappraised auto tracking?
 
-EP ability cost selection
+allow for rando state persistence, save state to file (works for config), push state back from UI to backend for non-auto use
 
-hint tracking (i.e. click up/down per location, give total and obtained - all manual probably)
+EP ability cost selection (start at default and allow adjustment up/down)
 
-pane selection (rather than pop in/out)
+hint tracking (i.e. click up/down per location, give total and obtained - all manual probably for now)
+
+pane selection/ordering controls (rather than pop in/out or fixed)
 -tracker grid (large)
 -inventory panes
 -side quest lookup
 -canvas lookup
 -npc lookup
 
-pane ordering
-
-visual customisation (basic themes for now)
--need to auto invert images, probably pick a default colour set and use filters.
-
-condensed layout for stream purposes probably
 */
