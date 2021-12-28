@@ -1,18 +1,27 @@
-import memoryjs, { DataTypes, Process } from "memoryjs";
+import type memoryjs from "memoryjs";
+import { DataTypes, Process } from "memoryjs";
 
 const LRProcess = "LRFF13.exe";
 
 export class LrMemoryReader {
     private processObject: Process | undefined;
     private debug: boolean;
+    private memoryjs: typeof memoryjs | undefined;
 
     constructor(debug = false){
         this.debug = debug;
     }
-    
 
-    tryAttach(): boolean {
-        this.processObject = memoryjs.openProcess(LRProcess);
+    async tryAttach(): Promise<boolean> {
+        if(!this.memoryjs){
+            try {
+                this.memoryjs = await import('memoryjs');
+            } catch (err){
+                console.debug('memoryjs unavailable');
+                return false;
+            }
+        }
+        this.processObject = this.memoryjs.openProcess(LRProcess);
         if(this.debug){
             console.log(JSON.stringify(this.processObject));
         }
@@ -24,6 +33,9 @@ export class LrMemoryReader {
     }
 
     readMemoryAddress(offset: number, dataType: DataTypes, absolute = false): any {
+        if(!this.memoryjs){
+            return undefined;
+        }
         if(!this.processObject){
             return undefined;
         }
@@ -35,10 +47,13 @@ export class LrMemoryReader {
             }));
         }
         const address = absolute ? offset : this.processObject.modBaseAddr + offset;
-        return memoryjs.readMemory(this.processObject.handle, address, dataType);
+        return this.memoryjs.readMemory(this.processObject.handle, address, dataType);
     }
 
     readBuffer(offset: number, length: number, absolute = false): Buffer {
+        if(!this.memoryjs){
+            return Buffer.from('');
+        }
         if(!this.processObject){
             return Buffer.from('');
         }
@@ -50,11 +65,14 @@ export class LrMemoryReader {
             }));
         }
         const address = absolute ? offset : this.processObject.modBaseAddr + offset;
-        return memoryjs.readBuffer(this.processObject.handle, address, length);
+        return this.memoryjs.readBuffer(this.processObject.handle, address, length);
     }
 
     getModules(){
-        console.log(JSON.stringify(memoryjs.getModules(this.processObject?.th32ProcessID).map(m => m.szModule)));
+        if(!this.memoryjs){
+            return;
+        }
+        console.log(JSON.stringify(this.memoryjs.getModules(this.processObject?.th32ProcessID).map(m => m.szModule)));
     }
 
     detatch(): void {

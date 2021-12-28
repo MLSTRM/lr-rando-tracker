@@ -1,5 +1,5 @@
 import { Areas, getSideQuestProgress, inflateCanvasBytes, resolveMainQuestProgress, SideQuestProgress } from "lr-rando-core";
-import { BYTE, DWORD, INT, INT64, SHORT } from "memoryjs";
+import { BYTE, DWORD, INT, INT64, SHORT } from "./model";
 import { LrMemoryReader, RandoMemoryState, resolveDateTime } from ".";
 
 // Not really sure why but for some reason the in-memory version mangles the multi byte characters
@@ -31,10 +31,10 @@ const canvasOffsetMaybe = 0xC0F0;
 
 const epAbilitiesMaybe = 0x17B50;
 
-export function attachAndVerify(reader: LrMemoryReader): boolean {
+export async function attachAndVerify(reader: LrMemoryReader): Promise<boolean> {
     try {
         if(!reader.isAttached()){
-            reader.tryAttach();
+            await reader.tryAttach();
             if(!reader.isAttached()){
                 console.log('Process attachment failed');
                 return false;

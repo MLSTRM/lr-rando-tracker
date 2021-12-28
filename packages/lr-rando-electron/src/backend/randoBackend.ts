@@ -22,9 +22,9 @@ export class RandoBackend {
         this.reader.detatch();
     }
 
-    public getState(): RandoMemoryState | undefined {
+    public async getState(): Promise<RandoMemoryState | undefined> {
         if(!this.readerLoaded){
-            this.readerLoaded = attachAndVerify(this.reader);
+            this.readerLoaded = await attachAndVerify(this.reader);
             if(!this.readerLoaded){
                 return undefined;
             }
@@ -40,9 +40,9 @@ export class RandoBackend {
         }
     }
 
-    public getStateChanges(): Partial<RandoMemoryState> {
+    public async getStateChanges(): Promise<Partial<RandoMemoryState>> {
         if(!this.readerLoaded){
-            this.readerLoaded = attachAndVerify(this.reader);
+            this.readerLoaded = await attachAndVerify(this.reader);
             return {};
         } else {
             const newState = scrapeRandoState(this.reader);
