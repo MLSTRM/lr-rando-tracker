@@ -21,6 +21,7 @@ const schemaOffset = 0x148; //pSomeStatsBase -> schema location
 const keyItemLength = 0x18;
 const keyItemAmountOffset = 0x12;
 const keyItemsOffset = 0x158C; //Offset from pSomeStatsBase to key item pointer
+const garbsOffset = 0x173C;
 const itemOffset = 0x16AC; //Offset from pSomeStatsBase to main item pointer
 const gameHeader = 0x1968;
 const mapOffset = gameHeader + 0x50;
@@ -28,6 +29,7 @@ const recoveryItemOffset = 0x1418;
 const chocoboOffset = 0x1A48;
 const sideQuestOffset = 0xAF10;
 const canvasOffsetMaybe = 0xC0F0;
+const charaCounterBaseLocation = 0x20D252C;
 
 const epAbilitiesMaybe = 0x17B50;
 
@@ -58,7 +60,9 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
     const pSomeStatsBase = reader.readMemoryAddress(someStatsBaseLocation, DWORD);
     const schemaIndex = reader.readMemoryAddress(pSomeStatsBase + 0xBF, BYTE, true);
     const pKeyItems = reader.readMemoryAddress(pSomeStatsBase + keyItemsOffset, DWORD, true);
+    const pGarbs = reader.readMemoryAddress(pSomeStatsBase + + recoveryItemOffset+0x174 + 0x180, DWORD, true);
     const pItems = reader.readMemoryAddress(pSomeStatsBase + itemOffset, DWORD, true);
+    const pCharaCounterBase = reader.readMemoryAddress(charaCounterBaseLocation, DWORD);
     return {
         gil: reader.readMemoryAddress(pSomeStatsBase + 0x2844, INT, true),
         region: {
@@ -77,6 +81,7 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
         odinHealth: reader.readMemoryAddress(pSomeStatsBase + chocoboOffset, SHORT, true),
         items: generateItemMap(reader, pItems),
         keyItems: generateItemMap(reader, pKeyItems),
+        garbs: resolveGarbList(reader, pGarbs),
         epAbilities: resolveEPAbilities(reader, pSomeStatsBase + epAbilitiesMaybe),
         mainQuestProgress: resolveMainQuestProgress({
             luxerion: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0x64, SHORT, true),
@@ -91,7 +96,8 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
             accepted: extractCanvasInfo(reader, pSomeStatsBase + canvasOffsetMaybe),
             completed: extractCanvasInfo(reader, pSomeStatsBase + canvasOffsetMaybe + 0x40),
         },
-        soulSeeds: reader.readMemoryAddress(pSomeStatsBase + gameHeader+0x50+(57*8)+6, BYTE, true)
+        soulSeeds: reader.readMemoryAddress(pSomeStatsBase + gameHeader+0x50+(57*8)+6, BYTE, true),
+        unappraised: resolveCharaCounter(reader, pCharaCounterBase, 825)
     }
 }
 
@@ -163,6 +169,21 @@ function generateItemMap(reader: LrMemoryReader, base: number): Map<string, numb
     return map;
 }
 
+function resolveGarbList(reader: LrMemoryReader, base: number): string[] {
+    const maxItems = 100; //todo make this reflect the bag?
+    const arr: string[] = [];
+    for(var i = 0; i<maxItems; i++){
+        const item = stripNullChars(reader.readBuffer(base + (keyItemLength*i), 16, true));
+        if(item.length>0){
+            arr.push(item);
+        } else {
+            return arr;
+        }
+    }
+    console.log('Reached end of iteration, might be some missing items at the end');
+    return arr;
+}
+
 function resolveEPAbilities(reader: LrMemoryReader, base: number): string[] {
     const EpAbilities: string[] = [];
     for(var i = 0; i<50; i++){
@@ -176,4 +197,21 @@ function resolveEPAbilities(reader: LrMemoryReader, base: number): string[] {
         }
     }
     return EpAbilities;
+}
+
+function resolveCharaCounter(reader: LrMemoryReader, base: number, index: number): number {
+    /*
+    LRFF13.exe+5BEFDE - 8B 15 2C25DA02        - mov edx,[LRFF13.exe+20D252C] { (DEA682A0) }
+    LRFF13.exe+5BEFE4 - 8D 0C C0              - lea ecx,[eax+eax*8] {multiply index by 9}
+    LRFF13.exe+5BEFE7 - 03 C9                 - add ecx,ecx {then double}
+    LRFF13.exe+5BEFE9 - 8D 84 CA C82C0500     - lea eax,[edx+ecx*8+00052CC8] {then multiply by 8, add offset}
+    LRFF13.exe+5BEFF0 - 85 C0                 - test eax,eax
+    LRFF13.exe+5BEFF2 - 74 32                 - je LRFF13.exe+5BF026 {unsure whats happening here}
+    LRFF13.exe+5BEFF4 - 66 89 5C 70 30        - mov [eax+esi*2+30],bx {read value with esi offset and base offset of 0x30}
+    esi always seems to be 0 but is likely the second arg to sfGetCharaCounter
+    */
+    const baseCharaCounterOffset = 0x52CC8;
+    const pSoulSeed = base + baseCharaCounterOffset + index * 18*8 + 0x30;
+    const counterValue = reader.readMemoryAddress(pSoulSeed, SHORT, true);
+    return counterValue;
 }

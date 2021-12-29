@@ -216,4 +216,8 @@ export class RandoBackend {
         }
         return Object.assign(getCanvasQuestInfo(name), {status});
     }
+
+    public hasGarbByName(garb: string): boolean {
+        return this.oldState.garbs?.includes(garb) ?? false;
+    }
 }

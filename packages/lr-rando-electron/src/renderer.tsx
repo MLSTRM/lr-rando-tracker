@@ -181,6 +181,7 @@ function beginPoll() {
         }
       }
       setPropOnElem('#auto-seeds', result.soulSeeds);
+      setPropOnElem('#auto-unappraised', result.unappraised);
       
     } else {
       setPropOnElem('#basicInfoLoading', 'Loading');
@@ -266,7 +267,19 @@ function beginPoll() {
         });
       });
     }
-    //Add garb autotrack polling here for MM
+    const garb = elem.getAttribute('data-garb');
+    if(garb){
+      const interval = setInterval(() => {
+        ipcRenderer.invoke('garbCheck', garb).then((result: boolean) => {
+          if(elem.classList.contains('clickToggle')){
+            if(result && elem.classList.contains(inactive)){
+              elem.classList.remove(inactive);
+            }
+          }
+        });
+      }, 2000);
+      pollingObtainedChecks.push(interval);
+    }
     setInterval(updateCanvasRegion, 5000);
     setInterval(updateSideQuestRegion, 5000);
   }
@@ -428,20 +441,16 @@ async function getCanvasQuestInfo(el: HTMLElement){
 // quest hints as well as libras. - do some CE stuff to see if it can be scraped from display text somewhere
 
 /*
-add key item boxes for:
--beloved's gift?
--locked sphere key?
--musical key?
-
-garb autotracking for mauve.
-
-handed in uappraised auto tracking?
-
 allow for rando state persistence, save state to file (works for config), push state back from UI to backend for non-auto use
 
 EP ability cost selection (start at default and allow adjustment up/down)
 
-hint tracking (i.e. click up/down per location, give total and obtained - all manual probably for now)
+hint tracking (i.e. click up/down per location, give total and obtained - all manual probably for now - can I scrape the text?)
+
+add region to canvas pane
+hook in autotracker to prerequisites and item check
+
+add shop note area?
 
 pane selection/ordering controls (rather than pop in/out or fixed)
 -tracker grid (large)

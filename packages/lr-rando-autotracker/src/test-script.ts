@@ -2,10 +2,12 @@ import { BYTE, DWORD, INT, INT64, SHORT } from "memoryjs";
 import { LrMemoryReader } from "./memoryReader";
 import { resolveDateTime } from "./datetime";
 import { prettyPrintEpAbility, extractZoneInfo, getSideQuestProgress, inflateCanvasBytes, Areas } from 'lr-rando-core';
+import { stripNullChars } from ".";
 
 //CONFIG
 const reader = new LrMemoryReader(false);
 const showItems = false;
+const showGarbs = true;
 const showSchemaInfo = false;
 const showEpAbilitiesEtc = false;
 const showSideQuests = false;
@@ -25,6 +27,7 @@ const recoveryItemOffset = 0x1418;
 const chocoboOffset = 0x1A48;
 const sideQuestOffset = 0xAF10;
 const canvasOffsetMaybe = 0xC0F0;
+const charaCounterBaseLocation = 0x20D252C;
 
 const epAbilitiesMaybe = 0x17B50;
 
@@ -70,6 +73,8 @@ const interval = setInterval(async () => {
             console.log(`item pointer: ${pItems.toString(16)}`);
             const pKeyItems = reader.readMemoryAddress(pSomeStatsBase + recoveryItemOffset+0x174, DWORD, true);
             console.log(`key item pointer: ${pKeyItems.toString(16)}`);
+            const pGarbs = reader.readMemoryAddress(pSomeStatsBase + recoveryItemOffset+0x174 + 0x180, DWORD, true);
+            console.log(`garb list pointer: ${pGarbs.toString(16)}`);
 
 
             if(showEpAbilitiesEtc){
@@ -129,6 +134,16 @@ const interval = setInterval(async () => {
                     }
                 }
             }
+            if(showGarbs){
+                console.log('garb list');
+                for(var i = 0; i<100; i++){
+                    const item = reader.readBuffer(pGarbs + (keyItemLength*i), 16, true);
+                    const stripped = stripNullChars(item);
+                    if(stripped.length > 0){
+                        console.log(stripped);
+                    }
+                }
+            }
 
             if(showSideQuests){
                 for(var i = 0; i<99; i++){
@@ -161,6 +176,15 @@ const interval = setInterval(async () => {
                 console.log(`Global: ${inflateCanvasBytes(Areas.GLOBAL, canvasDoneArr.slice(37,40))}`);
                 // TODO: fill in byte info for other regions than luxerion
             }
+
+            const pCharaCounterBase = reader.readMemoryAddress(charaCounterBaseLocation, DWORD);
+            console.log(`pCharaCounterBase: ${pCharaCounterBase.toString(16)}`);
+            const baseCharaCounterOffset = 0x52CC8;
+            const charaCounterIndex = 825;
+            const pSoulSeed = pCharaCounterBase + baseCharaCounterOffset + charaCounterIndex * 18*8 + 0x30;
+            const soulSeedsMaybe = reader.readMemoryAddress(pSoulSeed, SHORT, true);
+            console.log(`${pCharaCounterBase.toString(16)} + ${baseCharaCounterOffset.toString(16)} + ${(charaCounterIndex*18*8).toString(16)} + 0x30 = ${pSoulSeed.toString(16)}`);
+            console.log(`Soul seeds: ${soulSeedsMaybe}`);
 
             if(!loop){
                 reader.detatch();

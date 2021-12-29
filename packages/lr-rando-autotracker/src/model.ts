@@ -22,6 +22,7 @@ export interface RandoMemoryState {
     odinHealth: number;
     keyItems: Map<string, number>;
     items: Map<string, number>;
+    garbs: string[];
     mainQuestProgress: MainQuestPosition;
     sideQuestProgress: {[key: number]: SideQuestProgress[]};
     canvasOfPrayers: {
@@ -29,6 +30,7 @@ export interface RandoMemoryState {
         completed: {[key: number]: string[]}
     };
     soulSeeds: number;
+    unappraised: number;
 }
 
 // data type constants

@@ -6,9 +6,9 @@ function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     minWidth: 530,
-    minHeight: 670,
+    minHeight: 710,
     width: 950,
-    height: 730,
+    height: 750,
     maxWidth: 1920,
     maxHeight: 1080,
     autoHideMenuBar: true,
@@ -94,4 +94,8 @@ ipcMain.handle('canvasList', async (event, area) => {
 
 ipcMain.handle('canvasNamedInfo', async (event, name) => {
   return backend.getCanvasInfoByName(name);
-})
+});
+
+ipcMain.handle('garbCheck', async (event, garb) => {
+  return backend.hasGarbByName(garb);
+});
