@@ -1,5 +1,6 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
-import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem, getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress } from "lr-rando-core";
+import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem,
+    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName } from "lr-rando-core";
 import _ from 'lodash';
 
 const reservedKeys = ['time', 'region'];
@@ -214,7 +215,12 @@ export class RandoBackend {
                 break;
             }
         }
-        return Object.assign(getCanvasQuestInfo(name), {status});
+        const info = getCanvasQuestInfo(name);
+        if(info){
+            const {quest, region} = info;
+            return Object.assign(quest, {status, region: areaIndexStringToAreaName(region)});
+        }
+        return undefined;
     }
 
     public hasGarbByName(garb: string): boolean {

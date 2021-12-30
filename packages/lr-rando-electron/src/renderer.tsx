@@ -24,6 +24,7 @@ window.onload = () => {
   updateColumnWidth(true);
   updateCanvasRegion();
   updateSideQuestRegion();
+  addQuestHintRow();
 }
 
 function setupClickToggle() {
@@ -413,7 +414,7 @@ async function updateCanvasRegion(){
 }
 
 async function getCanvasQuestInfo(el: HTMLElement){
-  const info = await ipcRenderer.invoke('canvasNamedInfo', el.textContent) as QuestInfo & {status: string};
+  const info = await ipcRenderer.invoke('canvasNamedInfo', el.textContent) as QuestInfo & {status: string; region: string};
   //TODO:
   //extract pre-requisites
   //extract requirements
@@ -421,12 +422,64 @@ async function getCanvasQuestInfo(el: HTMLElement){
   //add in status (accepted / completed)
   setPropOnElem('#canvasLookupSelected', JSON.stringify(info));
   setPropOnElem('#canvasLookupSelectedName', info.name);
+  setPropOnElem('#canvasLookupSelectedRegion', info.region);
   setPropOnElem('#canvasLookupSelectedStatus', info.status);
   setPropOnElem('#canvasLookupSelectedPrerequisites', convertArrayToList([...(info.prerequisiteQuests ?? []), ...(info.prerequisiteOther ?? [])]));
   if(info.requirements){
     setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Item</th><th>#</th></tr>' + convertObjectToTable(info.requirements));
   }
 }
+
+function addQuestHintRow(){
+  const table = document.getElementById('questHintTable') as HTMLTableElement;
+  if(!table){return;}
+  const newRow = table.insertRow(table.rows.length-1);
+  const newCell = newRow.insertCell(0);
+  newCell.innerHTML = '-';
+  newCell.onclick = removeQuestHintRow(newCell);
+  const questCell = newRow.insertCell();
+  questCell.innerHTML = `<select>${questSelectBody}</select>`;
+  const locationCell = newRow.insertCell();
+  locationCell.innerHTML = '<input style="width: 90%;"/>';
+  const hasCell = newRow.insertCell();
+  hasCell.innerText = 'has';
+  const itemCell = newRow.insertCell();
+  itemCell.innerHTML = '<input style="width: 90%;"/>';
+}
+
+function removeQuestHintRow(cell: HTMLTableCellElement){
+  return (ev: MouseEvent) => {
+    const row = cell.parentElement as HTMLTableRowElement;
+    const table = row.parentElement as HTMLTableElement;
+    table.deleteRow(row.rowIndex);
+    return undefined;
+  }
+}
+
+const questSelectBody = `<option value="-1">Unknown</option>
+<option value="0">Yus 0-1</option>
+<option value="1">Lux 1-1</option>
+<option value="2">Lux 1-2</option>
+<option value="3">Lux 1-3</option>
+<option value="4">Lux 1-4</option>
+<option value="5">Lux 1-5</option>
+<option value="6">Yus 2-1</option>
+<option value="7">Yus 2-2</option>
+<option value="8">Yus 2-3</option>
+<option value="9">Wild 3-1</option>
+<option value="10">Wild 3-2</option>
+<option value="11">Wild 3-3</option>
+<option value="12">Dead 1-1</option>
+<option value="13">Dead 1-2</option>
+<option value="14">Dead 1-3</option>
+<option value="15">Dead 1-4</option>
+<option value="16">Dead 1-5</option>
+<option value="17">Sazh 5-1</option>
+<option value="18">Sazh 5-2</option>
+<option value="19">Sazh 5-3</option>
+<option value="20">Sazh 5-4</option>
+<option value="21">Sazh 5-5</option>
+<option value="22">Sazh 5-6</option>`;
 
 // Todo:
 // Check if I can have ipc renderer hooks in both directions maybe (seems yes - that will be helpful for settings etc.)
@@ -445,9 +498,6 @@ allow for rando state persistence, save state to file (works for config), push s
 
 EP ability cost selection (start at default and allow adjustment up/down)
 
-hint tracking (i.e. click up/down per location, give total and obtained - all manual probably for now - can I scrape the text?)
-
-add region to canvas pane
 hook in autotracker to prerequisites and item check
 
 add shop note area?
@@ -458,5 +508,4 @@ pane selection/ordering controls (rather than pop in/out or fixed)
 -side quest lookup
 -canvas lookup
 -npc lookup
-
 */

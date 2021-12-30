@@ -245,12 +245,42 @@ function numberToSideQuestArea(area?: number): SideQuestAreas | undefined {
     return area;
 }
 
-export function getCanvasQuestInfo(name: string): QuestInfo | undefined {
-    for(const area of Object.values(prayers)){
+export function getCanvasQuestInfo(name: string): {quest: QuestInfo, region: string}|undefined {
+    for(const [region, area] of Object.entries(prayers)){
         if(name in area){
             //@ts-ignore
-            return area[name];
+            return {quest: area[name], region};
         }
     }
     return undefined;
+}
+
+export function areaIndexToAreaName(index: number): string {
+    if(index === 0){
+        return 'Luxerion'
+    } else if (index ===1){
+        return 'Yusnaan'
+    } else if (index===2){
+        return 'Dead Dunes'
+    } else if (index===3){
+        return 'Wildlands'
+    } else if (index===4){
+        return 'Global'
+    }
+    return 'Unknown';
+}
+
+export function areaIndexStringToAreaName(index: string): string {
+    if(index === '0'){
+        return 'Luxerion'
+    } else if (index ==='1'){
+        return 'Yusnaan'
+    } else if (index==='2'){
+        return 'Dead Dunes'
+    } else if (index==='3'){
+        return 'Wildlands'
+    } else if (index==='4'){
+        return 'Global'
+    }
+    return 'Unknown';
 }

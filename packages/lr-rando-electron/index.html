@@ -72,6 +72,13 @@
       min-height: 40px;
     }
 
+    .column120 {
+      float: left;
+      width: calc(var(--column-width)*6);
+      min-width: calc(var(--column-width)*6);
+      min-height: 40px;
+    }
+
     .cell20 {
       height: 85px;
       text-align: center;
@@ -111,6 +118,23 @@
     .cell20s {
       height: 50px;
       line-height: 50px;
+    }
+
+    .cellHint > div {
+      float: left;
+      height: 30px;
+      line-height: 30px;
+    }
+
+    .cellHint > div {
+      width: calc(var(--column-width) / 2);
+      min-width: calc(var(--column-width) / 2);
+      text-align: center;
+    }
+
+    .cellHint > div:nth-of-type(3n+1) {
+      width: calc(var(--column-width)*2);
+      min-width: calc(var(--column-width)*2);
     }
 
     .cell20  img.boss {
@@ -244,6 +268,9 @@
     .mainFlex {
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
+      row-gap: 20px;
+      column-gap: 20px;
     }
 
     .columnTall {
@@ -265,7 +292,7 @@
     }
 
     .mainFlex .flexRegion {
-      max-height: 550px;
+      max-height: 700px;
     }
 
     .mainFlex .spacer {
@@ -437,16 +464,16 @@
 
           <div class="cell20 cell20s">
             <div class="clickToggle" data-key="key_kyu_pass">
-              lux key
+              <img src="resources/images/icon-lux-key.png" class="iconmono" alt="Supply sphere password" title="Supply sphere password" />
             </div>
             <div class="clickToggle" data-key="key_y_kagi1">
-              yus key
+              <img src="resources/images/icon-music-key.png" class="iconmono" alt="Musical Treasure Sphere Key" title="Musical Treasure Sphere Key" />
             </div>
             <div class="clickToggle" data-key="key_s_okuri">
-              Gift
+              <img src="resources/images/icon-belovedgift.png" class="iconmono" alt="Beloved's Gift" title="Beloved's Gift" />
             </div>
             <div class="clickToggle" data-key="key_d_keisan">
-              Arithmo
+              <img src="resources/images/icon-calc.png" class="iconmono" alt="Arithmometer" title="Arithmometer" />
             </div>
             <div class="clickToggle" data-key="key_w_mogsoul" data-oneway="true">
               <img src="resources/images/icon-moogle.jpg" class="iconmono" title="Moogle Fragment"/>
@@ -489,7 +516,6 @@
           </div>
         </div>
       </div>
-      <div id="spacer" class="flexRegion spacer">&nbsp;</div>
       <div id="keyInventory" class="autoTracker flexRegion">
         <div class="row column40">
           Key Items:
@@ -510,8 +536,6 @@
           </div>
         </div>
       </div>
-      <div id="spacer" class="flexRegion spacer">&nbsp;</div>
-
       <div id="sideQuests" class="flexRegion">
         <div class="row column40">
           Side quests:
@@ -530,7 +554,6 @@
           </div>
         </div>
       </div>
-      <div id="spacer" class="flexRegion spacer">&nbsp;</div>
       <div id="canvasLookup" class="flexRegion">
         <div class="row column100">
           Canvas of Prayers
@@ -549,7 +572,9 @@
             </table>
           </div>
           <div class="column60">
-            Selected: <span id="canvasLookupSelectedName"></span>
+            <span id="canvasLookupSelectedName"></span>
+            <br/>
+            Region: <span id="canvasLookupSelectedRegion"></span>
             <br/>
             Status: <span id="canvasLookupSelectedStatus"></span>
             <br/>
@@ -561,6 +586,66 @@
             <br/>
             <!-- <div id="canvasLookupSelected"></div> -->
           </div>
+        </div>
+      </div>
+      <div id="hintsReference" class="flexRegion noSelect">
+        <div class="row column120">
+          Hints
+          <br/>
+          <div class="">
+            <div class="cellHint">
+              <div>Area</div><div title="Known">K</div><div title="Found">F</div>
+              <div>Area</div><div title="Known">K</div><div title="Found">F</div>
+            </div>
+            <div class="cellHint">
+              <div>Ark:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              <div>CoP Global:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+            </div>
+            <div class="cellHint">
+              <div>Luxerion:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              <div>CoP Luxerion:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+            </div>
+            <div class="cellHint">
+              <div>Yusnaan:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              <div>CoP Yusnaan:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+            </div>
+            <div class="cellHint">
+              <div>Wildlands:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              <div>CoP Wildlands:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+            </div>
+            <div class="cellHint">
+              <div>Dead Dunes:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              <div>CoP Dunes:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+            </div>
+            <div class="cellHint">
+              <div>Hand ins:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              <div>Drops:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+            </div>
+            <div class="cellHint">
+              <div>Ultimate/Final:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="hintsReference" class="flexRegion noSelect">
+        <div class="row column120 columnHalf">
+          Quest hint notes:
+          <table style="table-layout: fixed; width: 100%;" id="questHintTable">
+            <tr>
+              <th style="width: 15px;"></th>
+              <th style="width: 60px;">Quest</th>
+              <th style="width: 35%">Location</th>
+              <th></th>
+              <th style="width: 35%">Item</th>
+            </tr>
+            <tr>
+              <td onclick="addQuestHintRow()">+</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
@@ -578,3 +663,30 @@
 </body>
 
 </html>
+
+<select>
+  <option value="-1">Unknown</option>
+  <option value="0">Yus 0-1</option>
+  <option value="1">Lux 1-1</option>
+  <option value="2">Lux 1-2</option>
+  <option value="3">Lux 1-3</option>
+  <option value="4">Lux 1-4</option>
+  <option value="5">Lux 1-5</option>
+  <option value="6">Yus 2-1</option>
+  <option value="7">Yus 2-2</option>
+  <option value="8">Yus 2-3</option>
+  <option value="9">Wild 3-1</option>
+  <option value="10">Wild 3-2</option>
+  <option value="11">Wild 3-3</option>
+  <option value="12">Dead 1-1</option>
+  <option value="13">Dead 1-2</option>
+  <option value="14">Dead 1-3</option>
+  <option value="15">Dead 1-4</option>
+  <option value="16">Dead 1-5</option>
+  <option value="17">Sazh 5-1</option>
+  <option value="18">Sazh 5-2</option>
+  <option value="19">Sazh 5-3</option>
+  <option value="20">Sazh 5-4</option>
+  <option value="21">Sazh 5-5</option>
+  <option value="22">Sazh 5-6</option>
+</select>
