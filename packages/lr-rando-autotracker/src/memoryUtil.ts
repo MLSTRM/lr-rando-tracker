@@ -6,9 +6,10 @@ import { LrMemoryReader, RandoMemoryState, resolveDateTime } from ".";
 const weirdEncodedDejaVu = Buffer.from([0x44, 0x85, 0xc8, 0x6a, 0x85, 0xbf, 0x20, 0x56, 0x75]).toString('utf8');
 
 //should stop at first null char.
-export function stripNullChars(input: Buffer): string {
+export function stripNullChars(input: Buffer, stopAtFirstNull = false): string {
     const str = input.toString('utf-8');
-    const stripped = str.replace(/\0/g, '');
+    const trimmed = stopAtFirstNull ? str.substr(0, str.indexOf('\0\0')) : str;
+    const stripped = trimmed.replace(/\0/g, '');
     if(stripped.startsWith(weirdEncodedDejaVu)){
         return 'Déjà Vu';
     }
@@ -75,7 +76,10 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
             ...resolveDateTime(reader.readMemoryAddress(pSomeStatsBase - 0x10680+0x100000, INT64, true))
         },
         schemas: {
-            active: stripNullChars(reader.readBuffer(pSomeStatsBase + schemaOffset + (schemaLength * schemaIndex), 24, true)) //Longest schema is "Hunter of the Wild" I think
+            active: stripNullChars(reader.readBuffer(pSomeStatsBase + schemaOffset + (schemaLength * schemaIndex), 24, true), true), //Longest schema is "Hunter of the Wild" I think
+            slot1: stripNullChars(reader.readBuffer(pSomeStatsBase + schemaOffset, 24, true), true),
+            slot2: stripNullChars(reader.readBuffer(pSomeStatsBase + schemaOffset + schemaLength, 24, true), true),
+            slot3: stripNullChars(reader.readBuffer(pSomeStatsBase + schemaOffset + (schemaLength*2), 24, true), true)
         },
         recoveryItemSlots: reader.readMemoryAddress(pSomeStatsBase + recoveryItemOffset, BYTE, true),
         odinHealth: reader.readMemoryAddress(pSomeStatsBase + chocoboOffset, SHORT, true),

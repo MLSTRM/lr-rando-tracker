@@ -13,6 +13,16 @@
       font-family: 'Tahoma';
     }
 
+    body.lightBody {
+      background-color: #dddddd;
+      color: black;
+    }
+
+    body.darkBody {
+      background-color: #222222;
+      color: white;
+    }
+
     .column {
       float: left;
       width: 50%;
@@ -22,8 +32,12 @@
       font-family: "Xoireqe";
     }
 
-    .row {
+    .lightBody .row {
       background-color: #9fb3bd;
+    }
+
+    .darkBody .row {
+      background-color: #3f636d;
     }
 
     .row:after {
@@ -51,6 +65,12 @@
       float: left;
       width: calc(var(--column-width)*2);
       min-width: calc(var(--column-width)*2);
+    }
+
+    .column50 {
+      float: left;
+      width: calc(var(--column-width)*2.5);
+      min-width: calc(var(--column-width)*2.5);
     }
 
     .column60 {
@@ -307,350 +327,359 @@
   </style>
 </head>
 
-<body>
-  <div class="settings" style="width: 100%; height: 30px;">
-    <button id="autoPollButton" class="topButton" onclick="beginPoll()" type="button">Start auto tracker</button>
-    <button id="detatchButton" class="topButton autoTracker" onclick="detatchTracker()" type="button" disabled="true">Stop auto tracker</button>
-    &nbsp;
-    <label for="theme">Display theme:</label>
-    <select name="theme" id="theme" onchange="updateTheme()">
-      <option value="checkerboard">Checkerboard (default)</option>
-      <option value="dark">Dark</option>
-      <option value="light">Light</option>
-    </select>
-    <select name="columnWidth" id="columnWidth" onchange="updateColumnWidth()">
-      <option value=100>Wide (default)</option>
-      <option value=65>Narrow</option>
-    </select>
-  </div>
-  <br/>
-  <div class="mainHolder" style="width: 100%;">
+<body id="mainBody" class="lightBody">
+  <div>
+    <div class="settings" style="width: 100%; height: 30px;">
+      <button id="autoPollButton" class="topButton" onclick="beginPoll()" type="button">Start auto tracker</button>
+      <button id="detatchButton" class="topButton autoTracker" onclick="detatchTracker()" type="button" disabled="true">Stop auto tracker</button>
+      &nbsp;
+      <label for="bodyTheme">Body theme:</label>
+      <select name="bodyTheme" id="bodyTheme" onchange="updateBodyTheme()">
+        <option value="lightBody">Light (default)</option>
+        <option value="darkBody">Dark</option>
+      </select>
+      <label for="theme">Grid theme:</label>
+      <select name="theme" id="theme" onchange="updateTheme()">
+        <option value="checkerboard">Checkerboard (default)</option>
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+      </select>
+      <label for="columnWidth">Column Width:</label>
+      <select name="columnWidth" id="columnWidth" onchange="updateColumnWidth()">
+        <option value=100>Wide (default)</option>
+        <option value=65>Narrow</option>
+      </select>
+    </div>
+    <br/>
+    <div class="mainHolder" style="width: 100%;">
 
-    <div class="mainFlex">
-      <div id="pretty_tracker_region" class="noSelect columnGrid flexRegion">
-        <div class="row column100" id="pretty_region_top">
-          <div class="column60 autoTracker" style="height: 40px;">
-            <span id="auto-region"></span><br/><span id="auto-zone"></span>
+      <div class="mainFlex">
+        <div id="pretty_tracker_region" class="noSelect columnGrid flexRegion">
+          <div class="row column100" id="pretty_region_top">
+            <div class="column50" style="height: 40px;">
+              <span id="auto-region">Temple Ruins - </span><br/><span id="auto-zone">Chamber of Plenilune: Upper Level</span>
+            </div>
+            <div class="column50" style="height: 40px;">
+              <div style="float:left; width: 42px"><img src="resources/images/icon-garb.png" alt="Active Garb: " height="40" width="40" /></div>
+              <div style="float:left; width: calc(var(--column-width)*2.5 - 45px)"><span id="auto-schema" class="centreSpan">Hunter of the Wild</span></div>
+            </div>
           </div>
-          <div class="column40 autoTracker" style="height: 40px;">
-            <img src="resources/images/icon-garb.png" alt="Active Garb: " height="40" width="40" /><span id="auto-schema" class="centreSpan"></span>
+          <div class="row column100 checkerboard" id="pretty_region_meta_1">
+            <div class="cell20">
+              <div class="clickRange" data-min="0" data-max="14" data-threshold="-1">
+                <!-- Only day if not auto tracking -->
+                <img src="resources/images/icon-clock.png" alt="Day " height="40" width="40" class="top"><br/><span id="auto-trueday" class="value">0</span><span class="autoTracker">: <span id="auto-time">00:00</span></span>
+              </div>
+              <div>
+                <img src="resources/images/icon-gil.png" alt="Gil: " height="40" width="40"  class="top"/><br/> <span id="auto-gil">0</span>
+              </div>
+              <div class="clickRange" data-min="5" data-max="9" data-threshold="4">
+                <img src="resources/images/icon-ep.png" alt="Max EP:" width="40" height="40" class="top" /><br/> <span id="auto-ep" class="value">5</span>
+              </div>
+              <div class="clickRange" data-min="6" data-max="12" data-threshold="5">
+                <img src="resources/images/icon-recovery.png" alt="Item slots:" width="40" height="40" class="top" /><br/> <span id="auto-itemslots" class="value">6</span>
+              </div>
+              <div class="clickRange" data-min="0" data-max="3" data-threshold="0" id="odin-parent">
+                <img src="resources/images/odin-icon.png" alt="Odin: " height="40" width="40" class="top"><br/> <span id="auto-odin-level" class="value">0</span><span class="autoTracker">: <span id="auto-odin-health">250</span><span id="auto-odin-next">/400</span></span>
+              </div>
+            </div>
+            <div class="cell20">
+              <div class="centerImage clickRange" data-min="0" data-max="5" data-threshold="4" data-mainquest="luxerion">
+                <img src="resources/images/Luxerion-lrffxiii-icon.png" class="top" alt="Main quest 1" height="40" width="40" /><br/>1-<span class="value">0</span>
+              </div>
+              <div class="centerImage clickRange" data-min="0" data-max="3" data-threshold="2" data-mainquest="yusnaan">
+                <img src="resources/images/Yusnaan-lrffxiii-icon.png" class="top" alt="Main quest 2" height="40" width="40"/><br/>2-<span class="value">0</span>
+              </div>
+              <div class="centerImage clickRange" data-min="0" data-max="3" data-threshold="2" data-mainquest="wildlands">
+                <img src="resources/images/Wildlands-lrffxiii-icon.png" class="top" alt="Main quest 3" height="40" width="40" /><br/>3-<span class="value">0</span>
+              </div>
+              <div class="centerImage clickRange" data-min="0" data-max="5" data-threshold="4" data-mainquest="deaddunes">
+                <img src="resources/images/DeadDunes-lrffxiii-icon.png" class="top" alt="Main quest 4" height="40" width="40" /><br/>4-<span class="value">0</span>
+              </div>
+              <div class="centerImage clickRange" data-min="0" data-max="1" data-threshold="0" data-mainquest="sazh">
+                <img src="resources/images/Wildlands-lrffxiii-icon.png" class="top" alt="Main quest 5" height="40" width="40" /><br/>5-<span class="value">0</span>
+              </div>
+            </div>
+            <div class="cell20 cell20s">
+              <div class="clickToggle">
+                <img src="resources/images/boss-noel.png" alt="Noel Kreiss" width="100" class="boss"/>
+              </div>
+              <div class="clickToggle">
+                <img src="resources/images/boss-snow.png" alt="Snow Villiers" width="100" class="boss"/>
+              </div>
+              <div class="clickToggle">
+                <img src="resources/images/boss-caius.png" alt="Caius Ballad" width="100" class="boss"/>
+              </div>
+              <div class="clickToggle">
+                <img src="resources/images/boss-gren.png" alt="Grendel" width="100" class="boss"/>
+              </div>
+              <div class="clickToggle">
+                <img src="resources/images/boss-zaltys.png" alt="Zaltys" width="100" class="boss" />
+              </div>
+            </div>
+
+            <div class="cell20 cell20s">
+              <div class="clickToggle" data-key="key_soulcd">
+                <img src="resources/images/seedcard.jpg" alt="Seedhunter Membership Card" title="Seedhunter Membership Card" class="iconmono"/>
+              </div>
+              <div class="clickRange clickToggle" data-key="key_soulcd" data-min="0" data-max="100" id="seed-parent">
+                <img src="resources/images/icon-item.png" alt="Seeds:" class="iconmono"><span id="auto-seeds" class="value">0</span>
+              </div>
+              <div class="clickToggle" data-key="key_kyu_pass">
+                <img src="resources/images/icon-loupe.jpg" alt="Loupe" title="Loupe" class="iconmono"/>
+              </div>
+              <div class="clickRange clickToggle" data-key="key_kyu_pass" data-min="0" data-max="50" id="appraised-parent">
+                <img src="resources/images/icon-unappraised.png" alt="Unapp:" class="iconmono"><span id="auto-unappraised" class="value">0</span>
+              </div>
+              <div class="centerImage clickToggle">
+                <img src="resources/images/boss-eres.png" alt="Ereshkigal" width="100" class="boss"/>
+              </div>
+            </div>
+
+            <div class="cell20 cell20s">
+              <div class="clickToggle" data-key="key_y_ticket">
+                <img src="resources/images/ticket.png" alt="Ticket" title="Sneaking in special ticket" class="iconmono" />
+              </div>
+              <div class="clickToggle" data-key="key_y_id">
+                <img src="resources/images/idcard.png" alt="ID Card" title="ID Card" class="iconmono" />
+              </div>
+              <div class="clickToggle" data-key="key_y_shiji">
+                <img src="resources/images/note.png" alt="Boss's Note" title="Boss's Note" class="iconmono"/>
+              </div>
+              <div class="clickRange" data-min="0" data-max="10" data-key="key_y_fire">
+                <img src="resources/images/firework.png" alt="Fireworks" title="Fireworks" class="iconmono"/> <span class="value">0</span>
+              </div>
+              <div class="centerImage clickToggle" data-garb="Midnight Mauve" data-oneway="true">
+                <img src="resources/images/icon-garb.png" alt="Midnight Mauve" title="Midnight Mauve" class="iconmono"/>
+              </div>
+            </div>
+
+            <div class="cell20 cell20s">
+              <div class="centerImage clickToggle" data-key="key_y_serap">
+                <img src="resources/images/icon-pendant.png" alt="Serah's Pendant" title="Serah's Pendant" class="iconmono"/>
+              </div>
+              <div class="clickToggle" data-key="key_w_yasai_t">
+                <img src="resources/images/icon-greens.png" alt="Main Greens" class="iconmono" />
+              </div>
+              <div class="clickRange" data-min="0" data-key="key_d_key">
+                <img src="resources/images/pilgrims-crux.png" alt="Pilgrim's Crux:" class="icon" style="height: 35px"> <span class="value">0</span>
+              </div>
+              <div class="clickRange" data-min="0" data-max="3" data-key="key_d_sekiban,key_d_wing,key_d_top,key_d_base" data-oneway="true">
+                <img src="resources/images/tablet.png" alt="Tablet:" class="icon"/> <span class="value">0</span>
+              </div>
+              <div class="clickRange" data-min="0" data-max="3" data-key="key_d_wing,key_d_top,key_d_base" data-oneway="true">
+                <img src="resources/images/saints-crux.png" alt="Saint's Crux" title="Saint's Crux Pieces" class="icon" style="height: 35px"/> <span class="value">0</span>
+              </div>
+            </div>
+
+            <div class="cell20 cell20s">
+              <div class="column20 clickToggle" data-key="key_s_zyouai" data-oneway="true">
+                <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Smiles"/>S</span>
+              </div>
+              <div class="column20 clickToggle" data-key="key_s_hiai" data-oneway="true">
+                <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Radiance"/>R</span>
+              </div>   
+              <div class="column20 clickToggle" data-key="key_s_kairaku" data-oneway="true">
+                <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Mischief"/>M</span>
+              </div>
+              <div class="column20 clickToggle" data-key="key_s_kanki" data-oneway="true">
+                <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Courage"/>C</span>
+              </div>
+              <div class="column20 clickToggle" data-key="key_s_hunnu" data-oneway="true">
+                <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Kindness"/>K</span>
+              </div>
+            </div>
+
+            <div class="cell20 cell20s">
+              <div class="clickToggle" data-key="key_kyu_pass">
+                <img src="resources/images/icon-lux-key.png" class="iconmono" alt="Supply sphere password" title="Supply sphere password" />
+              </div>
+              <div class="clickToggle" data-key="key_y_kagi1">
+                <img src="resources/images/icon-music-key.png" class="iconmono" alt="Musical Treasure Sphere Key" title="Musical Treasure Sphere Key" />
+              </div>
+              <div class="clickToggle" data-key="key_s_okuri">
+                <img src="resources/images/icon-belovedgift.png" class="iconmono" alt="Beloved's Gift" title="Beloved's Gift" />
+              </div>
+              <div class="clickToggle" data-key="key_d_keisan">
+                <img src="resources/images/icon-calc.png" class="iconmono" alt="Arithmometer" title="Arithmometer" />
+              </div>
+              <div class="clickToggle" data-key="key_w_mogsoul" data-oneway="true">
+                <img src="resources/images/icon-moogle.jpg" class="iconmono" title="Moogle Fragment"/>
+              </div>
+            </div>
+
+            <div class="cell20 cell20s">
+              <div class="clickToggle" data-epkey="ti900_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-rising.png" alt="Overclock" title="Overclock" class="iconmono"/></span>
+              </div>
+              <div class="clickToggle" data-epkey="ti000_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-heal.png" alt="Curaga" title="Curaga" class="iconmono" /></span>
+              </div>
+              <div class="clickToggle" data-epkey="ti020_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-phoenix.png" alt="Arise" title="Arise" class="iconmono" /></span>
+              </div>
+              <div class="clickToggle" data-epkey="ti030_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-debuff.png" alt="Esunada" title="Esunada" class="iconmono"/></span>
+              </div>
+              <div class="clickToggle" data-epkey="ti600_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-shield.png" alt="Decoy" title="Decoy" class="iconmono"/></span>
+              </div>
+            </div>
+            <div class="cell20 cell20s">
+              <div class="clickToggle" data-epkey="ti500_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-earth.png" alt="Quake" title="Quake" class="iconmono"/></span>
+              </div>
+              <div class="clickToggle" data-epkey="at900_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-weapon.png" alt="Army of One" title="Army of One" class="iconmono"/></span>
+              </div>
+              <div class="clickToggle" data-epkey="ti830_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-run.png" alt="Escape" title="Escape" class="iconmono"/></span>
+              </div>
+              <div class="clickToggle" data-epkey="ti840_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-clock.png" alt="Chronostasis" title="Chronostasis" class="iconmono"/></span>
+              </div>
+              <div class="clickToggle" data-epkey="ti810_00">
+                <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-map.png" alt="Teleport" title="Teleport" class="iconmono"/></span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="row column100 checkerboard" id="pretty_region_meta_1">
-          <div class="cell20">
-            <div class="clickRange" data-min="0" data-max="14" data-threshold="-1">
-              <!-- Only day if not auto tracking -->
-              <img src="resources/images/icon-clock.png" alt="Day " height="40" width="40" class="top"><br/><span id="auto-trueday" class="value">0</span><span class="autoTracker">: <span id="auto-time">00:00</span></span>
-            </div>
-            <div>
-              <img src="resources/images/icon-gil.png" alt="Gil: " height="40" width="40"  class="top"/><br/> <span id="auto-gil">0</span>
-            </div>
-            <div class="clickRange" data-min="5" data-max="9" data-threshold="4">
-              <img src="resources/images/icon-ep.png" alt="Max EP:" width="40" height="40" class="top" /><br/> <span id="auto-ep" class="value">5</span>
-            </div>
-            <div class="clickRange" data-min="6" data-max="12" data-threshold="5">
-              <img src="resources/images/icon-recovery.png" alt="Item slots:" width="40" height="40" class="top" /><br/> <span id="auto-itemslots" class="value">6</span>
-            </div>
-            <div class="clickRange" data-min="0" data-max="3" data-threshold="0" id="odin-parent">
-              <img src="resources/images/odin-icon.png" alt="Odin: " height="40" width="40" class="top"><br/> <span id="auto-odin-level" class="value">0</span><span class="autoTracker">: <span id="auto-odin-health">250</span><span id="auto-odin-next">/400</span></span>
-            </div>
-          </div>
-          <div class="cell20">
-            <div class="centerImage clickRange" data-min="0" data-max="5" data-threshold="4" data-mainquest="luxerion">
-              <img src="resources/images/Luxerion-lrffxiii-icon.png" class="top" alt="Main quest 1" height="40" width="40" /><br/>1-<span class="value">0</span>
-            </div>
-            <div class="centerImage clickRange" data-min="0" data-max="3" data-threshold="2" data-mainquest="yusnaan">
-              <img src="resources/images/Yusnaan-lrffxiii-icon.png" class="top" alt="Main quest 2" height="40" width="40"/><br/>2-<span class="value">0</span>
-            </div>
-            <div class="centerImage clickRange" data-min="0" data-max="3" data-threshold="2" data-mainquest="wildlands">
-              <img src="resources/images/Wildlands-lrffxiii-icon.png" class="top" alt="Main quest 3" height="40" width="40" /><br/>3-<span class="value">0</span>
-            </div>
-            <div class="centerImage clickRange" data-min="0" data-max="5" data-threshold="4" data-mainquest="deaddunes">
-              <img src="resources/images/DeadDunes-lrffxiii-icon.png" class="top" alt="Main quest 4" height="40" width="40" /><br/>4-<span class="value">0</span>
-            </div>
-            <div class="centerImage clickRange" data-min="0" data-max="1" data-threshold="0" data-mainquest="sazh">
-              <img src="resources/images/Wildlands-lrffxiii-icon.png" class="top" alt="Main quest 5" height="40" width="40" /><br/>5-<span class="value">0</span>
-            </div>
-          </div>
-          <div class="cell20 cell20s">
-            <div class="clickToggle">
-              <img src="resources/images/boss-noel.png" alt="Noel Kreiss" width="100" class="boss"/>
-            </div>
-            <div class="clickToggle">
-              <img src="resources/images/boss-snow.png" alt="Snow Villiers" width="100" class="boss"/>
-            </div>
-            <div class="clickToggle">
-              <img src="resources/images/boss-caius.png" alt="Caius Ballad" width="100" class="boss"/>
-            </div>
-            <div class="clickToggle">
-              <img src="resources/images/boss-gren.png" alt="Grendel" width="100" class="boss"/>
-            </div>
-            <div class="clickToggle">
-              <img src="resources/images/boss-zaltys.png" alt="Zaltys" width="100" class="boss" />
-            </div>
-          </div>
-
-          <div class="cell20 cell20s">
-            <div class="clickToggle" data-key="key_soulcd">
-              <img src="resources/images/seedcard.jpg" alt="Seedhunter Membership Card" title="Seedhunter Membership Card" class="iconmono"/>
-            </div>
-            <div class="clickRange" data-min="0" data-max="100" id="seed-parent">
-              <img src="resources/images/icon-item.png" alt="Seeds:" class="iconmono"><span id="auto-seeds" class="value">0</span>
-            </div>
-            <div class="clickToggle" data-key="key_kyu_pass">
-              <img src="resources/images/icon-loupe.jpg" alt="Loupe" title="Loupe" class="iconmono"/>
-            </div>
-            <div class="clickRange" data-min="0" data-max="50" id="appraised-parent">
-              <img src="resources/images/icon-unappraised.png" alt="Unapp:" class="iconmono"><span id="auto-unappraised" class="value">0</span>
-            </div>
-            <div class="centerImage clickToggle">
-              <img src="resources/images/boss-eres.png" alt="Ereshkigal" width="100" class="boss"/>
-            </div>
-          </div>
-
-          <div class="cell20 cell20s">
-            <div class="clickToggle" data-key="key_y_ticket">
-              <img src="resources/images/ticket.png" alt="Ticket" title="Sneaking in special ticket" class="iconmono" />
-            </div>
-            <div class="clickToggle" data-key="key_y_id">
-              <img src="resources/images/idcard.png" alt="ID Card" title="ID Card" class="iconmono" />
-            </div>
-            <div class="clickToggle" data-key="key_y_shiji">
-              <img src="resources/images/note.png" alt="Boss's Note" title="Boss's Note" class="iconmono"/>
-            </div>
-            <div class="clickRange" data-min="0" data-max="10" data-key="key_y_fire">
-              <img src="resources/images/firework.png" alt="Fireworks" title="Fireworks" class="iconmono"/> <span class="value">0</span>
-            </div>
-            <div class="centerImage clickToggle" data-garb="0000000_0000139">
-              <img src="resources/images/icon-garb.png" alt="Midnight Mauve" title="Midnight Mauve" class="iconmono"/>
-            </div>
-          </div>
-
-          <div class="cell20 cell20s">
-            <div class="centerImage clickToggle" data-key="key_y_serap">
-              <img src="resources/images/icon-pendant.png" alt="Serah's Pendant" title="Serah's Pendant" class="iconmono"/>
-            </div>
-            <div class="clickToggle" data-key="key_w_yasai_t">
-              <img src="resources/images/icon-greens.png" alt="Main Greens" class="iconmono" />
-            </div>
-            <div class="clickRange" data-min="0" data-key="key_d_key">
-              <img src="resources/images/pilgrims-crux.png" alt="Pilgrim's Crux:" class="icon" style="height: 35px"> <span class="value">0</span>
-            </div>
-            <div class="clickRange" data-min="0" data-max="3" data-key="key_d_sekiban" data-oneway="true">
-              <img src="resources/images/tablet.png" alt="Tablet:" class="icon"/> <span class="value">0</span>
-            </div>
-            <div class="clickRange" data-min="0" data-max="3" data-key="key_d_wing,key_d_top,key_d_base" data-oneway="true">
-              <img src="resources/images/saints-crux.png" alt="Saint's Crux" title="Saint's Crux Pieces" class="icon" style="height: 35px"/> <span class="value">0</span>
-            </div>
-          </div>
-
-          <div class="cell20 cell20s">
-            <div class="column20 clickToggle" data-key="key_s_zyouai" data-oneway="true">
-              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Smiles"/>S</span>
-            </div>
-            <div class="column20 clickToggle" data-key="key_s_hiai" data-oneway="true">
-              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Radiance"/>R</span>
-            </div>   
-            <div class="column20 clickToggle" data-key="key_s_kairaku" data-oneway="true">
-              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Mischief"/>M</span>
-            </div>
-            <div class="column20 clickToggle" data-key="key_s_kanki" data-oneway="true">
-              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Courage"/>C</span>
-            </div>
-            <div class="column20 clickToggle" data-key="key_s_hunnu" data-oneway="true">
-              <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Kindness"/>K</span>
-            </div>
-          </div>
-
-          <div class="cell20 cell20s">
-            <div class="clickToggle" data-key="key_kyu_pass">
-              <img src="resources/images/icon-lux-key.png" class="iconmono" alt="Supply sphere password" title="Supply sphere password" />
-            </div>
-            <div class="clickToggle" data-key="key_y_kagi1">
-              <img src="resources/images/icon-music-key.png" class="iconmono" alt="Musical Treasure Sphere Key" title="Musical Treasure Sphere Key" />
-            </div>
-            <div class="clickToggle" data-key="key_s_okuri">
-              <img src="resources/images/icon-belovedgift.png" class="iconmono" alt="Beloved's Gift" title="Beloved's Gift" />
-            </div>
-            <div class="clickToggle" data-key="key_d_keisan">
-              <img src="resources/images/icon-calc.png" class="iconmono" alt="Arithmometer" title="Arithmometer" />
-            </div>
-            <div class="clickToggle" data-key="key_w_mogsoul" data-oneway="true">
-              <img src="resources/images/icon-moogle.jpg" class="iconmono" title="Moogle Fragment"/>
-            </div>
-          </div>
-
-          <div class="cell20 cell20s">
-            <div class="clickToggle" data-epkey="ti900_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-rising.png" alt="Overclock" title="Overclock" class="iconmono"/></span>
-            </div>
-            <div class="clickToggle" data-epkey="ti000_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-heal.png" alt="Curaga" title="Curaga" class="iconmono" /></span>
-            </div>
-            <div class="clickToggle" data-epkey="ti020_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-phoenix.png" alt="Arise" title="Arise" class="iconmono" /></span>
-            </div>
-            <div class="clickToggle" data-epkey="ti030_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-debuff.png" alt="Esunada" title="Esunada" class="iconmono"/></span>
-            </div>
-            <div class="clickToggle" data-epkey="ti600_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-shield.png" alt="Decoy" title="Decoy" class="iconmono"/></span>
-            </div>
-          </div>
-          <div class="cell20 cell20s">
-            <div class="clickToggle" data-epkey="ti500_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-earth.png" alt="Quake" title="Quake" class="iconmono"/></span>
-            </div>
-            <div class="clickToggle" data-epkey="at900_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-weapon.png" alt="Army of One" title="Army of One" class="iconmono"/></span>
-            </div>
-            <div class="clickToggle" data-epkey="ti830_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-run.png" alt="Escape" title="Escape" class="iconmono"/></span>
-            </div>
-            <div class="clickToggle" data-epkey="ti840_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-clock.png" alt="Chronostasis" title="Chronostasis" class="iconmono"/></span>
-            </div>
-            <div class="clickToggle" data-epkey="ti810_00">
-              <span><img src="resources/images/icon-ep.png" alt="EP:" class="iconmono"/><img src="resources/images/icon-map.png" alt="Teleport" title="Teleport" class="iconmono"/></span>
+        <div id="keyInventory" class="autoTracker flexRegion">
+          <div class="row column40">
+            Key Items:
+            <br/>
+            <div class="column40 columnTall" id="keyItems">
+              <table id="basic_keyItems">
+              </table>
             </div>
           </div>
         </div>
-      </div>
-      <div id="keyInventory" class="autoTracker flexRegion">
-        <div class="row column40">
-          Key Items:
-          <br/>
-          <div class="column40 columnTall" id="keyItems">
-            <table id="basic_keyItems">
+        <div id="inventory" class="autoTracker flexRegion">
+          <div class="row column40">
+            Items: 
+            <br/>
+            <div class="column40 columnTall" id="items">
+              <table id="basic_items">
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="sideQuests" class="flexRegion">
+          <div class="row column40">
+            Side quests:
+            <br/>
+            Region: <select name="sideQuestRegion" id="sideQuestRegion" onchange="updateSideQuestRegion()">
+              <option value="-1">All</option>
+              <option value="0">Luxerion</option>
+              <option value="1">Yusnaan</option>
+              <option value="2">Dead Dunes</option>
+              <option value="3">Wildlands</option>
+            </select>
+            <br/>
+            <div class="column40 columnTall" id="side-quests">
+              <table id="base_side_quests">
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="canvasLookup" class="flexRegion">
+          <div class="row column100">
+            Canvas of Prayers
+            <br/>
+            Region: <select name="canvasRegion" id="canvasRegion" onchange="updateCanvasRegion()">
+              <option value="-1">All</option>
+              <option value="0">Luxerion</option>
+              <option value="1">Yusnaan</option>
+              <option value="2">Dead Dunes</option>
+              <option value="3">Wildlands</option>
+              <option value="4">Global</option>
+            </select>
+            <br/>
+            <div class="column40 columnTall">
+              <table id="canvasLookupList">
+              </table>
+            </div>
+            <div class="column60">
+              <span id="canvasLookupSelectedName"></span>
+              <br/>
+              Region: <span id="canvasLookupSelectedRegion"></span>
+              <br/>
+              Status: <span id="canvasLookupSelectedStatus"></span>
+              <br/>
+              Prerequisites:
+              <ul id="canvasLookupSelectedPrerequisites"></ul>
+              <br/>
+              Requirements:
+              <table id="canvasLookupSelectedRequirements" style="width: inherit;"></table>
+              <br/>
+              <!-- <div id="canvasLookupSelected"></div> -->
+            </div>
+          </div>
+        </div>
+        <div id="hintsReference" class="flexRegion noSelect">
+          <div class="row column120">
+            Hints
+            <br/>
+            <div class="">
+              <div class="cellHint">
+                <div>Area</div><div title="Known">K</div><div title="Found">F</div>
+                <div>Area</div><div title="Known">K</div><div title="Found">F</div>
+              </div>
+              <div class="cellHint">
+                <div>Ark:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+                <div>CoP Global:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              </div>
+              <div class="cellHint">
+                <div>Luxerion:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+                <div>CoP Luxerion:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              </div>
+              <div class="cellHint">
+                <div>Yusnaan:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+                <div>CoP Yusnaan:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              </div>
+              <div class="cellHint">
+                <div>Wildlands:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+                <div>CoP Wildlands:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              </div>
+              <div class="cellHint">
+                <div>Dead Dunes:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+                <div>CoP Dunes:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              </div>
+              <div class="cellHint">
+                <div>Hand ins:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+                <div>Drops:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              </div>
+              <div class="cellHint">
+                <div>Ultimate/Final:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="hintsReference" class="flexRegion noSelect">
+          <div class="row column120 columnHalf">
+            Quest hint notes:
+            <table style="table-layout: fixed; width: 100%;" id="questHintTable">
+              <tr>
+                <th style="width: 15px;"></th>
+                <th style="width: 60px;">Quest</th>
+                <th style="width: 35%">Location</th>
+                <th></th>
+                <th style="width: 35%">Item</th>
+              </tr>
+              <tr>
+                <td onclick="addQuestHintRow()">+</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
             </table>
           </div>
-        </div>
-      </div>
-      <div id="inventory" class="autoTracker flexRegion">
-        <div class="row column40">
-          Items: 
-          <br/>
-          <div class="column40 columnTall" id="items">
-            <table id="basic_items">
-            </table>
-          </div>
-        </div>
-      </div>
-      <div id="sideQuests" class="flexRegion">
-        <div class="row column40">
-          Side quests:
-          <br/>
-          Region: <select name="sideQuestRegion" id="sideQuestRegion" onchange="updateSideQuestRegion()">
-            <option value="-1">All</option>
-            <option value="0">Luxerion</option>
-            <option value="1">Yusnaan</option>
-            <option value="2">Dead Dunes</option>
-            <option value="3">Wildlands</option>
-          </select>
-          <br/>
-          <div class="column40 columnTall" id="side-quests">
-            <table id="base_side_quests">
-            </table>
-          </div>
-        </div>
-      </div>
-      <div id="canvasLookup" class="flexRegion">
-        <div class="row column100">
-          Canvas of Prayers
-          <br/>
-          Region: <select name="canvasRegion" id="canvasRegion" onchange="updateCanvasRegion()">
-            <option value="-1">All</option>
-            <option value="0">Luxerion</option>
-            <option value="1">Yusnaan</option>
-            <option value="2">Dead Dunes</option>
-            <option value="3">Wildlands</option>
-            <option value="4">Global</option>
-          </select>
-          <br/>
-          <div class="column40 columnTall">
-            <table id="canvasLookupList">
-            </table>
-          </div>
-          <div class="column60">
-            <span id="canvasLookupSelectedName"></span>
-            <br/>
-            Region: <span id="canvasLookupSelectedRegion"></span>
-            <br/>
-            Status: <span id="canvasLookupSelectedStatus"></span>
-            <br/>
-            Prerequisites:
-            <ul id="canvasLookupSelectedPrerequisites"></ul>
-            <br/>
-            Requirements:
-            <table id="canvasLookupSelectedRequirements" style="width: inherit;"></table>
-            <br/>
-            <!-- <div id="canvasLookupSelected"></div> -->
-          </div>
-        </div>
-      </div>
-      <div id="hintsReference" class="flexRegion noSelect">
-        <div class="row column120">
-          Hints
-          <br/>
-          <div class="">
-            <div class="cellHint">
-              <div>Area</div><div title="Known">K</div><div title="Found">F</div>
-              <div>Area</div><div title="Known">K</div><div title="Found">F</div>
-            </div>
-            <div class="cellHint">
-              <div>Ark:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              <div>CoP Global:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-            </div>
-            <div class="cellHint">
-              <div>Luxerion:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              <div>CoP Luxerion:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-            </div>
-            <div class="cellHint">
-              <div>Yusnaan:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              <div>CoP Yusnaan:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-            </div>
-            <div class="cellHint">
-              <div>Wildlands:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              <div>CoP Wildlands:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-            </div>
-            <div class="cellHint">
-              <div>Dead Dunes:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              <div>CoP Dunes:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-            </div>
-            <div class="cellHint">
-              <div>Hand ins:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              <div>Drops:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-            </div>
-            <div class="cellHint">
-              <div>Ultimate/Final:</div><div class="clickRange" data-min="0"><span class="value">0</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="hintsReference" class="flexRegion noSelect">
-        <div class="row column120 columnHalf">
-          Quest hint notes:
-          <table style="table-layout: fixed; width: 100%;" id="questHintTable">
-            <tr>
-              <th style="width: 15px;"></th>
-              <th style="width: 60px;">Quest</th>
-              <th style="width: 35%">Location</th>
-              <th></th>
-              <th style="width: 35%">Item</th>
-            </tr>
-            <tr>
-              <td onclick="addQuestHintRow()">+</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </table>
         </div>
       </div>
     </div>
+    <br />
   </div>
-  <br />
   <!-- <br /> -->
   <!-- <button id="autoPollButton" class="topButton" onclick="beginPoll()" type="button">Start auto tracker</button> -->
   <!-- <button id="detatchButton" class="topButton autoTracker" onclick="detatchTracker()" type="button" disabled="true">Stop auto tracker</button> -->
@@ -663,30 +692,3 @@
 </body>
 
 </html>
-
-<select>
-  <option value="-1">Unknown</option>
-  <option value="0">Yus 0-1</option>
-  <option value="1">Lux 1-1</option>
-  <option value="2">Lux 1-2</option>
-  <option value="3">Lux 1-3</option>
-  <option value="4">Lux 1-4</option>
-  <option value="5">Lux 1-5</option>
-  <option value="6">Yus 2-1</option>
-  <option value="7">Yus 2-2</option>
-  <option value="8">Yus 2-3</option>
-  <option value="9">Wild 3-1</option>
-  <option value="10">Wild 3-2</option>
-  <option value="11">Wild 3-3</option>
-  <option value="12">Dead 1-1</option>
-  <option value="13">Dead 1-2</option>
-  <option value="14">Dead 1-3</option>
-  <option value="15">Dead 1-4</option>
-  <option value="16">Dead 1-5</option>
-  <option value="17">Sazh 5-1</option>
-  <option value="18">Sazh 5-2</option>
-  <option value="19">Sazh 5-3</option>
-  <option value="20">Sazh 5-4</option>
-  <option value="21">Sazh 5-5</option>
-  <option value="22">Sazh 5-6</option>
-</select>

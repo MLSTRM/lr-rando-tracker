@@ -22,6 +22,7 @@ window.onload = () => {
   hideAutotrackerElements();
   updateTheme(true);
   updateColumnWidth(true);
+  updateBodyTheme(true);
   updateCanvasRegion();
   updateSideQuestRegion();
   addQuestHintRow();
@@ -387,6 +388,18 @@ function updateTheme(initial?: boolean){
   }
 }
 
+function updateBodyTheme(initial?: boolean){
+  const themeElement = document.getElementById('bodyTheme') as HTMLSelectElement;
+  const theme = (initial ? localStorage.getItem('display-body-theme') : undefined) ?? themeElement.value;
+  themeElement.value = theme;
+  localStorage.setItem('display-body-theme', theme);
+  const metaRegion = document.getElementById('mainBody');
+  if(metaRegion){
+    metaRegion.classList.value = '';
+    metaRegion.classList.add(theme);
+  }
+}
+
 function updateColumnWidth(initial?: boolean){
   const widthElement = document.getElementById('columnWidth') as HTMLSelectElement;
   const width = (initial ? localStorage.getItem('display-columnWidth') : undefined) ?? widthElement.value;
@@ -469,11 +482,11 @@ const questSelectBody = `<option value="-1">Unknown</option>
 <option value="9">Wild 3-1</option>
 <option value="10">Wild 3-2</option>
 <option value="11">Wild 3-3</option>
-<option value="12">Dead 1-1</option>
-<option value="13">Dead 1-2</option>
-<option value="14">Dead 1-3</option>
-<option value="15">Dead 1-4</option>
-<option value="16">Dead 1-5</option>
+<option value="12">Dead 4-1</option>
+<option value="13">Dead 4-2</option>
+<option value="14">Dead 4-3</option>
+<option value="15">Dead 4-4</option>
+<option value="16">Dead 4-5</option>
 <option value="17">Sazh 5-1</option>
 <option value="18">Sazh 5-2</option>
 <option value="19">Sazh 5-3</option>
@@ -494,11 +507,24 @@ const questSelectBody = `<option value="-1">Unknown</option>
 // quest hints as well as libras. - do some CE stuff to see if it can be scraped from display text somewhere
 
 /*
+To fix: 0.7.1
+fix garb autotracking (based on cos_fa00 id? Might have to do it based on equipped)
+TEST change, should be linked to key item - highlight on soul seeds and unappraised - would side quest hook be better here?
+fix - tablets lock at 1 max?
+fix - garb names - memory doesn't clear?
+
+New features to do:
+hook up side quest info pane
+
+icons for quest status for side/canvas
+allow for manual toggle of side/canvas completion
+Add way to mark hints as complete rather than deleting?
+
 allow for rando state persistence, save state to file (works for config), push state back from UI to backend for non-auto use
 
 EP ability cost selection (start at default and allow adjustment up/down)
 
-hook in autotracker to prerequisites and item check
+hook in autotracker to prerequisites and item check for canvas/side
 
 add shop note area?
 
@@ -508,4 +534,15 @@ pane selection/ordering controls (rather than pop in/out or fixed)
 -side quest lookup
 -canvas lookup
 -npc lookup
+
+SORT:
+half canvas requirements thing (settings)
+
+canvas sorting options (alphabetical rather than default)
+quest track progress even if all areas
+
+8 chocoborel, 6 slug sweet cardesia
+
+pull boss names from spoiler log
+
 */

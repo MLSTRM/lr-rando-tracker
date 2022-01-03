@@ -508,6 +508,9 @@ export const prayers = {
                 "Sun Flower",
                 "Moon Flower"
             ],
+            prerequisiteOther: [
+                "time_day_3"
+            ],
             canvasByteIndex: 3,
             canvasByteOffset: 0x08
         } as QuestInfo,

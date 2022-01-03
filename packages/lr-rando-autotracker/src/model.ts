@@ -18,6 +18,9 @@ export interface RandoMemoryState {
     };
     schemas: {
         active: string;
+        slot1: string;
+        slot2: string;
+        slot3: string;
     };
     odinHealth: number;
     keyItems: Map<string, number>;

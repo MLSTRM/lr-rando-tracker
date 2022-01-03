@@ -224,6 +224,6 @@ export class RandoBackend {
     }
 
     public hasGarbByName(garb: string): boolean {
-        return this.oldState.garbs?.includes(garb) ?? false;
+        return (this.oldState.garbs?.includes(garb) || this.oldState.schemas?.slot1 === garb || this.oldState.schemas?.slot2 === garb || this.oldState.schemas?.slot3 === garb) ?? false;
     }
 }

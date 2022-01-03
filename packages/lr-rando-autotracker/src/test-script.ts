@@ -7,8 +7,8 @@ import { stripNullChars } from ".";
 //CONFIG
 const reader = new LrMemoryReader(false);
 const showItems = false;
-const showGarbs = true;
-const showSchemaInfo = false;
+const showGarbs = false;
+const showSchemaInfo = true;
 const showEpAbilitiesEtc = false;
 const showSideQuests = false;
 const showCanvasQuests = false;
@@ -102,9 +102,10 @@ const interval = setInterval(async () => {
             const activeSchemaIndex = reader.readMemoryAddress(pSomeStatsBase + 0xBF, BYTE, true);
             if(showSchemaInfo){
                 // Nocturne shows as "Nocturneour" ?? Check region with CE
-                console.log(`reading Schema 1 as: ${reader.readBuffer(pSomeStatsBase + schemaOffset, 64, true)?.toString()}`);
-                console.log(`reading Schema 2 as: ${reader.readBuffer(pSomeStatsBase + schemaOffset + schemaLength, 64, true)?.toString()}`);
-                console.log(`reading Schema 3 as: ${reader.readBuffer(pSomeStatsBase + schemaOffset + (schemaLength*2), 64, true)?.toString()}`);
+                console.log(`schema info memory region start: ${(pSomeStatsBase + schemaOffset).toString(16)}`);
+                console.log(`reading Schema 1 as: ${stripNullChars(reader.readBuffer(pSomeStatsBase + schemaOffset, 64, true), true)}`);
+                console.log(`reading Schema 2 as: ${stripNullChars(reader.readBuffer(pSomeStatsBase + schemaOffset + schemaLength, 64, true), true)}`);
+                console.log(`reading Schema 3 as: ${stripNullChars(reader.readBuffer(pSomeStatsBase + schemaOffset + (schemaLength*2), 64, true), true)}`);
                 console.log(`Active schema index: ${reader.readMemoryAddress(pSomeStatsBase + 0xBF, BYTE, true)}`);
             }
             console.log(`Overworld garb: ${reader.readBuffer(pSomeStatsBase + schemaOffset + (schemaLength * activeSchemaIndex), 32, true)?.toString()}`);
