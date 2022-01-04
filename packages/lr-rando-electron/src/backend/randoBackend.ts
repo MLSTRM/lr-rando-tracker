@@ -21,6 +21,7 @@ export class RandoBackend {
 
     public disconnect(): void {
         this.reader.detatch();
+        this.readerLoaded = false;
     }
 
     public async getState(): Promise<RandoMemoryState | undefined> {
@@ -226,4 +227,9 @@ export class RandoBackend {
     public hasGarbByName(garb: string): boolean {
         return (this.oldState.garbs?.includes(garb) || this.oldState.schemas?.slot1 === garb || this.oldState.schemas?.slot2 === garb || this.oldState.schemas?.slot3 === garb) ?? false;
     }
+}
+
+
+interface BackendSettings {
+    halfCanvas: boolean;
 }

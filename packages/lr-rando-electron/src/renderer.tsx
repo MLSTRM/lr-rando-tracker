@@ -314,6 +314,12 @@ function detatchTracker() {
   ipcRenderer.invoke('randoDisconnect');
   clearInterval(pollInterval);
   pollingObtainedChecks.forEach(i => clearInterval(i));
+  document.getElementById('detatchButton')?.setAttribute('disabled', 'true');
+  document.getElementById('autoPollButton')?.removeAttribute('disabled');
+  const trackerElements = document.getElementsByClassName('autoTracker');
+  for(var i = 0; i<trackerElements.length; i++){
+    trackerElements[i].setAttribute('hidden', '');
+  }
 }
 
 function setPropOnElem(selector: string, value: any){
