@@ -99,3 +99,7 @@ ipcMain.handle('canvasNamedInfo', async (event, name) => {
 ipcMain.handle('garbCheck', async (event, garb) => {
   return backend.hasGarbByName(garb);
 });
+
+ipcMain.on('settings_halfCanvas', async (event, halfCanvas) => {
+  return backend.setSettingsHalfCanvas(halfCanvas);
+});

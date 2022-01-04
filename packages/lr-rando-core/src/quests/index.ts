@@ -6,6 +6,7 @@ import { QuestInfo, QuestPrerequisites, QuestProgressCheck } from "./model";
 import { SazhMainQuest } from "./sazh";
 import { WildlandsMainQuest, WildlandsSideQuests, WildMainQuestCompletionValues } from "./wildlands";
 import { YusMainQuestCompletionValues, YusnaanMainQuest, YusnaanSideQuests } from "./yusnaan";
+export * from './model';
 
 const mainQuests = {
     [Areas.LUXERION]: LuxerionMainQuest,

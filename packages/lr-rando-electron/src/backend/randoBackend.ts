@@ -1,7 +1,8 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem,
-    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName } from "lr-rando-core";
+    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement } from "lr-rando-core";
 import _ from 'lodash';
+import { QuestInfo } from "lr-rando-core/build/quests/model";
 
 const reservedKeys = ['time', 'region'];
 
@@ -11,6 +12,10 @@ export class RandoBackend {
     private oldUnknownEp: string[] = [];
     private unknownRegions: Set<string> = new Set();
     private stateValid: boolean = false;
+
+    private settings: BackendSettings = {
+        halfCanvas: false
+    };
 
     private oldState: Partial<RandoMemoryState>;
 
@@ -171,7 +176,7 @@ export class RandoBackend {
 
     public getSideQuestList(area?: number): Map<string, SideQuestProgress | undefined> {
         const keys = getSideQuestNamesList(area);
-        const areas = area ? [area] : [0, 1, 2, 3];
+        const areas = (area && area >= 0) ? [area] : [0, 1, 2, 3];
         const map = new Map();
         key: for(const key of keys){
             for(const locs of areas){
@@ -187,7 +192,7 @@ export class RandoBackend {
 
     public getCanvasList(area?: number): Map<string, string> {
         const keys = getCanvasNamesList(area);
-        const areas = area ? [area] : [0, 1, 2, 3, 4];
+        const areas = (area && area >= 0) ? [area] : [0, 1, 2, 3, 4];
         const map = new Map();
         key: for(const key of keys){
             for(const locs of areas){
@@ -219,7 +224,9 @@ export class RandoBackend {
         const info = getCanvasQuestInfo(name);
         if(info){
             const {quest, region} = info;
-            return Object.assign(quest, {status, region: areaIndexStringToAreaName(region)});
+            const displayQuest = enrichCanvasRequirements(quest, this.settings);
+            //translate names into better forms
+            return Object.assign(displayQuest, {status, region: areaIndexStringToAreaName(region)});
         }
         return undefined;
     }
@@ -227,6 +234,39 @@ export class RandoBackend {
     public hasGarbByName(garb: string): boolean {
         return (this.oldState.garbs?.includes(garb) || this.oldState.schemas?.slot1 === garb || this.oldState.schemas?.slot2 === garb || this.oldState.schemas?.slot3 === garb) ?? false;
     }
+
+    public setSettingsHalfCanvas(value?: boolean): void {
+        console.log(`Setting half canvas to: ${value}`);
+        this.settings.halfCanvas = !!value;
+    }
+}
+
+function enrichCanvasRequirements(info: QuestInfo, settings: BackendSettings): QuestInfo {
+    if(info.requirements){
+        if(!Array.isArray(info.requirements)){
+            const requirement = info.requirements;
+            const mappedRequirement: QuestRequirement = {};
+            for(const key of Object.keys(requirement)){
+                const value = requirement[key];
+                let name = key;
+                let newValue = value;
+                const isItemWithInfo = prettyPrintItem(key);
+                if(isItemWithInfo.known){
+                    if(typeof value === 'number' && settings.halfCanvas){
+                        newValue = Math.ceil(value / 2);
+                    }
+                    name = isItemWithInfo.name;
+                }
+                const isKeyItemWithInfo = prettyPrintKeyItem(key);
+                if(isKeyItemWithInfo.known){
+                    name = isKeyItemWithInfo.name;
+                }
+                mappedRequirement[name] = newValue;
+            }
+            info = Object.assign({}, info, {requirements: mappedRequirement});
+        }
+    }
+    return info;
 }
 
 

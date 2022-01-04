@@ -4,14 +4,12 @@ import { Berdy, Biggs, Candice, DrunkPyro, Funicula, Gordon_Gourmet, Gregory, Le
 
 const Yus_2_1: QuestInfo = {
     name: "The Great Break-In",
-    requirements: [
-        {
+    requirements: {
             "sneak_ticket": true,
             "sneak_in_special": true,
             "{cyclops}": true,
             "id_card": true
-        }
-    ],
+    },
     handIn: "Augur's Quarter"
 }
 

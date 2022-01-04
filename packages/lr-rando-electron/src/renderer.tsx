@@ -23,6 +23,7 @@ window.onload = () => {
   updateTheme(true);
   updateColumnWidth(true);
   updateBodyTheme(true);
+  updateCanvasHalf(true);
   updateCanvasRegion();
   updateSideQuestRegion();
   addQuestHintRow();
@@ -414,6 +415,18 @@ function updateColumnWidth(initial?: boolean){
   document.documentElement.style.setProperty('--column-width', `${width}px`);
 }
 
+function updateCanvasHalf(initial?: boolean){
+  const halfCanvasElement = document.getElementById('halfCanvasRequirements') as HTMLInputElement;
+  const checked = (initial ? (localStorage.getItem('display-halfCanvas') === 'true') : halfCanvasElement.checked);
+  localStorage.setItem('display-halfCanvas', checked.toString());
+  ipcRenderer.send('settings_halfCanvas', halfCanvasElement.checked);
+  setPropOnElem('#canvasLookupSelectedName', '');
+  setPropOnElem('#canvasLookupSelectedRegion', '');
+  setPropOnElem('#canvasLookupSelectedStatus', '');
+  setPropOnElem('#canvasLookupSelectedPrerequisites', '');
+  setPropOnElem('#canvasLookupSelectedRequirements', '');
+}
+
 //Display config region end
 
 async function updateSideQuestRegion(){
@@ -439,7 +452,6 @@ async function getCanvasQuestInfo(el: HTMLElement){
   //extract requirements
   //hook into inventory to check possibility
   //add in status (accepted / completed)
-  setPropOnElem('#canvasLookupSelected', JSON.stringify(info));
   setPropOnElem('#canvasLookupSelectedName', info.name);
   setPropOnElem('#canvasLookupSelectedRegion', info.region);
   setPropOnElem('#canvasLookupSelectedStatus', info.status);

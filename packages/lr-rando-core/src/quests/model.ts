@@ -23,7 +23,7 @@ export interface MainQuestLine {
     quests: {[key: string]: QuestInfo}
 }
 
-interface QuestRequirement {
+export interface QuestRequirement {
     [key: string]: true | number //TODO: change key here to be KeyItem | Item | Event
 }
 

@@ -17,7 +17,7 @@ export const keyItemNameMap = Object.freeze({
     'key_b_09': 'Key to the Sand Gate',
     'key_b_10': 'Key to the Green Gate',
     'key_b_11': 'Bandit\'s Bloodseal',
-    'key_b_12': 'Oath of the Merchants Guild',
+    'key_b_12': 'Oath of the Merchant\'s Guild',
     'key_b_13': 'Key for the Gates',
     'key_b_14': 'Proof of Unlocking the Light Gate',
     'key_b_15': 'Proof of Unlocking the Green Gate',

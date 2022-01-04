@@ -7,7 +7,7 @@ export const prayers = {
          "Revenge is Sweet": {
             name: "Revenge is Sweet",
             requirements: {
-                "niblet_hairball": 6
+                "mat_z_002": 6
             },
             prerequisiteQuests: [
                 "Lux_1_1"
@@ -18,7 +18,7 @@ export const prayers = {
          "Gift of Gratitude": {
             name: "Gift of Gratitude",
             requirements: {
-                "tattered_leather": 8
+                "mat_z_000": 8
             },
             prerequisiteQuests: [
                 "Lux_1_1"
@@ -29,7 +29,7 @@ export const prayers = {
          "Inventive Seamstress": {
             name: "Inventive Seamstress",
             requirements: {
-                "liquid_glass": 3
+                "mat_z_045": 3
             },
             prerequisiteQuests: [
                 "Lux_1_1"
@@ -40,8 +40,8 @@ export const prayers = {
          "Trapped": {
             name: "Trapped",
             requirements: {
-                "niblet_hairball": 60,
-                "tattered_leather": 80
+                "mat_z_002": 60,
+                "mat_z_000": 80
             },
             prerequisiteQuests: [
                 "Revenge is Sweet",
@@ -53,7 +53,7 @@ export const prayers = {
          "A Song for God": {
             name: "A Song for God",
             requirements: {
-                "demon_spicule": 3
+                "mat_z_022": 3
             },
             canvasByteIndex: 0,
             canvasByteOffset: 0x04
@@ -61,7 +61,7 @@ export const prayers = {
          "Slay the Machine": {
             name: "Slay the Machine",
             requirements: {
-                "motor_coil": 5
+                "mat_z_020": 5
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -72,7 +72,7 @@ export const prayers = {
          "Mythical Badge": {
             name: "Mythical Badge",
             requirements: {
-                "proof_of_legendary_title": 1
+                "ley_l_kishin": 1
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -83,7 +83,7 @@ export const prayers = {
          "Grave of a Bounty Hunter": {
             name: "Grave of a Bounty Hunter",
             requirements: {
-                "stormdragon_down": 1
+                "mat_z_031": 1
             },
             prerequisiteOther: [
                 "time_day_5"
@@ -94,7 +94,7 @@ export const prayers = {
          "Puppeteer's Lament": {
             name: "Puppeteer's Lament",
             requirements: {
-                "quality_machine_oil": 1
+                "mat_z_029": 1
             },
             prerequisiteOther: [
                 "time_day_5"
@@ -105,7 +105,7 @@ export const prayers = {
          "Revenge Has Teeth": {
             name: "Revenge Has Teeth",
             requirements: {
-                "chipped_fang": 10
+                "mat_z_013": 10
             },
             prerequisiteOther: [
                 "time_day_5"
@@ -116,8 +116,8 @@ export const prayers = {
          "Enchanted Brush": {
             name: "Enchanted Brush",
             requirements: {
-                "demon_spicule": 10,
-                "stormdragon_down": 8
+                "mat_z_022": 10,
+                "mat_z_031": 8
             },
             prerequisiteQuests: [
                 "A Song for God",
@@ -129,8 +129,8 @@ export const prayers = {
          "Night Patrol": {
             name: "Night Patrol",
             requirements: {
-                "chipped_fang": 10,
-                "motor_coil": 15
+                "mat_z_013": 10,
+                "mat_z_020": 15
             },
             prerequisiteQuests: [
                 "Slay the Machine",
@@ -142,8 +142,8 @@ export const prayers = {
          "Heretics' Beasts": {
             name: "Heretics' Beasts",
             requirements: {
-                "quality_machine_oil": 5,
-                "liquid_glass": 10
+                "mat_z_029": 5,
+                "mat_z_045": 10
             },
             prerequisiteQuests: [
                 "Inventive Seamstress",
@@ -157,7 +157,7 @@ export const prayers = {
          "Secret Machine": {
             name: "Secret Machine",
             requirements: {
-                "ether_coil": 3
+                "mat_z_021": 3
             },
             prerequisiteOther: [
                 "time_day_1"
@@ -168,7 +168,7 @@ export const prayers = {
          "Soulful Horn": {
             name: "Soulful Horn",
             requirements: {
-                "poisonous_sting": 10
+                "mat_z_019": 10
             },
             prerequisiteOther: [
                 "time_day_2"
@@ -179,7 +179,7 @@ export const prayers = {
          "A Dangerous Cocktail": {
             name: "A Dangerous Cocktail",
             requirements: {
-                "clear_ooze": 4
+                "mat_z_007": 4
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -190,8 +190,8 @@ export const prayers = {
          "Time Doesn't Heal": {
             name: "Time Doesn't Heal",
             requirements: {
-                "jade_hair_comb": 1,
-                "bronze_pocket_watch": 1
+                "key_b_16": 1,
+                "key_b_17": 1
             },
             prerequisiteOther: [
                 "boss_{cyclops}"
@@ -202,7 +202,7 @@ export const prayers = {
          "A Man for a Chocobo Girl": {
             name: "A Man for a Chocobo Girl",
             requirements: {
-                "chocobo_girls_phone_no": 1
+                "key_b_20": 1
             },
             prerequisiteQuests: [
                 "Yus_2_2"
@@ -213,7 +213,7 @@ export const prayers = {
          "Unfired Firework": {
             name: "Unfired Firework",
             requirements: {
-                "unfired_rocket_fireworks": 1
+                "key_b_18": 1
             },
             prerequisiteQuests: [
                 "Yus_2_3"
@@ -224,7 +224,7 @@ export const prayers = {
          "Rebuilding": {
             name: "Rebuilding",
             requirements: {
-                "statue_fragment": 5
+                "key_b_19": 5
             },
             prerequisiteQuests: [
                 "Yus_2_3"
@@ -235,7 +235,7 @@ export const prayers = {
          "Source of Inspiration": {
             name: "Source of Inspiration",
             requirements: {
-                "shattered_bone": 3
+                "mat_z_014": 3
             },
             prerequisiteOther: [
                 "time_day_5"
@@ -246,7 +246,7 @@ export const prayers = {
          "True Colors": {
             name: "True Colors",
             requirements: {
-                "firewyrm_scale": 1
+                "mat_z_028": 1
             },
             prerequisiteOther: [
                 "time_day_5"
@@ -257,8 +257,8 @@ export const prayers = {
          "Beast Summoner": {
             name: "Beast Summoner",
             requirements: {
-                "shattered_bone": 5,
-                "poisonous_sting": 10
+                "mat_z_014": 5,
+                "mat_z_019": 10
             },
             prerequisiteQuests: [
                 "Soulful Horn",
@@ -270,7 +270,7 @@ export const prayers = {
          "Youth Potion": {
             name: "Youth Potion",
             requirements: {
-                "single_eye": 1
+                "mat_z_035": 1
             },
             prerequisiteOther: [
                 "time_day_7"
@@ -281,7 +281,7 @@ export const prayers = {
          "Spell for Spell": {
             name: "Spell for Spell",
             requirements: {
-                "radial_bearing": 30
+                "mat_z_009": 30
             },
             prerequisiteOther: [
                 "time_day_7"
@@ -292,8 +292,8 @@ export const prayers = {
          "What Seekers Seek": {
             name: "What Seekers Seek",
             requirements: {
-                "firewyrm_scale": 5,
-                "single_eye": 5
+                "mat_z_028": 5,
+                "mat_z_035": 5
             },
             prerequisiteQuests: [
                 "Youth Potion",
@@ -305,9 +305,9 @@ export const prayers = {
          "Ultimate Craving": {
             name: "Ultimate Craving",
             requirements: {
-                "radial_bearing": 10,
-                "ether_coil": 15,
-                "clear_ooze": 30
+                "mat_z_009": 10,
+                "mat_z_021": 15,
+                "mat_z_007": 30
             },
             prerequisiteQuests: [
                 "Secret Machine",
@@ -322,7 +322,7 @@ export const prayers = {
          "Sun Flower": {
             name: "Sun Flower",
             requirements: {
-                "dayring_blossom": 3
+                "key_w_hana3": 3
             },
             prerequisiteOther: [
                 "time_day_1"
@@ -333,7 +333,7 @@ export const prayers = {
          "Moon Flower": {
             name: "Moon Flower",
             requirements: {
-                "moonsoul_bloom": 5
+                "key_w_hana2": 5
             },
             prerequisiteOther: [
                 "time_day_1"
@@ -344,7 +344,7 @@ export const prayers = {
          "Forget Me Not": {
             name: "Forget Me Not",
             requirements: {
-                "vibrant_ooze": 8
+                "mat_z_001": 8
             },
             prerequisiteOther: [
                 "time_day_1"
@@ -355,7 +355,7 @@ export const prayers = {
          "Chocobo Chow": {
             name: "Chocobo Chow",
             requirements: {
-                "gysahl_greens": 5
+                "key_w_yasai": 5
             },
             prerequisiteOther: [
                 "time_day_1"
@@ -366,9 +366,9 @@ export const prayers = {
          "Digging Mole": {
             name: "Digging Mole",
             requirements: {
-                "rocky_crag_mole": 1,
-                "chocoborel": 3,
-                "luminous_mushroom": 2
+                "key_w_mogura": 1,
+                "key_w_kino": 3,
+                "key_w_kino2": 2
             },
             prerequisiteOther: [
                 "time_day_1"
@@ -379,7 +379,7 @@ export const prayers = {
          "Moghan's Plea": {
             name: "Moghan's Plea",
             requirements: {
-                "arboreal_spore": 10
+                "mat_z_011": 10
             },
             prerequisiteQuests: [
                 "Peace and Quiet, Kupo"
@@ -390,7 +390,7 @@ export const prayers = {
          "Moogle Gourmand": {
             name: "Moogle Gourmand",
             requirements: {
-                "mystical_meal": 1
+                "key_w_food": 1
             },
             prerequisiteQuests: [
                 "Peace and Quiet, Kupo"
@@ -401,8 +401,8 @@ export const prayers = {
          "Emergency Treatment": {
             name: "Emergency Treatment",
             requirements: {
-                "chocobull": 1,
-                "animal_potion": 1
+                "key_w_drink": 1,
+                "key_w_drag2": 1
             },
             prerequisiteQuests: [
                 "Wild_3_2"
@@ -413,7 +413,7 @@ export const prayers = {
          "Fresh Fertilizer": {
             name: "Fresh Fertilizer",
             requirements: {
-                "goopy_goo": 5
+                "mat_z_015": 5
             },
             prerequisiteQuests: [
                 "Land of Our Forebears"
@@ -424,7 +424,7 @@ export const prayers = {
          "Secret of the Chocoborel": {
             name: "Secret of the Chocoborel",
             requirements: {
-                "chocoborel": 10
+                "key_w_kino": 10
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -435,7 +435,7 @@ export const prayers = {
          "Wildlands in Danger!": {
             name: "Wildlands in Danger!",
             requirements: {
-                "vegetable_seed": 10
+                "key_w_tane": 10
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -446,7 +446,7 @@ export const prayers = {
          "A Word of Thanks": {
             name: "A Word of Thanks",
             requirements: {
-                "wonder_gel": 3
+                "mat_z_018": 3
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -457,7 +457,7 @@ export const prayers = {
          "For the Future": {
             name: "For the Future",
             requirements: {
-                "amp_chip": 1
+                "mat_z_036": 1
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -468,7 +468,7 @@ export const prayers = {
          "Hunter's Challenge": {
             name: "Hunter's Challenge",
             requirements: {
-                "green_monster_moss": 2
+                "mat_z_032": 2
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -479,7 +479,7 @@ export const prayers = {
          "Echoes of a Drum": {
             name: "Echoes of a Drum",
             requirements: {
-                "green_leather": 6
+                "mat_z_008": 6
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -490,7 +490,7 @@ export const prayers = {
          "A Voice from Below": {
             name: "A Voice from Below",
             requirements: {
-                "monster_mince": 10
+                "mat_z_004": 10
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -501,8 +501,8 @@ export const prayers = {
          "Two Together": {
             name: "Two Together",
             requirements: {
-                "dayring_blossom": 8,
-                "moonsoul_bloom": 6
+                "key_w_hana3": 8,
+                "key_w_hana2": 6
             },
             prerequisiteQuests: [
                 "Sun Flower",
@@ -517,8 +517,8 @@ export const prayers = {
          "Dumpling Cook-off": {
             name: "Dumpling Cook-off",
             requirements: {
-                "monster_mince": 15,
-                "green_leather": 15
+                "mat_z_004": 15,
+                "mat_z_008": 15
             },
             prerequisiteQuests: [
                 "Echoes of a Drum",
@@ -530,8 +530,8 @@ export const prayers = {
          "A Secret Wish": {
             name: "A Secret Wish",
             requirements: {
-                "vibrant_ooze": 20,
-                "wonder_gel": 10
+                "mat_z_001": 20,
+                "mat_z_018": 10
             },
             prerequisiteQuests: [
                 "Forget Me Not",
@@ -543,9 +543,9 @@ export const prayers = {
          "Sylkis Secrets": {
             name: "Sylkis Secrets",
             requirements: {
-                "gysahl_greens": 3,
-                "tantal_greens": 2,
-                "sylkis_greens": 1
+                "key_w_yasai": 3,
+                "key_w_tanta": 2,
+                "key_w_shiru": 1
             },
             prerequisiteQuests: [
                 "Chocobo Chow"
@@ -556,7 +556,7 @@ export const prayers = {
          "Hunting the Hunter": {
             name: "Hunting the Hunter",
             requirements: {
-                "green_monster_moss": 8
+                "mat_z_032": 8
             },
             prerequisiteQuests: [
                 "Hunter's Challenge"
@@ -567,7 +567,7 @@ export const prayers = {
          "Gatekeeper's Curiosity": {
             name: "Gatekeeper's Curiosity",
             requirements: {
-                "slug_sweet": 12
+                "mat_z_003": 12
             },
             prerequisiteOther: [
                 "time_day_5"
@@ -578,9 +578,9 @@ export const prayers = {
          "What's in a Brew": {
             name: "What's in a Brew",
             requirements: {
-                "arboreal_spore": 10,
-                "goopy_goo": 20,
-                "slug_sweet": 50
+                "mat_z_011": 10,
+                "mat_z_015": 20,
+                "mat_z_003": 50
             },
             prerequisiteQuests: [
                 "Fresh Fertilizer",
@@ -593,7 +593,7 @@ export const prayers = {
          "Brain Over Brawn": {
             name: "Brain Over Brawn",
             requirements: {
-                "sinister_fang": 1
+                "mat_z_030": 1
             },
             prerequisiteOther: [
                 "time_day_7"
@@ -604,8 +604,8 @@ export const prayers = {
          "A Prayer to a Goddess": {
             name: "A Prayer to a Goddess",
             requirements: {
-                "sinister_fang": 5,
-                "amp_chip": 5
+                "mat_z_030": 5,
+                "mat_z_036": 5
             },
             prerequisiteQuests: [
                 "For the Future",
@@ -619,7 +619,7 @@ export const prayers = {
          "Flower in the Sands": {
             name: "Flower in the Sands",
             requirements: {
-                "desert_rose": 1
+                "mat_z_033": 1
             },
             prerequisiteOther: [
                 "time_day_1"
@@ -630,7 +630,7 @@ export const prayers = {
          "Biologically Speaking": {
             name: "Biologically Speaking",
             requirements: {
-                "dried_scale": 3
+                "mat_z_017": 3
             },
             prerequisiteOther: [
                 "time_day_1"
@@ -641,7 +641,7 @@ export const prayers = {
          "Banned Goods": {
             name: "Banned Goods",
             requirements: {
-                "goblot_hairball": 8
+                "mat_z_010": 8
             },
             prerequisiteOther: [
                 "time_day_1"
@@ -652,8 +652,8 @@ export const prayers = {
          "Desert Cleanup": {
             name: "Desert Cleanup",
             requirements: {
-                "desert_rose": 10,
-                "dried_scale": 30
+                "mat_z_033": 10,
+                "mat_z_017": 30
             },
             prerequisiteQuests: [
                 "Flower in the Sands",
@@ -665,7 +665,7 @@ export const prayers = {
          "Lucky Charm": {
             name: "Lucky Charm",
             requirements: {
-                "lizard_tail": 3
+                "gil_d_010": 3
             },
             prerequisiteOther: [
                 "area_yusnaan"
@@ -676,7 +676,7 @@ export const prayers = {
          "A New Application": {
             name: "A New Application",
             requirements: {
-                "lizard_tail": 20
+                "gil_d_010": 20
             },
             prerequisiteQuests: [
                 "Family Food"
@@ -687,7 +687,7 @@ export const prayers = {
          "Supply and Demand": {
             name: "Supply and Demand",
             requirements: {
-                "lizard_tail": 5
+                "gil_d_010": 5
             },
             prerequisiteQuests: [
                 "Lucky Charm"
@@ -698,7 +698,7 @@ export const prayers = {
          "Pride and Greed I": {
             name: "Pride and Greed I",
             requirements: {
-                "yellowed_skull": 3
+                "gil_d_020": 3
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -709,7 +709,7 @@ export const prayers = {
          "For My Child": {
             name: "For My Child",
             requirements: {
-                "cactuar_doll": 1
+                "mat_z_044": 1
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -720,7 +720,7 @@ export const prayers = {
          "Climbing the Ranks I": {
             name: "Climbing the Ranks I",
             requirements: {
-                "dead_mans_teeth": 5
+                "mat_z_012": 5
             },
             prerequisiteOther: [
                 "time_day_3"
@@ -731,7 +731,7 @@ export const prayers = {
          "Climbing the Ranks II": {
             name: "Climbing the Ranks II",
             requirements: {
-                "dead_mans_teeth": 20
+                "mat_z_012": 20
             },
             prerequisiteQuests: [
                 "Climbing the Ranks I"
@@ -742,7 +742,7 @@ export const prayers = {
          "Miracle Vintage": {
             name: "Miracle Vintage",
             requirements: {
-                "pot_shard":10
+                "mat_z_016": 10
             },
             prerequisiteOther: [
                 "time_day_4"
@@ -753,7 +753,7 @@ export const prayers = {
          "Heightened Security": {
             name: "Heightened Security",
             requirements: {
-                "organic_carapace": 1
+                "mat_z_024": 1
             },
             prerequisiteOther: [
                 "time_day_4"
@@ -764,8 +764,8 @@ export const prayers = {
          "The Real Client": {
             name: "The Real Client",
             requirements: {
-                "goblot_hairball": 10,
-                "pot_shard": 5
+                "mat_z_010": 10,
+                "mat_z_016": 5
             },
             prerequisiteQuests: [
                 "Banned Goods",
@@ -777,8 +777,8 @@ export const prayers = {
          "Bandit's New Weapon": {
             name: "Bandit's New Weapon",
             requirements: {
-                "organic_carapace": 5,
-                "cactuar_doll": 5
+                "mat_z_024": 5,
+                "mat_z_044": 5
             },
             prerequisiteQuests: [
                 "For My Child",
@@ -790,7 +790,7 @@ export const prayers = {
          "Pride and Greed II": {
             name: "Pride and Greed II",
             requirements: {
-                "yellowed_skull": 5
+                "gil_d_020": 5
             },
             prerequisiteOther: [
                 "time_day_7"
@@ -804,7 +804,7 @@ export const prayers = {
          "Pride and Greed III": {
             name: "Pride and Greed III",
             requirements: {
-                "yellowed_skull": 20
+                "gil_d_020": 20
             },
             prerequisiteOther: [
                 "time_day_9"
@@ -818,7 +818,7 @@ export const prayers = {
          "A Treasure for a God": {
             name: "A Treasure for a God",
             requirements: {
-                "pilgrims_crux": 3
+                "key_d_key": 3
             },
             prerequisiteQuests: [
                 "Dead_4_5"
@@ -831,7 +831,7 @@ export const prayers = {
          "Shoot for the Sky": {
             name: "Shoot for the Sky",
             requirements: {
-                "broken_gyroscope": 1
+                "key_b_07": 1
             },
             prerequisiteOther: [
                 "time_day_2"
@@ -842,7 +842,7 @@ export const prayers = {
          "Where Moogles Be": {
             name: "Where Moogles Be",
             requirements: {
-                "moogle_dust": 1
+                "key_b_04": 1
             },
             prerequisiteQuests: [
                 "Saving an Angel"
@@ -853,7 +853,7 @@ export const prayers = {
          "Fading Prayer": {
             name: "Fading Prayer",
             requirements: {
-                "oldfashioned_photo_frame": 1
+                "key_b_05": 1
             },
             prerequisiteQuests: [
                 "Saving an Angel"
@@ -864,7 +864,7 @@ export const prayers = {
          "Seeing the Dawn": {
             name: "Seeing the Dawn",
             requirements: {
-                "lapis_lazuli": 1
+                "key_b_02": 1
             },
             prerequisiteQuests: [
                 "A Man for a Chocobo",
@@ -876,7 +876,7 @@ export const prayers = {
          "Key to Her Heart": {
             name: "Key to Her Heart",
             requirements: {
-                "beloveds_gift": 1
+                "key_s_okuri": 1
             },
             prerequisiteQuests: [
                 "Sazh_5_3"
@@ -887,7 +887,7 @@ export const prayers = {
          "Staying Sharp": {
             name: "Staying Sharp",
             requirements: {
-                "power_booster": 1
+                "key_b_03": 1
             },
             prerequisiteQuests: [
                 "Death Safari"
@@ -898,7 +898,7 @@ export const prayers = {
          "Digging Mysteries": {
             name: "Digging Mysteries",
             requirements: {
-                "golden_scarab": 1
+                "key_b_08": 1
             },
             prerequisiteOther: [
                 "accept_rough_beast"
@@ -909,7 +909,7 @@ export const prayers = {
          "A Girl's Challenge": {
             name: "A Girl's Challenge",
             requirements: {
-                "proof_of_courage": 1
+                "key_b_00": 1
             },
             prerequisiteQuests: [
                 "Lux_1_5"
@@ -920,7 +920,7 @@ export const prayers = {
          "What's Left Behind": {
             name: "What's Left Behind",
             requirements: {
-                "violet_amulet": 1
+                "key_b_01": 1
             },
             prerequisiteQuests: [
                 "Lux_1_5"
@@ -931,7 +931,7 @@ export const prayers = {
          "Forbidden Tome": {
             name: "Forbidden Tome",
             requirements: {
-                "etros_forbidden_tome": 1
+                "key_b_06": 1
             },
             prerequisiteQuests: [
                 "Wild_3_3"
@@ -942,8 +942,8 @@ export const prayers = {
          "Roadworks I": {
             name: "Roadworks I",
             requirements: {
-                "proof_of_unlocking_the_light_gate": 1,
-                "proof_of_unlocking_the_green_gate": 1
+                "key_b_14": 1,
+                "key_b_15": 1
             },
             prerequisiteOther: [
                 "time_day_9"
@@ -954,8 +954,8 @@ export const prayers = {
          "Roadworks II": {
             name: "Roadworks II",
             requirements: {
-                "key_to_the_green_gate": 1,
-                "key_to_the_sand_gate": 1
+                "key_b_09": 1,
+                "key_b_10": 1
             },
             prerequisiteOther: [
                 "time_day_9"
@@ -966,8 +966,8 @@ export const prayers = {
          "Roadworks III": {
             name: "Roadworks III",
             requirements: {
-                "oath_of_the_merchants_guild": 1,
-                "bandits_bloodseal": 1
+                "key_b_11": 1,
+                "key_b_12": 1
             },
             prerequisiteOther: [
                 "time_day_9"
