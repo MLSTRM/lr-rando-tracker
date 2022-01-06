@@ -461,7 +461,7 @@ async function getCanvasQuestInfo(el: HTMLElement){
   }
 }
 
-function addQuestHintRow(){
+function addQuestHintRow(rowData?: string[]){
   const table = document.getElementById('questHintTable') as HTMLTableElement;
   if(!table){return;}
   const newRow = table.insertRow(table.rows.length-1);
@@ -469,13 +469,16 @@ function addQuestHintRow(){
   newCell.innerHTML = '-';
   newCell.onclick = removeQuestHintRow(newCell);
   const questCell = newRow.insertCell();
-  questCell.innerHTML = `<select>${questSelectBody}</select>`;
+  questCell.innerHTML = `<select ${rowData ? `value="${rowData[1]}"` : ''}>${questSelectBody}</select>`;
+  if(rowData){
+    (questCell.firstChild as HTMLSelectElement).value = rowData[1];
+  }
   const locationCell = newRow.insertCell();
-  locationCell.innerHTML = '<input style="width: 90%;"/>';
+  locationCell.innerHTML = `<input style="width: 90%;" ${rowData ? `value="${rowData[2]}"` : ''}/>`;
   const hasCell = newRow.insertCell();
   hasCell.innerText = 'has';
   const itemCell = newRow.insertCell();
-  itemCell.innerHTML = '<input style="width: 90%;"/>';
+  itemCell.innerHTML = `<input style="width: 90%;" ${rowData ? `value="${rowData[4]}"` : ''}/>`;
 }
 
 function removeQuestHintRow(cell: HTMLTableCellElement){
@@ -512,6 +515,86 @@ const questSelectBody = `<option value="-1">Unknown</option>
 <option value="21">Sazh 5-5</option>
 <option value="22">Sazh 5-6</option>`;
 
+function exportData(){
+  const data = {
+    seed: (document.getElementById('seed') as HTMLInputElement)?.value,
+    shops: (document.getElementById('shopNotes') as HTMLTextAreaElement)?.value,
+    hintNumbers: deflateHintGrid(document.getElementById('hintNumberGrid')!),
+    hintList: deflateTable(document.getElementById('questHintTable') as HTMLTableElement)
+  };
+  (document.getElementById('exportAreaContent') as HTMLTextAreaElement).value = JSON.stringify(data);
+  document.getElementById('exportArea')?.removeAttribute('hidden');
+}
+
+function importData(){
+  document.getElementById('exportArea')?.setAttribute('hidden', '');
+  const raw = (document.getElementById('exportAreaContent') as HTMLTextAreaElement).value;
+  try {
+    const parsed = JSON.parse(raw);
+    (document.getElementById('seed') as HTMLInputElement).value = parsed.seed;
+    (document.getElementById('shopNotes') as HTMLTextAreaElement).value = parsed.shops;
+    inflateHintGrid(parsed.hintNumbers);
+    inflateHintTable(parsed.hintList);
+  } catch (e){
+    console.log('Error while importing data');
+  }
+}
+
+function inflateHintTable(data: string[][]): void {
+  data.forEach(row => addQuestHintRow(row));
+}
+
+function deflateTable(table: HTMLTableElement): string[][] {
+  const rows = [];
+  const rowsToMap = [...table.rows];
+  rowsToMap.shift();
+  rowsToMap.pop();
+  for(const row of rowsToMap){
+    rows.push([...row.cells].map(deflateInputOrSelect));
+  }
+  return rows;
+}
+
+function deflateInputOrSelect(el: Element): string {
+  const child = el.firstChild;
+  if(!child && el instanceof HTMLElement){
+    return el.innerText;
+  }
+  if(child instanceof HTMLSelectElement){
+    return child.value;
+  } else if (child instanceof HTMLInputElement){
+    return child.value;
+  } else if (child instanceof HTMLSpanElement){
+    return child.textContent ?? '';
+  } else if (child instanceof HTMLDivElement){
+    return child.textContent ?? '';
+  }
+  return '';
+}
+
+function deflateHintGrid(el: HTMLElement): string[][] {
+  const cellHintList = [...el.children];
+  cellHintList.shift();
+  return cellHintList.map(el => [...el.children].map(deflateInputOrSelect));
+}
+
+function inflateHintGrid(input: string[][]): void {
+  const gridParent = document.getElementById('hintNumberGrid')!;
+  const children = [...gridParent?.children];
+  children.shift();
+  children.forEach((div, i) => {
+    const inputRow = input[i];
+    const divElements = [...div.children];
+    for(const idx in divElements){
+      const value = inputRow[idx];
+      const el = divElements[idx];
+      if(el instanceof HTMLDivElement && el.firstChild instanceof HTMLSpanElement){
+        el.firstChild.textContent = value;
+      }
+    }
+  });
+}
+
 // Todo:
 // Check if I can have ipc renderer hooks in both directions maybe (seems yes - that will be helpful for settings etc.)
 // Start hooking up quest/npc info sections (done the backing, need to do the UI side)
@@ -525,11 +608,8 @@ const questSelectBody = `<option value="-1">Unknown</option>
 // quest hints as well as libras. - do some CE stuff to see if it can be scraped from display text somewhere
 
 /*
-To fix: 0.7.1
-fix garb autotracking (based on cos_fa00 id? Might have to do it based on equipped)
-TEST change, should be linked to key item - highlight on soul seeds and unappraised - would side quest hook be better here?
-fix - tablets lock at 1 max?
-fix - garb names - memory doesn't clear?
+To fix: 0.7.2
+TODO: highlight on soul seeds and unappraised - would side quest hook be better here?
 
 New features to do:
 hook up side quest info pane
@@ -554,13 +634,15 @@ pane selection/ordering controls (rather than pop in/out or fixed)
 -npc lookup
 
 SORT:
-half canvas requirements thing (settings)
 
 canvas sorting options (alphabetical rather than default)
-quest track progress even if all areas
 
 8 chocoborel, 6 slug sweet cardesia
 
 pull boss names from spoiler log
+pull hints from spoiler log
 
+
+serialize hints and shop notes to a file on save button, reload on startup.
+Reinflation would be same as hint loading anyway
 */

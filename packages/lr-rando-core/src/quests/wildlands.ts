@@ -85,7 +85,7 @@ export const WildlandsSideQuests = {
             "Wild_3_1",
         ],
         prerequisiteOther: [
-            "event_make_chocobull"
+            "event_make_chocobull" //6 slug sweet, 8 chocoborel
         ],
         trigger: Cardesia,
         handIn: Cardesia,

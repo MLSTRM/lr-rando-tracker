@@ -351,6 +351,9 @@
       </select>
       <label for="halfCanvasRequirements">Half canvas of prayers requirements: </label>
       <input type="checkbox" id="halfCanvasRequirements" name="halfCanvasRequirements" value="halfCanvasRequirements" onchange="updateCanvasHalf()"/>
+      <label>Seed: </label>
+      <input id="seed"/>
+      <button id="export" onclick="exportData()">Import/Export</button>
     </div>
     <br/>
     <div class="mainHolder" style="width: 100%;">
@@ -618,11 +621,18 @@
             </div>
           </div>
         </div>
+        <div id="shopReference" class="flexRegion noSelect">
+          <div class="row column80 columnFull">
+            Shop notes:
+            </br>
+            <textarea id="shopNotes" cols="29" rows="35" style="resize: none"></textarea>
+          </div>
+        </div>
         <div id="hintsReference" class="flexRegion noSelect">
           <div class="row column120">
             Hints
             <br/>
-            <div class="">
+            <div id="hintNumberGrid" class="">
               <div class="cellHint">
                 <div>Area</div><div title="Known">K</div><div title="Found">F</div>
                 <div>Area</div><div title="Known">K</div><div title="Found">F</div>
@@ -657,7 +667,7 @@
             </div>
           </div>
         </div>
-        <div id="hintsReference" class="flexRegion noSelect">
+        <div id="hintNotesReference" class="flexRegion noSelect">
           <div class="row column120 columnHalf">
             Quest hint notes:
             <table style="table-layout: fixed; width: 100%;" id="questHintTable">
@@ -676,6 +686,15 @@
                 <td></td>
               </tr>
             </table>
+          </div>
+        </div>
+        <div id="exportArea" class="flexRegion noSelect" hidden>
+          <div class="row column80 columnHalf">
+            Exported data:
+            </br>
+            <textarea id="exportAreaContent" cols="25" rows="12" style="resize: none"></textarea>
+            <br>
+            <button id="import" onclick="importData()">Import</button>
           </div>
         </div>
       </div>

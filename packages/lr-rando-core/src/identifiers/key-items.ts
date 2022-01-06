@@ -50,7 +50,7 @@ export const keyItemNameMap = Object.freeze({
     'key_l_kagi': 'Service Entrance Key',
     'key_l_kawa': 'Crystal Shard',
     'key_l_kusa': 'Starlit Spice',
-    'ley_l_kishin': 'Proof of Legendary Title',
+    'key_l_kishin': 'Proof of Legendary Title',
     'key_l_syokai': 'Reddick\'s Letter',
     'key_ball': 'Rubber Ball',
     'key_behi_tume': 'Cursed Dragon Claw', //unused?

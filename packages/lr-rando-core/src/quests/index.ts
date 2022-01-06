@@ -159,8 +159,6 @@ function processValueBoundaries(mapping: {[key: string]: {num: number; complete:
                     name: entry[0]
                 };
             }
-        } else {
-            console.log('Had only one of 2 expected second values?');
         }
     }
     return highest;
