@@ -419,7 +419,7 @@ function updateCanvasHalf(initial?: boolean){
   const halfCanvasElement = document.getElementById('halfCanvasRequirements') as HTMLInputElement;
   const checked = (initial ? (localStorage.getItem('display-halfCanvas') === 'true') : halfCanvasElement.checked);
   localStorage.setItem('display-halfCanvas', checked.toString());
-  ipcRenderer.send('settings_halfCanvas', halfCanvasElement.checked);
+  ipcRenderer.send('settings_halfCanvas', checked);
   setPropOnElem('#canvasLookupSelectedName', '');
   setPropOnElem('#canvasLookupSelectedRegion', '');
   setPropOnElem('#canvasLookupSelectedStatus', '');
