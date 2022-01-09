@@ -99,6 +99,13 @@
       min-height: 40px;
     }
 
+    .column140 {
+      float: left;
+      width: calc(var(--column-width)*7);
+      min-width: calc(var(--column-width)*7);
+      min-height: 40px;
+    }
+
     .cell20 {
       height: 85px;
       text-align: center;
@@ -324,6 +331,28 @@
       vertical-align: middle;
       height: inherit;
     }
+
+    /* scrollbar section start */
+    /* width */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    /* scrollbar section end */
   </style>
 </head>
 
@@ -427,13 +456,15 @@
               <div class="clickToggle" data-key="key_soulcd">
                 <img src="resources/images/seedcard.jpg" alt="Seedhunter Membership Card" title="Seedhunter Membership Card" class="iconmono"/>
               </div>
-              <div class="clickRange clickToggle" data-key="key_soulcd" data-min="0" data-max="100" id="seed-parent">
+              <!--change to sidequest soul seeds: id=7-->
+              <div class="clickRange clickToggle" data-sideq="7" data-min="0" data-max="100" id="seed-parent">
                 <img src="resources/images/icon-item.png" alt="Seeds:" class="iconmono"><span id="auto-seeds" class="value">0</span>
               </div>
-              <div class="clickToggle" data-key="key_kyu_pass">
+              <div class="clickToggle" data-key="key_kyu_pass" data-oneway="true">
                 <img src="resources/images/icon-loupe.jpg" alt="Loupe" title="Loupe" class="iconmono"/>
               </div>
-              <div class="clickRange clickToggle" data-key="key_kyu_pass" data-min="0" data-max="50" id="appraised-parent">
+              <!--change to sidequest tool of the trade: id=45-->
+              <div class="clickRange clickToggle" data-sideq="45" data-min="0" data-max="50" id="appraised-parent">
                 <img src="resources/images/icon-unappraised.png" alt="Unapp:" class="iconmono"><span id="auto-unappraised" class="value">0</span>
               </div>
               <div class="centerImage clickToggle">
@@ -570,10 +601,8 @@
           </div>
         </div>
         <div id="sideQuests" class="flexRegion">
-          <div class="row column40">
-            Side quests:
-            <br/>
-            Region: <select name="sideQuestRegion" id="sideQuestRegion" onchange="updateSideQuestRegion()">
+          <div class="row column140">
+            Side quests & Canvas: &nbsp;&nbsp;&nbsp;Region: <select name="sideQuestRegion" id="sideQuestRegion" onchange="updateSideQuestRegion()">
               <option value="-1">All</option>
               <option value="0">Luxerion</option>
               <option value="1">Yusnaan</option>
@@ -584,6 +613,32 @@
             <div class="column40 columnTall" id="side-quests">
               <table id="base_side_quests">
               </table>
+            </div>
+            <div class="column40 columnTall">
+              <table id="canvasLookupList">
+              </table>
+            </div>
+            <div class="column60">
+              <span id="canvasLookupSelectedName"></span>
+              <br/>
+              Region: <span id="canvasLookupSelectedRegion"></span>
+              <br/>
+              Status: <span id="canvasLookupSelectedStatus"></span>
+              <br/>
+              Prerequisites:
+              <ul id="canvasLookupSelectedPrerequisites"></ul>
+              <br/>
+              Requirements:
+              <table id="canvasLookupSelectedRequirements" style="width: inherit;"></table>
+              <br/>
+              Accept from:
+              <span id="sideLookupSelectedAccept"></span>
+              <span id="sideLookupSelectedAcceptTime" style="white-space: pre-line;"></span>
+              <br/>
+              Hand in to:
+              <span id="sideLookupSelectedHandIn"></span>
+              <span id="sideLookupSelectedHandInTime" style="white-space: pre-line;"></span>
+              <!-- <div id="canvasLookupSelected"></div> -->
             </div>
           </div>
         </div>
@@ -600,10 +655,7 @@
               <option value="4">Global</option>
             </select>
             <br/>
-            <div class="column40 columnTall">
-              <table id="canvasLookupList">
-              </table>
-            </div>
+
             <div class="column60">
               <span id="canvasLookupSelectedName"></span>
               <br/>
@@ -623,7 +675,7 @@
         </div>
         <div id="shopReference" class="flexRegion noSelect">
           <div class="row column80 columnFull">
-            Shop notes:
+            Notes:
             </br>
             <textarea id="shopNotes" cols="29" rows="35" style="resize: none"></textarea>
           </div>

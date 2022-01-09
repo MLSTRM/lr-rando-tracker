@@ -49,7 +49,7 @@ export const WildlandsSideQuests = {
     "A Father's Request": {
         name: "A Father's Request",
         requirements: {
-            "fertilizer": true,
+            "key_w_mori": true,
             "wandering_man": true
         },
         prerequisiteQuests: [
@@ -62,9 +62,9 @@ export const WildlandsSideQuests = {
     "The Hunter's Challenge": {
         name: "The Hunter's Challenge",
         requirements: {
-            "monster_mince": 3,
+            "mat_z_004": 3,
             "hand_in": true,
-            "amp_chip": 1
+            "mat_z_036": 1
         },
         prerequisiteQuests: [
             "Wild_3_1"
@@ -76,9 +76,9 @@ export const WildlandsSideQuests = {
     "A Final Cure": {
         name: "A Final Cure",
         requirements: {
-            "chocoborels": 4,
-            "luminous_mushrooms": 4,
-            "crimm_mushroom": 1,
+            "key_w_kino": 4,
+            "key_w_kino2": 4,
+            "key_w_mash": 1,
             "second_option": true
         },
         prerequisiteQuests: [
@@ -119,7 +119,7 @@ export const WildlandsSideQuests = {
     "Chocobo Cheer": {
         name: "Chocobo Cheer",
         requirements: {
-            "yeuls_flower": 1
+            "key_w_hana": 1
         },
         prerequisiteQuests: [
             "Wild_3_2"
@@ -165,7 +165,7 @@ export const WildlandsSideQuests = {
     "The Old Man and the Field": {
         name: "The Old Man and the Field",
         requirements: {
-            "gysahl_greens": 1,
+            "key_w_yasai": 1,
         },
         prerequisiteQuests: [
             "A Father's Request",
@@ -194,8 +194,8 @@ export const WildlandsSideQuests = {
     "A Taste of the Past": {
         name: "A Taste of the Past",
         requirements: {
-            "rocky_crag_mole": 2,
-            "aryas_apple": 2
+            "key_w_mogura": 2,
+            "key_w_apple": 2
         },
         prerequisiteQuests: [
             "Wild_3_2"
@@ -207,9 +207,9 @@ export const WildlandsSideQuests = {
     "Dog, Doctor and Assistant": {
         name: "Dog, Doctor and Assistant",
         requirements: {
-            "dayring_blossom": 4,
-            "moonsoul_bloom": 2,
-            "goopy_goo": 5,
+            "key_w_hana3": 4,
+            "key_w_hana2": 2,
+            "mat_z_015": 5,
             "heal_dog": true
         },
         prerequisiteQuests: [
@@ -222,7 +222,7 @@ export const WildlandsSideQuests = {
     "The Right Stuff": {
         name: "The Right Stuff",
         requirements: {
-            "vibrant_ooze": 6
+            "mat_z_001": 6
         },
         prerequisiteQuests: [
             "Wild_3_1"
@@ -259,7 +259,7 @@ export const WildlandsSideQuests = {
     "Mercy of a Goddess": {
         name: "Mercy of a Goddess",
         requirements: {
-            "cardesias_cure": true
+            "key_w_hiyaku": true
         },
         trigger: Taleb,
         handIn: Taleb,
@@ -268,9 +268,12 @@ export const WildlandsSideQuests = {
     "The Grail of Valhalla": {
         name: "The Grail of Valhalla",
         requirements: {
-            "goddess_glyphs": true,
-            "chaos_glyps": true,
-            "poltae_panels": 4
+            "key_w_moji1": true,
+            "key_w_moji2": true,
+            "poltae_panel": true,
+            "key_w_buhin1": true,
+            "key_w_buhin2": true,
+            "key_w_buhin3": true
         },
         trigger: Professor,
         handIn: Professor,
@@ -302,9 +305,9 @@ export const WildlandsSideQuests = {
     "Matchmaker": {
         name: "Matchmaker",
         requirements: {
-            "moonsoul_bloom": 4,
-            "rocky_crag_mole": 2,
-            "green_leather": 5,
+            "key_w_hana2": 4,
+            "key_w_mogura": 2,
+            "mat_z_008": 5,
             "give_to_tilda": true
         },
         prerequisiteQuests: [

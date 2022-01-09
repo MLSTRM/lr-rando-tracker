@@ -96,6 +96,10 @@ ipcMain.handle('canvasNamedInfo', async (event, name) => {
   return backend.getCanvasInfoByName(name);
 });
 
+ipcMain.handle('sideQuestNamedInfo', async (event, name) => {
+  return backend.getSideQuestInfoByName(name);
+})
+
 ipcMain.handle('garbCheck', async (event, garb) => {
   return backend.hasGarbByName(garb);
 });

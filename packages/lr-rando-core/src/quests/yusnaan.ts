@@ -5,10 +5,9 @@ import { Berdy, Biggs, Candice, DrunkPyro, Funicula, Gordon_Gourmet, Gregory, Le
 const Yus_2_1: QuestInfo = {
     name: "The Great Break-In",
     requirements: {
-            "sneak_ticket": true,
-            "sneak_in_special": true,
+            "key_y_ticket": true,
             "{cyclops}": true,
-            "id_card": true
+            "key_y_id": true
     },
     handIn: "Augur's Quarter"
 }
@@ -16,10 +15,10 @@ const Yus_2_1: QuestInfo = {
 const Yus_2_2: QuestInfo = {
     name: "The Legend of the Savior",
     requirements: {
-        "boss_note": true,
-        "fireworks": 10,
+        "key_y_shiji": true,
+        "key_y_fire": 10,
         "hand_in_fireworks": true,
-        "midnight_mauve": true,
+        "cos_fa00": true,
     },
     trigger: "Sarzhak",
     handIn: "Sarzhak"
@@ -28,7 +27,7 @@ const Yus_2_2: QuestInfo = {
 const Yus_2_3: QuestInfo = {
     name: "Solitary Patron",
     requirements: {
-        "serahs_pendant": true
+        "key_y_serap": true
     },
     handIn: "Defeat {Snow}"
 }
@@ -50,7 +49,7 @@ export const YusnaanSideQuests = {
     "Fireworks in a Bottle": {
         name: "Fireworks in a Bottle",
         requirements: {
-            "bacchus_brew": true
+            "key_y_sake": true
         },
         prerequisiteQuests: [
             "Yus_2_1",
@@ -76,7 +75,7 @@ export const YusnaanSideQuests = {
         name: "Songless Diva",
         requirements: {
             "berdy_talk": true,
-            "music_satchel": true,
+            "key_y_kaban": true,
         },
         trigger: Olga,
         handIn: Berdy,
@@ -85,7 +84,8 @@ export const YusnaanSideQuests = {
     "Stolen Things": {
         name: "Stolen Things",
         requirements: {
-            "pickett_letter": true
+            "key_y_letter": true,
+            "pickett_steal_letter": true
         },
         prerequisiteOther: [
             "event_pickett_steal"
@@ -141,7 +141,7 @@ export const YusnaanSideQuests = {
         name: "Free Will",
         requirements: {
             "return_24h": true,
-            "desert_flames": 3,
+            "key_y_honou": 3,
             "niblet_omega": true
         },
         trigger: "Diviner",
@@ -170,7 +170,7 @@ export const YusnaanSideQuests = {
         requirements: {
             "talk_to_gordon": true,
             "eat_at_restaurants": 6,
-            "civet_musk": true,
+            "key_y_bashira": true,
             "recipe": true
         },
         trigger: Seedy_Owner,
@@ -192,9 +192,10 @@ export const YusnaanSideQuests = {
     "Play It for Me": {
         name: "Play It for Me",
         requirements: {
-            "nostalgic_score_coda": true,
-            "nostalgic_score_chorus": true,
-            "nostalgic_score_refrain": true
+            "key_y_kagi1": true,
+            "key_y_rappa": true,
+            "key_y_kagi2": true,
+            "key_y_kagi3": true
         },
         trigger: Morris,
         handIn: Morris,
@@ -215,7 +216,7 @@ export const YusnaanSideQuests = {
     "Adoring Candice": {
         name: "Adoring Candice",
         requirements: {
-            "gift_glasses": true
+            "key_y_megane": true
         },
         prerequisiteQuests: [
             "Adoring Adornments"
@@ -227,7 +228,7 @@ export const YusnaanSideQuests = {
     "Death Safari": {
         name: "Death Safari",
         requirements: {
-            "niblet_defeater_emblem": 30
+            "key_y_gabu": 30
         },
         prerequisiteQuests: [
             "Yus_2_1"
@@ -241,6 +242,9 @@ export const YusnaanSideQuests = {
         requirements: {
             "death_game_point": 30
         },
+        prerequisiteOther: [
+            "keyItem_death_ticket"
+        ],
         prerequisiteQuests: [
             "Death Safari"
         ],

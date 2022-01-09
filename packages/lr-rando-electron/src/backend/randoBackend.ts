@@ -1,8 +1,8 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem,
-    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement } from "lr-rando-core";
+    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo } from "lr-rando-core";
 import _ from 'lodash';
-import { QuestInfo } from "lr-rando-core/build/quests/model";
+import { QuestInfo, QuestPrerequisites } from "lr-rando-core";
 
 const reservedKeys = ['time', 'region'];
 
@@ -231,6 +231,22 @@ export class RandoBackend {
         return undefined;
     }
 
+    public getSideQuestInfoByName(name: string): any {
+        let status = '';
+        const info = getSideQuestInfo(name);
+        if(info){
+            const {quest, region} = info;
+            const progress = this.oldState.sideQuestProgress?.[Number(region)]?.find(q => q.name === name)
+            if(progress){
+                status = progress.status;
+            }
+            const displayQuest = enrichSideQuestRequirements(quest);
+            //translate names into better forms
+            return Object.assign(displayQuest, {status, region: areaIndexStringToAreaName(region)});
+        }
+        return undefined;
+    }
+
     public hasGarbByName(garb: string): boolean {
         return (this.oldState.garbs?.includes(garb) || this.oldState.schemas?.slot1 === garb || this.oldState.schemas?.slot2 === garb || this.oldState.schemas?.slot3 === garb) ?? false;
     }
@@ -241,32 +257,64 @@ export class RandoBackend {
     }
 }
 
+function enrichSideQuestRequirements(info: QuestInfo): QuestInfo {
+    if(info.requirements){
+        if(!Array.isArray(info.requirements)){
+            const requirement = info.requirements;
+            const mappedRequirement = mapRequirements(requirement);
+            info = Object.assign({}, info, {requirements: mappedRequirement});
+        }
+    }
+    if(info.prerequisiteOther){
+        const mappedPrerequisites = info.prerequisiteOther.map(e => QuestPrerequisites[e].name);
+        info = Object.assign({}, info, {prerequisiteOther: mappedPrerequisites});
+    }
+    if(info.prerequisiteQuests){
+        const mappedPrerequisites = info.prerequisiteQuests.map(mapMainQuestName);
+        info = Object.assign({}, info, {prerequisiteQuests: mappedPrerequisites});
+    }
+    return info;
+}
+
+function mapMainQuestName(name: string): string {
+    const match = name.match(/[A-Za-z]*_([0-9])_([0-9])/);
+    if(!match){
+        return name;
+    }
+    return `Main Quest ${match[1]}-${match[2]}`;
+}
+
 function enrichCanvasRequirements(info: QuestInfo, settings: BackendSettings): QuestInfo {
     if(info.requirements){
         if(!Array.isArray(info.requirements)){
             const requirement = info.requirements;
-            const mappedRequirement: QuestRequirement = {};
-            for(const key of Object.keys(requirement)){
-                const value = requirement[key];
-                let name = key;
-                let newValue = value;
-                const isItemWithInfo = prettyPrintItem(key);
-                if(isItemWithInfo.known){
-                    if(typeof value === 'number' && settings.halfCanvas){
-                        newValue = Math.ceil(value / 2);
-                    }
-                    name = isItemWithInfo.name;
-                }
-                const isKeyItemWithInfo = prettyPrintKeyItem(key);
-                if(isKeyItemWithInfo.known){
-                    name = isKeyItemWithInfo.name;
-                }
-                mappedRequirement[name] = newValue;
-            }
+            const mappedRequirement = mapRequirements(requirement, settings);
             info = Object.assign({}, info, {requirements: mappedRequirement});
         }
     }
     return info;
+}
+
+function mapRequirements(requirement: QuestRequirement, settings?: BackendSettings): QuestRequirement {
+    const mappedRequirement: QuestRequirement = {};
+    for(const key of Object.keys(requirement)){
+        const value = requirement[key];
+        let name = key;
+        let newValue = value;
+        const isItemWithInfo = prettyPrintItem(key);
+        if(isItemWithInfo.known){
+            if(typeof value === 'number' && settings && settings.halfCanvas){
+                newValue = Math.ceil(value / 2);
+            }
+            name = isItemWithInfo.name;
+        }
+        const isKeyItemWithInfo = prettyPrintKeyItem(key);
+        if(isKeyItemWithInfo.known){
+            name = isKeyItemWithInfo.name;
+        }
+        mappedRequirement[name] = newValue;
+    }
+    return mappedRequirement;
 }
 
 

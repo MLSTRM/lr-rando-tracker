@@ -24,7 +24,7 @@ window.onload = () => {
   updateColumnWidth(true);
   updateBodyTheme(true);
   updateCanvasHalf(true);
-  updateCanvasRegion();
+  //updateCanvasRegion();
   updateSideQuestRegion();
   addQuestHintRow();
 }
@@ -283,7 +283,7 @@ function beginPoll() {
       }, 2000);
       pollingObtainedChecks.push(interval);
     }
-    setInterval(updateCanvasRegion, 5000);
+    //setInterval(updateCanvasRegion, 5000);
     setInterval(updateSideQuestRegion, 5000);
   }
 }
@@ -431,18 +431,14 @@ function updateCanvasHalf(initial?: boolean){
 
 async function updateSideQuestRegion(){
   const area = (document.getElementById('sideQuestRegion') as HTMLSelectElement).value;
-  const names = await ipcRenderer.invoke('sideQuestList', area) as Map<string, SideQuestProgress | undefined>;
+  const sideNames = await ipcRenderer.invoke('sideQuestList', area) as Map<string, SideQuestProgress | undefined>;
   //TODO: N here should be replaced by completion status (and allow manual change if not autotracking)
-  const tableOut = [...names].map((name) => `<tr><td>${name[0]}</td><td>${name[1]?.status ?? ''}</td></tr>`).join('');
-  setPropOnElem('#base_side_quests', tableOut);
-}
-
-async function updateCanvasRegion(){
-  const area = (document.getElementById('canvasRegion') as HTMLSelectElement).value;
-  const names = await ipcRenderer.invoke('canvasList', area) as Map<string, string>;
+  const sideTableOut = [...sideNames].map((name) => `<tr><td onclick="getSideQuestInfo(this)">${name[0]}</td><td>${name[1]?.status ?? ''}</td></tr>`).join('');
+  setPropOnElem('#base_side_quests', sideTableOut);
+  const canvasNames = await ipcRenderer.invoke('canvasList', area) as Map<string, string>;
   //TODO: N here should be replaced by completion status (and allow manual change if not autotracking)
-  const tableOut = [...names].map((name) => `<tr><td onclick="getCanvasQuestInfo(this)">${name[0]}</td><td>${name[1]}</td></tr>`).join('');
-  setPropOnElem('#canvasLookupList', tableOut);
+  const canvasTableOut = [...canvasNames].map((name) => `<tr><td onclick="getCanvasQuestInfo(this)">${name[0]}</td><td>${name[1]}</td></tr>`).join('');
+  setPropOnElem('#canvasLookupList', canvasTableOut);
 }
 
 async function getCanvasQuestInfo(el: HTMLElement){
@@ -458,6 +454,49 @@ async function getCanvasQuestInfo(el: HTMLElement){
   setPropOnElem('#canvasLookupSelectedPrerequisites', convertArrayToList([...(info.prerequisiteQuests ?? []), ...(info.prerequisiteOther ?? [])]));
   if(info.requirements){
     setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Item</th><th>#</th></tr>' + convertObjectToTable(info.requirements));
+  }
+}
+
+async function getSideQuestInfo(el: HTMLElement){
+  const info = await ipcRenderer.invoke('sideQuestNamedInfo', el.textContent) as QuestInfo & {status: string; region: string};
+  //TODO:
+  //hook into inventory to check possibility
+  setPropOnElem('#canvasLookupSelectedName', info.name);
+  setPropOnElem('#canvasLookupSelectedRegion', info.region);
+  setPropOnElem('#canvasLookupSelectedStatus', info.status);
+  setPropOnElem('#canvasLookupSelectedPrerequisites', convertArrayToList([...(info.prerequisiteQuests ?? []), ...(info.prerequisiteOther ?? [])]));
+  if(info.requirements){
+    if(!Array.isArray(info.requirements)){
+      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th></tr>' + convertObjectToTable(info.requirements));
+    } else {
+      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th></tr>' + info.requirements.map(convertObjectToTable).join('<tr><td colspan="2">OR</td></tr>'));
+    }
+  } else {
+    setPropOnElem('#canvasLookupSelectedRequirements', '');
+  }
+  if(info.trigger && info.trigger !== info.handIn){
+    if(typeof info.trigger === 'string'){
+      setPropOnElem('#sideLookupSelectedAccept', info.trigger);
+    } else {
+      setPropOnElem('#sideLookupSelectedAccept', info.trigger.name);
+      const av = info.trigger.available;
+      setPropOnElem('#sideLookupSelectedAcceptTime', `\n(${av.from} - ${av.to}${av.fromDate ? `, Day ${av.fromDate}+` : ''})`);
+    }
+  } else {
+    setPropOnElem('#sideLookupSelectedAccept', '');
+    setPropOnElem('#sideLookupSelectedAcceptTime', '');
+  }
+  if(info.handIn){
+    if(typeof info.handIn === 'string'){
+      setPropOnElem('#sideLookupSelectedHandIn', info.handIn);
+    } else {
+      setPropOnElem('#sideLookupSelectedHandIn', info.handIn.name);
+      const av = info.handIn.available;
+      setPropOnElem('#sideLookupSelectedHandInTime', `\n(${av.from} - ${av.to}${av.fromDate ? `, Day ${av.fromDate}+` : ''})`);
+    }
+  } else {
+    setPropOnElem('#sideLookupSelectedHandIn', '');
+    setPropOnElem('#sideLookupSelectedHandInTime', '');
   }
 }
 
@@ -609,11 +648,9 @@ function inflateHintGrid(input: string[][]): void {
 
 /*
 To fix: 0.7.2
-TODO: highlight on soul seeds and unappraised - would side quest hook be better here?
+TODO: highlight on soul seeds and unappraised - would side quest hook be better here? Yes it would. Do it.
 
 New features to do:
-hook up side quest info pane
-
 icons for quest status for side/canvas
 allow for manual toggle of side/canvas completion
 Add way to mark hints as complete rather than deleting?
@@ -624,8 +661,6 @@ EP ability cost selection (start at default and allow adjustment up/down)
 
 hook in autotracker to prerequisites and item check for canvas/side
 
-add shop note area?
-
 pane selection/ordering controls (rather than pop in/out or fixed)
 -tracker grid (large)
 -inventory panes
@@ -634,7 +669,6 @@ pane selection/ordering controls (rather than pop in/out or fixed)
 -npc lookup
 
 SORT:
-
 canvas sorting options (alphabetical rather than default)
 
 8 chocoborel, 6 slug sweet cardesia
@@ -643,6 +677,7 @@ pull boss names from spoiler log
 pull hints from spoiler log
 
 
-serialize hints and shop notes to a file on save button, reload on startup.
-Reinflation would be same as hint loading anyway
+serialize hints and shop notes to a file on save button, reload on startup (copy/paste for now, hook up localstorage).
+
+Begin work on enriched event/boss names and checks
 */

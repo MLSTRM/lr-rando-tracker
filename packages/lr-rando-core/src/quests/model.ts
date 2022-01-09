@@ -8,7 +8,7 @@ export interface QuestInfo {
     name: string;
     requirements: false | QuestRequirement | QuestRequirement[]
     prerequisiteQuests?: string[], //narrow to quest ids/names
-    prerequisiteOther?: QuestPrerequisite[], //narrow to specific list
+    prerequisiteOther?: QuestPrerequisite[], //narrowed to specific list below
     trigger?: string | NpcAvailable; //narrow to only NpcAvailable struct
     handIn?: string | NpcAvailable;
     failable?: boolean;
@@ -24,7 +24,7 @@ export interface MainQuestLine {
 }
 
 export interface QuestRequirement {
-    [key: string]: true | number //TODO: change key here to be KeyItem | Item | Event
+    [key: string]: true | number //TODO: change key here to be KeyItem | Item | Event | Boss and define all events/bosses.
 }
 
 export interface QuestProgressCheck {
@@ -34,32 +34,35 @@ export interface QuestProgressCheck {
     keyInventory: {[key in KeyItem]?: number};
     visited: {[key in Areas]?: boolean};
     bossLocations: {[key in Bosses | MiniBosses]?: boolean};
-    questState: {[key in QuestNames]: QuestState} & {[key: string]: undefined};
+    questState: {[key in QuestNames]: QuestState};
 };
 
 type QuestPrerequisite = keyof typeof QuestPrerequisites;
 
 export const QuestPrerequisites = {
-    "time_day_1": {name: '', check: (context: QuestProgressCheck) => context.day >= 1},
-    "time_day_2": {name: '', check: (context: QuestProgressCheck) => context.day >= 2},
-    "time_day_3": {name: '', check: (context: QuestProgressCheck) => context.day >= 3},
-    "time_day_4": {name: '', check: (context: QuestProgressCheck) => context.day >= 3},
-    "time_day_5": {name: '', check: (context: QuestProgressCheck) => context.day >= 3},
-    "time_day_6": {name: '', check: (context: QuestProgressCheck) => context.day >= 3},
-    "time_day_7": {name: '', check: (context: QuestProgressCheck) => context.day >= 3},
-    "time_day_8": {name: '', check: (context: QuestProgressCheck) => context.day >= 3},
-    "time_day_9": {name: '', check: (context: QuestProgressCheck) => context.day >= 3},
-    "time_day_10": {name: '', check: (context: QuestProgressCheck) => context.day >= 3},
-    "odin_level_1": {name: '', check: (context: QuestProgressCheck) => context.odin >= 120},
-    "odin_level_2": {name: '', check: (context: QuestProgressCheck) => context.odin >= 250},
-    "odin_level_3": {name: '', check: (context: QuestProgressCheck) => context.odin >= 400},
-    "event_make_chocobull": {name: '', check: (context: QuestProgressCheck) => context.hasObtained['chocobull_cardesia']},
-    "event_harvest_gysahl": {name: '', check: (context: QuestProgressCheck) => context.hasObtained['gysahl_field']},
-    "event_harvest_tantal": {name: '', check: (context: QuestProgressCheck) => context.hasObtained['tantal_field']},
-    "keyItem_boss_note": {name: '', check: (context: QuestProgressCheck) => !!context.keyInventory['key_y_shiji']},
-    "event_pickett_steal": {name: '', check: (context: QuestProgressCheck) => context.hasObtained['pickett_steal']},
-    "time_3h_after_fuzzy_search": {name: '', check: (context: QuestProgressCheck) => true},
-    "accept_rough_beast": {name: '', check: (context: QuestProgressCheck) => context.hasObtained['rough_beast']},
-    "area_yusnaan": {name: '', check: (context: QuestProgressCheck) => !!context.visited[Areas.YUSNAAN]},
-    "boss_{cyclops}": {name: '', check: (context: QuestProgressCheck) => !!context.bossLocations[MiniBosses.CYCLOPS]}
+    "time_day_1": {name: 'Day 1', check: (context: QuestProgressCheck) => context.day >= 1},
+    "time_day_2": {name: 'Day 2', check: (context: QuestProgressCheck) => context.day >= 2},
+    "time_day_3": {name: 'Day 3', check: (context: QuestProgressCheck) => context.day >= 3},
+    "time_day_4": {name: 'Day 4', check: (context: QuestProgressCheck) => context.day >= 4},
+    "time_day_5": {name: 'Day 5', check: (context: QuestProgressCheck) => context.day >= 5},
+    "time_day_6": {name: 'Day 6', check: (context: QuestProgressCheck) => context.day >= 6},
+    "time_day_7": {name: 'Day 7', check: (context: QuestProgressCheck) => context.day >= 7},
+    "time_day_8": {name: 'Day 8', check: (context: QuestProgressCheck) => context.day >= 8},
+    "time_day_9": {name: 'Day 9', check: (context: QuestProgressCheck) => context.day >= 9},
+    "time_day_10": {name: 'Day 10', check: (context: QuestProgressCheck) => context.day >= 10},
+    "odin_level_1": {name: 'Odin Level 1', check: (context: QuestProgressCheck) => context.odin >= 120},
+    "odin_level_2": {name: 'Odin Level 2 (Glide)', check: (context: QuestProgressCheck) => context.odin >= 250},
+    "odin_level_3": {name: 'Odin Full Heal', check: (context: QuestProgressCheck) => context.odin >= 400},
+    "event_make_chocobull": {name: 'Make Chocobull', check: (context: QuestProgressCheck) => context.hasObtained['chocobull_cardesia']},
+    "event_harvest_gysahl": {name: 'Harvest Gysahl Greens', check: (context: QuestProgressCheck) => context.hasObtained['gysahl_field']},
+    "event_harvest_tantal": {name: 'Harvest Tantal Greens', check: (context: QuestProgressCheck) => context.hasObtained['tantal_field']},
+    "keyItem_boss_note": {name: 'Boss\'s Note', check: (context: QuestProgressCheck) => !!context.keyInventory['key_y_shiji']},
+    "keyItem_death_ticket": {name: 'Death Game Ticket', check: (context: QuestProgressCheck) => !!context.keyInventory['key_y_death']},
+    "keyItem_crux_body": {name: 'Crux Body', check: (context: QuestProgressCheck) => !!context.keyInventory['key_d_wing']},
+    "event_pickett_steal": {name: 'Pickett Steal', check: (context: QuestProgressCheck) => context.hasObtained['pickett_steal']},
+    "time_3h_after_fuzzy_search": {name: '3h after Fuzzy Search', check: (context: QuestProgressCheck) => true},
+    "accept_rough_beast": {name: 'Accept What Rough Beast Slouches', check: (context: QuestProgressCheck) => context.questState['What Rough Beast Slouches'] >= 2},
+    "accept_old_rivals": {name: 'Accept Old Rivals', check: (context: QuestProgressCheck) => context.questState['Old Rivals'] >= 2},
+    "area_yusnaan": {name: 'Enter Yusnaan', check: (context: QuestProgressCheck) => !!context.visited[Areas.YUSNAAN]},
+    "boss_{cyclops}": {name: 'Defeat Cyclops', check: (context: QuestProgressCheck) => !!context.bossLocations[MiniBosses.CYCLOPS]}
 }

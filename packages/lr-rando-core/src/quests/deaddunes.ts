@@ -61,7 +61,7 @@ export const DeadDunesSideQuests = {
     "The Life of a Machine": {
         name: "The Life of a Machine",
         requirements: {
-            "bhakti_oil": 3,
+            "key_d_oil": 3,
             "loot_skeles": true
         },
         prerequisiteQuests: [
@@ -83,11 +83,10 @@ export const DeadDunesSideQuests = {
     "His Wife's Dream": {
         name: "His Wife's Dream",
         requirements: {
-            "pilgrims_crux": 1,
-            "arithmometer": true
+            "key_d_keisan": true
         },
-        prerequisiteQuests: [
-            "started_Old Rivals"
+        prerequisiteOther: [
+            "accept_old_rivals"
         ],
         trigger: Ramon,
         handIn: Ramon,
@@ -96,7 +95,7 @@ export const DeadDunesSideQuests = {
     "Tool of the Trade": {
         name: "Tool of the Trade",
         requirements: {
-            "loupe": true
+            "key_d_lupe": true
         },
         trigger: Elmer,
         handIn: Elmer,
@@ -114,7 +113,7 @@ export const DeadDunesSideQuests = {
     "What Rough Beast Slouches": {
         name: "What Rough Beast Slouches",
         requirements: {
-            "monster_flesh": 1
+            "key_d_niku": 1
         },
         prerequisiteQuests: [
             "Dead_4_3"
@@ -128,9 +127,11 @@ export const DeadDunesSideQuests = {
         requirements: {
             "skeleton_omega": true
         },
-        prerequisiteQuests: [
-            "Dead_4_3",
+        prerequisiteOther: [
             "keyItem_crux_body"
+        ],
+        prerequisiteQuests: [
+            "Dead_4_3"
         ],
         trigger: Jamus,
         handIn: Jamus,

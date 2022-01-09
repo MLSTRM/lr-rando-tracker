@@ -22,7 +22,11 @@ const sideQuests = {
     [Areas.WILDLANDS]: WildlandsSideQuests,
     [Areas.DEAD_DUNES]: DeadDunesSideQuests,
     [Areas.GLOBAL]: {"Main Quest 5": SazhMainQuest.Sazh_5_1}
-} as {[key: number]: any};
+} as {
+    [key: number]: {
+        [key: string]: QuestInfo
+    }
+};
 
 type CanvasLuxNames = keyof typeof prayers[Areas.LUXERION];
 type CanvasYusNames = keyof typeof prayers[Areas.YUSNAAN];
@@ -249,6 +253,15 @@ export function getCanvasQuestInfo(name: string): {quest: QuestInfo, region: str
         if(name in area){
             //@ts-ignore
             return {quest: area[name], region};
+        }
+    }
+    return undefined;
+}
+
+export function getSideQuestInfo(name: string): {quest: QuestInfo, region: string}|undefined {
+    for(const [region, area] of Object.entries(sideQuests)){
+        if(name in area){
+            return {quest: area[name], region}
         }
     }
     return undefined;

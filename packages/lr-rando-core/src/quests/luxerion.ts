@@ -44,7 +44,7 @@ const Lux_1_5: QuestInfo = {
     name: "Hunter in Light and Shadow",
     requirements: [
         {
-            "crest_of_etro": true
+            "key_bajji": true
         },
         {
             "force_through": true
@@ -89,9 +89,14 @@ export const LuxerionSideQuests = {
     } as QuestInfo,
     "The Things She's Lost": {
         name: "The Things She's Lost",
-        requirements: {
-            "red_carbuncle_doll": true
-        },
+        requirements: [
+            {
+                "key_kb_g": true
+            },
+            {
+                "key_kb_r": true
+            }
+        ],
         trigger: Dolce,
         handIn: Dolce,
         sideQuestId: 1
@@ -111,10 +116,10 @@ export const LuxerionSideQuests = {
     "Dying Wish": {
         name: "Dying Wish",
         requirements: {
-            "shaolong_gui_shell": true,
-            "mandragora_root": true,
-            "thunderclap_cap": true,
-            "spectral_elixir": true
+            "key_niku": true,
+            "key_ninjin": true,
+            "key_j_kino": true,
+            "key_sp_bt": true
         },
         prerequisiteQuests: [
             "Lux_1_2"
@@ -152,7 +157,8 @@ export const LuxerionSideQuests = {
     "Soul Seeds": {
         name: "Soul Seeds",
         requirements: {
-            "soul_seed": true
+            "key_sm_lt": true,
+            "key_soulcd": true
         },
         prerequisiteQuests: [
             "Lux_1_2"
@@ -173,7 +179,7 @@ export const LuxerionSideQuests = {
     "Treasured Ball": {
         name: "Treasured Ball",
         requirements: {
-            "rubber_ball": true
+            "key_ball": true
         },
         prerequisiteQuests: [
             "Lux_1_5"
@@ -199,7 +205,7 @@ export const LuxerionSideQuests = {
     "The Saint's Stone": {
         name: "The Saint's Stone",
         requirements: {
-            "crystal_shard": true
+            "key_l_kawa": true
         },
         trigger: Aremiah,
         handIn: Aremiah,
@@ -224,7 +230,7 @@ export const LuxerionSideQuests = {
             "armand_return_1": true,
             "armand_return_2": true,
             "armand_return_3": true,
-            "quill_pen": true
+            "key_l_pen": true
         },
         prerequisiteQuests: [
             "Lux_1_5"
@@ -250,7 +256,7 @@ export const LuxerionSideQuests = {
     "Stuck in a Gem": {
         name: "Stuck in a Gem",
         requirements: {
-            "starlit_spice": true
+            "key_l_kusa": true
         },
         trigger: Gem,
         handIn: "Ronan",
@@ -259,7 +265,7 @@ export const LuxerionSideQuests = {
     "Get the Girl": {
         name: "Get the Girl",
         requirements: {
-            "lackleys_ring": true,
+            "key_l_ling": true,
             "maitre-d": true,
             "seila": true
         },
@@ -273,7 +279,7 @@ export const LuxerionSideQuests = {
     "A Rose by Any Other Name": {
         name: "A Rose by Any Other Name",
         requirements: {
-            "phantom_rose": true
+            "key_l_hana": true
         },
         prerequisiteQuests: [
             "Lux_1_5"
