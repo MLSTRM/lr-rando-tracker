@@ -99,10 +99,10 @@
       min-height: 40px;
     }
 
-    .column140 {
+    .column160 {
       float: left;
-      width: calc(var(--column-width)*7);
-      min-width: calc(var(--column-width)*7);
+      width: calc(var(--column-width)*8);
+      min-width: calc(var(--column-width)*8);
       min-height: 40px;
     }
 
@@ -581,27 +581,27 @@
           </div>
         </div>
         <div id="keyInventory" class="autoTracker flexRegion">
-          <div class="row column40">
+          <div class="row column50">
             Key Items:
             <br/>
-            <div class="column40 columnTall" id="keyItems">
+            <div class="column50 columnTall" id="keyItems">
               <table id="basic_keyItems">
               </table>
             </div>
           </div>
         </div>
         <div id="inventory" class="autoTracker flexRegion">
-          <div class="row column40">
+          <div class="row column50">
             Items: 
             <br/>
-            <div class="column40 columnTall" id="items">
+            <div class="column50 columnTall" id="items">
               <table id="basic_items">
               </table>
             </div>
           </div>
         </div>
         <div id="sideQuests" class="flexRegion">
-          <div class="row column140">
+          <div class="row column160">
             Side quests & Canvas: &nbsp;&nbsp;&nbsp;Region: <select name="sideQuestRegion" id="sideQuestRegion" onchange="updateSideQuestRegion()">
               <option value="-1">All</option>
               <option value="0">Luxerion</option>
@@ -610,11 +610,11 @@
               <option value="3">Wildlands</option>
             </select>
             <br/>
-            <div class="column40 columnTall" id="side-quests">
+            <div class="column50 columnTall" id="side-quests">
               <table id="base_side_quests">
               </table>
             </div>
-            <div class="column40 columnTall">
+            <div class="column50 columnTall">
               <table id="canvasLookupList">
               </table>
             </div>
@@ -638,37 +638,6 @@
               Hand in to:
               <span id="sideLookupSelectedHandIn"></span>
               <span id="sideLookupSelectedHandInTime" style="white-space: pre-line;"></span>
-              <!-- <div id="canvasLookupSelected"></div> -->
-            </div>
-          </div>
-        </div>
-        <div id="canvasLookup" class="flexRegion">
-          <div class="row column100">
-            Canvas of Prayers
-            <br/>
-            Region: <select name="canvasRegion" id="canvasRegion" onchange="updateCanvasRegion()">
-              <option value="-1">All</option>
-              <option value="0">Luxerion</option>
-              <option value="1">Yusnaan</option>
-              <option value="2">Dead Dunes</option>
-              <option value="3">Wildlands</option>
-              <option value="4">Global</option>
-            </select>
-            <br/>
-
-            <div class="column60">
-              <span id="canvasLookupSelectedName"></span>
-              <br/>
-              Region: <span id="canvasLookupSelectedRegion"></span>
-              <br/>
-              Status: <span id="canvasLookupSelectedStatus"></span>
-              <br/>
-              Prerequisites:
-              <ul id="canvasLookupSelectedPrerequisites"></ul>
-              <br/>
-              Requirements:
-              <table id="canvasLookupSelectedRequirements" style="width: inherit;"></table>
-              <br/>
               <!-- <div id="canvasLookupSelected"></div> -->
             </div>
           </div>

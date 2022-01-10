@@ -418,6 +418,9 @@ function updateColumnWidth(initial?: boolean){
 function updateCanvasHalf(initial?: boolean){
   const halfCanvasElement = document.getElementById('halfCanvasRequirements') as HTMLInputElement;
   const checked = (initial ? (localStorage.getItem('display-halfCanvas') === 'true') : halfCanvasElement.checked);
+  if(initial){
+    halfCanvasElement.checked = checked;
+  }
   localStorage.setItem('display-halfCanvas', checked.toString());
   ipcRenderer.send('settings_halfCanvas', checked);
   setPropOnElem('#canvasLookupSelectedName', '');
@@ -455,6 +458,10 @@ async function getCanvasQuestInfo(el: HTMLElement){
   if(info.requirements){
     setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Item</th><th>#</th></tr>' + convertObjectToTable(info.requirements));
   }
+  setPropOnElem('#sideLookupSelectedAccept', '');
+  setPropOnElem('#sideLookupSelectedAcceptTime', '');
+  setPropOnElem('#sideLookupSelectedHandIn', '');
+  setPropOnElem('#sideLookupSelectedHandInTime', '');
 }
 
 async function getSideQuestInfo(el: HTMLElement){
@@ -680,4 +687,6 @@ pull hints from spoiler log
 serialize hints and shop notes to a file on save button, reload on startup (copy/paste for now, hook up localstorage).
 
 Begin work on enriched event/boss names and checks
+
+Add currently playing music to tracker
 */
