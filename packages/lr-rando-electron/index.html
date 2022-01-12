@@ -602,13 +602,17 @@
         </div>
         <div id="sideQuests" class="flexRegion">
           <div class="row column160">
-            Side quests & Canvas: &nbsp;&nbsp;&nbsp;Region: <select name="sideQuestRegion" id="sideQuestRegion" onchange="updateSideQuestRegion()">
+            Side quests & Canvas:&nbsp;<span style="float: right">Search:&nbsp;<input id="sideNameSearch" type="search" onkeyup="updateSideQuestRegion()" onsearch="updateSideQuestRegion()"/></span>
+            <br style="clear: both"/>
+            Region:&nbsp;<select name="sideQuestRegion" id="sideQuestRegion" onchange="updateSideQuestRegion()">
               <option value="-1">All</option>
               <option value="0">Luxerion</option>
               <option value="1">Yusnaan</option>
               <option value="2">Dead Dunes</option>
               <option value="3">Wildlands</option>
             </select>
+            Sort&nbsp;by&nbsp;name:&nbsp;<input id="sideSortName" type="checkbox" onchange="setSideSortByName()" />
+            Hide&nbsp;complete:&nbsp;<input id="sideHideComplete" type="checkbox" onchange="setSideHideComplete()" />            
             <br/>
             <div class="column50 columnTall" id="side-quests">
               <table id="base_side_quests">

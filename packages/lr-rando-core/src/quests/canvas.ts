@@ -55,6 +55,9 @@ export const prayers = {
             requirements: {
                 "mat_z_022": 3
             },
+            prerequisiteOther: [
+                'time_day_3'
+            ],
             canvasByteIndex: 0,
             canvasByteOffset: 0x04
         } as QuestInfo,

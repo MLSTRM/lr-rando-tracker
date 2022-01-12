@@ -82,9 +82,10 @@ export const WildlandsSideQuests = {
             "second_option": true
         },
         prerequisiteQuests: [
-            "Wild_3_1",
+            "Wild_3_1", //Not just this it seems
         ],
         prerequisiteOther: [
+            "odin_level_1", //verify????
             "event_make_chocobull" //6 slug sweet, 8 chocoborel
         ],
         trigger: Cardesia,

@@ -24,6 +24,8 @@ window.onload = () => {
   updateColumnWidth(true);
   updateBodyTheme(true);
   updateCanvasHalf(true);
+  setSideSortByName(true);
+  setSideHideComplete(true);
   //updateCanvasRegion();
   updateSideQuestRegion();
   addQuestHintRow();
@@ -430,18 +432,80 @@ function updateCanvasHalf(initial?: boolean){
   setPropOnElem('#canvasLookupSelectedRequirements', '');
 }
 
+function setSideSortByName(initial?: boolean){
+  const sideSortNameElement = document.getElementById('sideSortName') as HTMLInputElement;
+  const checked = (initial ? (localStorage.getItem('display-sideSortName') === 'true') : sideSortNameElement.checked);
+  if(initial){
+    sideSortNameElement.checked = checked;
+  }
+  localStorage.setItem('display-sideSortName', checked.toString());
+  updateSideQuestRegion();
+}
+
+function setSideHideComplete(initial?: boolean){
+  const sideHideCompleteElement = document.getElementById('sideHideComplete') as HTMLInputElement;
+  const checked = (initial ? (localStorage.getItem('display-sideHideComplete') === 'true') : sideHideCompleteElement.checked);
+  if(initial){
+    sideHideCompleteElement.checked = checked;
+  }
+  localStorage.setItem('display-sideHideComplete', checked.toString());
+  updateSideQuestRegion();
+}
+
 //Display config region end
 
 async function updateSideQuestRegion(){
   const area = (document.getElementById('sideQuestRegion') as HTMLSelectElement).value;
+  
   const sideNames = await ipcRenderer.invoke('sideQuestList', area) as Map<string, SideQuestProgress | undefined>;
-  //TODO: N here should be replaced by completion status (and allow manual change if not autotracking)
-  const sideTableOut = [...sideNames].map((name) => `<tr><td onclick="getSideQuestInfo(this)">${name[0]}</td><td>${name[1]?.status ?? ''}</td></tr>`).join('');
-  setPropOnElem('#base_side_quests', sideTableOut);
   const canvasNames = await ipcRenderer.invoke('canvasList', area) as Map<string, string>;
-  //TODO: N here should be replaced by completion status (and allow manual change if not autotracking)
-  const canvasTableOut = [...canvasNames].map((name) => `<tr><td onclick="getCanvasQuestInfo(this)">${name[0]}</td><td>${name[1]}</td></tr>`).join('');
-  setPropOnElem('#canvasLookupList', canvasTableOut);
+
+  let sideNameArray = [...sideNames];
+  let canvasNameArray = [...canvasNames];
+
+  if(localStorage.getItem('display-sideHideComplete') === 'true'){
+    sideNameArray = sideNameArray.filter(([,q]) => q?.status !== 'Complete');
+    canvasNameArray = canvasNameArray.filter(([,s]) => s !== 'Complete');
+  }
+
+  const nameFilter = (document.getElementById('sideNameSearch') as HTMLInputElement).value?.toLowerCase();
+
+  if(nameFilter){
+    sideNameArray = sideNameArray.filter(([s,]) => s.toLowerCase().includes(nameFilter));
+    canvasNameArray = canvasNameArray.filter(([s,]) => s.toLowerCase().includes(nameFilter));
+  }
+
+  if(localStorage.getItem('display-sideSortName') === 'true'){
+    sideNameArray.sort(([s1,],[s2,]) => s1.localeCompare(s2));
+    canvasNameArray.sort(([s1,],[s2,]) => s1.localeCompare(s2));
+  }
+
+  const sideTableOut = sideNameArray.map((name) => `<tr><td>${statusToImage(name[1]?.status ?? '')}</td><td onclick="getSideQuestInfo(this)">${name[0]}</td></tr>`).join('');
+  setPropOnElem('#base_side_quests', sideTableHeader + sideTableOut);
+
+  const canvasTableOut = canvasNameArray.map((name) => `<tr><td>${statusToImage(name[1])}</td><td onclick="getCanvasQuestInfo(this)">${name[0]}</td></tr>`).join('');
+  setPropOnElem('#canvasLookupList', sideTableHeader + canvasTableOut);
+}
+
+const sideTableHeader = '<tr><th width="18px"></th><th></th></tr>'
+
+function statusToImage(status: string): string {
+  switch(status){
+    case 'Complete':
+      return '<img src="resources/images/icon_m_pass.png" height="18px" />';
+    case 'Failed / Missed':
+      return '<img src="resources/images/icon_m_fail.png" height="18px" />';
+    case 'In Progress':
+      return '<img src="resources/images/icon_m_prog.png" height="18px" />';
+    case 'Accepted':
+      return '<img src="resources/images/icon_m_acc.png" height="18px" />';
+    case 'Available':
+      return '<img src="resources/images/icon_m_avail.png" height="18px" />';
+  }
+  if(!status){
+    return '-';
+  }
+  return status;
 }
 
 async function getCanvasQuestInfo(el: HTMLElement){
@@ -648,18 +712,17 @@ function inflateHintGrid(input: string[][]): void {
 // Start working on NPC availability based on time (clamp view window into range[], convert to rectangles?)
 // Create quests section with auto scanning of inventory/completion requirements
 
-// use library on ark for boss tracking (?) - works for location but not name.
+// use library on ark for boss tracking (?) - works for location but not name. - sync with hints
 
 // find where text pointer moves if hint is open and use that to add to list
 // quest hints as well as libras. - do some CE stuff to see if it can be scraped from display text somewhere
 
 /*
 To fix: 0.7.2
-TODO: highlight on soul seeds and unappraised - would side quest hook be better here? Yes it would. Do it.
+TODO: highlight on soul seeds and unappraised - would side quest hook be better here? Yes it would. Do it. Test this properly on a seed that works...
 
 New features to do:
-icons for quest status for side/canvas
-allow for manual toggle of side/canvas completion
+allow for manual toggle of side/canvas completion (and push to backend + store)
 Add way to mark hints as complete rather than deleting?
 
 allow for rando state persistence, save state to file (works for config), push state back from UI to backend for non-auto use
@@ -676,8 +739,6 @@ pane selection/ordering controls (rather than pop in/out or fixed)
 -npc lookup
 
 SORT:
-canvas sorting options (alphabetical rather than default)
-
 8 chocoborel, 6 slug sweet cardesia
 
 pull boss names from spoiler log
@@ -688,5 +749,5 @@ serialize hints and shop notes to a file on save button, reload on startup (copy
 
 Begin work on enriched event/boss names and checks
 
-Add currently playing music to tracker
+Add currently playing music to tracker?
 */
