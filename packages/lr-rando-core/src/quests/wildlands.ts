@@ -15,7 +15,7 @@ const Wild_3_2: QuestInfo = {
     name: "Healing an Angel",
     requirements: {
         "saving_an_angel": true,
-        "chocobo_healing": 120
+        "odin": 120
     }
 }
 
@@ -141,7 +141,7 @@ export const WildlandsSideQuests = {
     "Saving an Angel": {
         name: "Saving an Angel",
         requirements: {
-            "chocobo_healing": 120
+            "odin": 120
         },
         prerequisiteQuests: [
             "Wild_3_1"

@@ -87,14 +87,14 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
         keyItems: generateItemMap(reader, pKeyItems),
         garbs: resolveGarbList(reader, pGarbs),
         epAbilities: resolveEPAbilities(reader, pSomeStatsBase + epAbilitiesMaybe),
-        mainQuestProgress: resolveMainQuestProgress({
+        mainQuestBytes: {
             luxerion: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0x64, SHORT, true),
             yusnaan: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0x78, SHORT, true),
             wildlands1: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0x94, SHORT, true),
             wildlands2: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0x8C, SHORT, true),
             deaddunes: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0xA0, SHORT, true),
             sazh: reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34), SHORT, true)
-        }),
+        },
         sideQuestProgress: extractSideQuestProgress(reader, pSomeStatsBase + sideQuestOffset),
         canvasOfPrayers: {
             accepted: extractCanvasInfo(reader, pSomeStatsBase + canvasOffsetMaybe),

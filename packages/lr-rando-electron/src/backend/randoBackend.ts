@@ -1,6 +1,6 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem,
-    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo, QuestProgressCheck, QuestState } from "lr-rando-core";
+    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo, QuestProgressCheck, QuestState, resolveMainQuestProgress } from "lr-rando-core";
 import _ from 'lodash';
 import { QuestInfo, QuestPrerequisites, EnrichedQuestRequirement, EnrichedQuestInfo } from "lr-rando-core";
 
@@ -17,7 +17,7 @@ export class RandoBackend {
         halfCanvas: false
     };
 
-    private oldState: Partial<RandoMemoryState>;
+    private oldState: Partial<BackendRandoMemoryState>;
 
     constructor(){
         this.reader = new LrMemoryReader();
@@ -29,7 +29,7 @@ export class RandoBackend {
         this.readerLoaded = false;
     }
 
-    public async getState(): Promise<RandoMemoryState | undefined> {
+    public async getState(): Promise<BackendRandoMemoryState | undefined> {
         if(!this.readerLoaded){
             this.readerLoaded = await attachAndVerify(this.reader);
             if(!this.readerLoaded){
@@ -47,7 +47,7 @@ export class RandoBackend {
         }
     }
 
-    public async getStateChanges(): Promise<Partial<RandoMemoryState>> {
+    public async getStateChanges(): Promise<Partial<BackendRandoMemoryState>> {
         if(!this.readerLoaded){
             this.readerLoaded = await attachAndVerify(this.reader);
             return {};
@@ -96,8 +96,12 @@ export class RandoBackend {
         }
     }
 
-    prettifyState(state: RandoMemoryState): RandoMemoryState;
-    prettifyState(state: Partial<RandoMemoryState>): Partial<RandoMemoryState> {
+    prettifyState(state: BackendRandoMemoryState): BackendRandoMemoryState;
+    prettifyState(state: Partial<BackendRandoMemoryState>): Partial<BackendRandoMemoryState> {
+        if(state.mainQuestBytes){
+            state.mainQuestProgress = resolveMainQuestProgress(state.mainQuestBytes);
+        }
+
         if(state.region){
             const regionInfo = extractZoneInfo(state.region.map, state.region.zone);
             if(!regionInfo.known){
@@ -254,23 +258,17 @@ export class RandoBackend {
             hasObtained: {},
             keyInventory: this.oldState.keyItems ?? new Map(),
             odin: this.oldState.odinHealth ?? 0,
-            questState: this.convertSideQuestProgress(),
-            visited: {},
+            questState: this.convertQuestState(),
             mainQuestProgress: this.oldState.mainQuestProgress!,
-            mainQuestBytes: {
-                luxerion: 0,
-                yusnaan: 0,
-                wildlands: 0,
-                deaddunes: 0,
-                sazh: 0
-            },
+            mainQuestBytes: this.oldState.mainQuestBytes!,
             inventory: this.oldState.items ?? new Map()
         };
     }
 
-    convertSideQuestProgress(): {[x: string]: QuestState} {
+    convertQuestState(): {[x: string]: QuestState} {
         const base = this.getSideQuestList();
-        return Object.fromEntries([...base].map(([k,v]) => ([k, statusToIndex(v?.status)])));
+        const canvasBase = this.getCanvasList();
+        return Object.fromEntries([...[...base].map(([k,v]) => ([k, statusToIndex(v?.status)])), ...[...canvasBase].map(([k,v]) => ([k, statusToIndex(v)]))]);
     }
 
     public hasGarbByName(garb: string): boolean {
@@ -298,7 +296,7 @@ function enrichSideQuestInfo(info: QuestInfo, state: QuestProgressCheck, setting
         requirements: enrichRequirements(info.requirements, state, settings)
     };
     if(info.prerequisiteOther){
-        const mappedPrerequisites = info.prerequisiteOther.map(e => ({name: QuestPrerequisites[e].name, complete: false}));
+        const mappedPrerequisites = info.prerequisiteOther.map(e => ({name: QuestPrerequisites[e].name, complete: QuestPrerequisites[e].check(state)}));
         mutable.prerequisiteOther = mappedPrerequisites;
     }
     if(info.prerequisiteQuests){
@@ -377,6 +375,10 @@ function mapRequirements(requirement: QuestRequirement, state: QuestProgressChec
             name = isKeyItemWithInfo.name;
             current = state.keyInventory?.get(key) ?? 0;
         }
+        if(key==='odin'){
+            name = 'Heal Odin';
+            current = state.odin;
+        }
         if(typeof value === 'boolean'){
             current = !!current;
         }
@@ -391,4 +393,8 @@ function mapRequirements(requirement: QuestRequirement, state: QuestProgressChec
 
 interface BackendSettings {
     halfCanvas: boolean;
+}
+
+interface BackendRandoMemoryState extends RandoMemoryState {
+    mainQuestProgress?: MainQuestPosition;
 }

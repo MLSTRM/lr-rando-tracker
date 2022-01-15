@@ -1,5 +1,5 @@
 import { MainQuestPosition, QuestNames, SideQuestProgress } from ".";
-import { QuestState } from "..";
+import { MainQuestProgressValues, QuestState } from "..";
 import { Areas, Bosses, MainQuests, MiniBosses } from "../constants";
 import { KeyItem } from "../identifiers";
 import { NpcAvailable } from "../model";
@@ -49,10 +49,9 @@ export interface QuestProgressCheck {
     hasObtained: {[key: string]: boolean};
     keyInventory: Map<string, number>;
     inventory: Map<string, number>;
-    visited: {[key in Areas]?: boolean};
     bossLocations: {[key in Bosses | MiniBosses]?: boolean};
     mainQuestProgress: MainQuestPosition;
-    mainQuestBytes: MainQuestPosition;
+    mainQuestBytes: MainQuestProgressValues;
     questState: {[key: string]: QuestState};
 };
 

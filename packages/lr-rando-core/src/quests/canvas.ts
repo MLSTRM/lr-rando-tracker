@@ -75,7 +75,7 @@ export const prayers = {
          "Mythical Badge": {
             name: "Mythical Badge",
             requirements: {
-                "ley_l_kishin": 1
+                "key_l_kishin": 1
             },
             prerequisiteOther: [
                 "time_day_3"
