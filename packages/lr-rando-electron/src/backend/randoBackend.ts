@@ -1,6 +1,6 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem,
-    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo } from "lr-rando-core";
+    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo, QuestProgressCheck, QuestState } from "lr-rando-core";
 import _ from 'lodash';
 import { QuestInfo, QuestPrerequisites, EnrichedQuestRequirement, EnrichedQuestInfo } from "lr-rando-core";
 
@@ -224,7 +224,7 @@ export class RandoBackend {
         const info = getCanvasQuestInfo(name);
         if(info){
             const {quest, region} = info;
-            const displayQuest = enrichSideQuestInfo(quest, this.oldState, this.settings);
+            const displayQuest = enrichSideQuestInfo(quest, this.constructProgressCheck(), this.settings);
             //translate names into better forms
             return Object.assign(displayQuest, {status, region: areaIndexStringToAreaName(region)});
         }
@@ -240,11 +240,37 @@ export class RandoBackend {
             if(progress){
                 status = progress.status;
             }
-            const displayQuest = enrichSideQuestInfo(quest, this.oldState);
+            const displayQuest = enrichSideQuestInfo(quest, this.constructProgressCheck());
             //translate names into better forms
             return Object.assign(displayQuest, {status, region: areaIndexStringToAreaName(region)});
         }
         return undefined;
+    }
+
+    constructProgressCheck(): QuestProgressCheck {
+        return {
+            bossLocations: {},
+            day: this.oldState.time?.trueDay || 0,
+            hasObtained: {},
+            keyInventory: this.oldState.keyItems ?? new Map(),
+            odin: this.oldState.odinHealth ?? 0,
+            questState: this.convertSideQuestProgress(),
+            visited: {},
+            mainQuestProgress: this.oldState.mainQuestProgress!,
+            mainQuestBytes: {
+                luxerion: 0,
+                yusnaan: 0,
+                wildlands: 0,
+                deaddunes: 0,
+                sazh: 0
+            },
+            inventory: this.oldState.items ?? new Map()
+        };
+    }
+
+    convertSideQuestProgress(): {[x: string]: QuestState} {
+        const base = this.getSideQuestList();
+        return Object.fromEntries([...base].map(([k,v]) => ([k, statusToIndex(v?.status)])));
     }
 
     public hasGarbByName(garb: string): boolean {
@@ -257,7 +283,16 @@ export class RandoBackend {
     }
 }
 
-function enrichSideQuestInfo(info: QuestInfo, state: Partial<RandoMemoryState>, settings?: BackendSettings): EnrichedQuestInfo {
+function statusToIndex(status?: string): QuestState {
+    switch(status){
+        case 'Complete':
+            return QuestState.COMPLETED;
+        default:
+            return QuestState.AVAILABLE;
+    }
+}
+
+function enrichSideQuestInfo(info: QuestInfo, state: QuestProgressCheck, settings?: BackendSettings): EnrichedQuestInfo {
     const mutable: EnrichedQuestInfo = {
         name: info.name,
         requirements: enrichRequirements(info.requirements, state, settings)
@@ -267,7 +302,7 @@ function enrichSideQuestInfo(info: QuestInfo, state: Partial<RandoMemoryState>, 
         mutable.prerequisiteOther = mappedPrerequisites;
     }
     if(info.prerequisiteQuests){
-        const mappedPrerequisites = info.prerequisiteQuests.map(mapMainQuestName);
+        const mappedPrerequisites = info.prerequisiteQuests.map(name => mapMainQuestName(name, state));
         mutable.prerequisiteQuests = mappedPrerequisites;
     }
     if(info.handIn){
@@ -279,7 +314,7 @@ function enrichSideQuestInfo(info: QuestInfo, state: Partial<RandoMemoryState>, 
     return mutable;
 }
 
-function enrichRequirements(reqs: false | QuestRequirement | QuestRequirement[], state: Partial<RandoMemoryState>, settings?: BackendSettings): false | EnrichedQuestRequirement | EnrichedQuestRequirement[] {
+function enrichRequirements(reqs: false | QuestRequirement | QuestRequirement[], state: QuestProgressCheck, settings?: BackendSettings): false | EnrichedQuestRequirement | EnrichedQuestRequirement[] {
     if(!reqs){
         return reqs;
     }
@@ -291,21 +326,38 @@ function enrichRequirements(reqs: false | QuestRequirement | QuestRequirement[],
     return reqs.map(r => mapRequirements(r, state));
 }
 
-function mapMainQuestName(name: string): {name: string, complete: boolean} {
+function mapMainQuestName(name: string, state: QuestProgressCheck): {name: string, complete: boolean} {
     const match = name.match(/[A-Za-z]*_([0-9])_([0-9])/);
     if(!match){
         return {
             name,
-            complete: false
+            complete: state.questState[name] === QuestState.COMPLETED
         };
     }
+    const key = getAreaFromKey(match[1]);
     return {
         name: `Main Quest ${match[1]}-${match[2]}`,
-        complete: false
+        complete: !!key && state.mainQuestProgress[key] >= Number(match[2])
     };
 }
 
-function mapRequirements(requirement: QuestRequirement, state: Partial<RandoMemoryState>, settings?: BackendSettings): EnrichedQuestRequirement {
+function getAreaFromKey(id: '1' | '2' | '3' | '4' | '5' | string): keyof MainQuestPosition | undefined{
+    switch(id){
+        case '1':
+            return 'luxerion';
+        case '2':
+            return 'yusnaan';
+        case '3':
+            return 'wildlands';
+        case '4':
+            return 'deaddunes';
+        case '5':
+            return 'sazh';
+    }
+    return undefined;
+}
+
+function mapRequirements(requirement: QuestRequirement, state: QuestProgressCheck, settings?: BackendSettings): EnrichedQuestRequirement {
     const mappedRequirement: EnrichedQuestRequirement = {};
     for(const key of Object.keys(requirement)){
         const value = requirement[key];
@@ -318,12 +370,12 @@ function mapRequirements(requirement: QuestRequirement, state: Partial<RandoMemo
                 newValue = Math.ceil(value / 2);
             }
             name = isItemWithInfo.name;
-            current = state.items?.get(key) ?? 0;
+            current = state.inventory?.get(key) ?? 0;
         }
         const isKeyItemWithInfo = prettyPrintKeyItem(key);
         if(isKeyItemWithInfo.known){
             name = isKeyItemWithInfo.name;
-            current = state.keyItems?.get(key) ?? 0;
+            current = state.keyInventory?.get(key) ?? 0;
         }
         if(typeof value === 'boolean'){
             current = !!current;

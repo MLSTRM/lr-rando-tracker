@@ -1,4 +1,4 @@
-import { QuestNames } from ".";
+import { MainQuestPosition, QuestNames, SideQuestProgress } from ".";
 import { QuestState } from "..";
 import { Areas, Bosses, MainQuests, MiniBosses } from "../constants";
 import { KeyItem } from "../identifiers";
@@ -47,10 +47,13 @@ export interface QuestProgressCheck {
     day: number;
     odin: number;
     hasObtained: {[key: string]: boolean};
-    keyInventory: {[key in KeyItem]?: number};
+    keyInventory: Map<string, number>;
+    inventory: Map<string, number>;
     visited: {[key in Areas]?: boolean};
     bossLocations: {[key in Bosses | MiniBosses]?: boolean};
-    questState: {[key in QuestNames]: QuestState};
+    mainQuestProgress: MainQuestPosition;
+    mainQuestBytes: MainQuestPosition;
+    questState: {[key: string]: QuestState};
 };
 
 type QuestPrerequisite = keyof typeof QuestPrerequisites;
@@ -72,14 +75,14 @@ export const QuestPrerequisites = {
     "event_make_chocobull": {name: 'Make Chocobull', check: (context: QuestProgressCheck) => context.hasObtained['chocobull_cardesia']},
     "event_harvest_gysahl": {name: 'Harvest Gysahl Greens', check: (context: QuestProgressCheck) => context.hasObtained['gysahl_field']},
     "event_harvest_tantal": {name: 'Harvest Tantal Greens', check: (context: QuestProgressCheck) => context.hasObtained['tantal_field']},
-    "keyItem_boss_note": {name: 'Boss\'s Note', check: (context: QuestProgressCheck) => !!context.keyInventory['key_y_shiji']},
-    "keyItem_death_ticket": {name: 'Death Game Ticket', check: (context: QuestProgressCheck) => !!context.keyInventory['key_y_death']},
-    "keyItem_crux_body": {name: 'Crux Body', check: (context: QuestProgressCheck) => !!context.keyInventory['key_d_wing']},
+    "keyItem_boss_note": {name: 'Boss\'s Note', check: (context: QuestProgressCheck) => !!context.keyInventory.get('key_y_shiji')},
+    "keyItem_death_ticket": {name: 'Death Game Ticket', check: (context: QuestProgressCheck) => !!context.keyInventory.get('key_y_death')},
+    "keyItem_crux_body": {name: 'Crux Body', check: (context: QuestProgressCheck) => !!context.keyInventory.get('key_d_wing') || context.mainQuestBytes.deaddunes >= 800},
     "event_pickett_steal": {name: 'Pickett Steal', check: (context: QuestProgressCheck) => context.hasObtained['pickett_steal']},
     "time_3h_after_fuzzy_search": {name: '3h after Fuzzy Search', check: (context: QuestProgressCheck) => true},
     "accept_rough_beast": {name: 'Accept What Rough Beast Slouches', check: (context: QuestProgressCheck) => context.questState['What Rough Beast Slouches'] >= 2},
     "accept_old_rivals": {name: 'Accept Old Rivals', check: (context: QuestProgressCheck) => context.questState['Old Rivals'] >= 2},
-    "area_yusnaan": {name: 'Enter Yusnaan', check: (context: QuestProgressCheck) => !!context.visited[Areas.YUSNAAN]},
-    "boss_{cyclops}": {name: 'Defeat Cyclops', check: (context: QuestProgressCheck) => !!context.bossLocations[MiniBosses.CYCLOPS] || context.questState['MQ2'] >= 220 },
-    "mq2_firework_hand_in": {name: 'Return Fireworks', check: (context: QuestProgressCheck) => context.questState['MQ2'] >= 350 }
+    "area_yusnaan": {name: 'Enter Yusnaan', check: (context: QuestProgressCheck) => context.mainQuestBytes.yusnaan >= 110},
+    "boss_{cyclops}": {name: 'Defeat Cyclops', check: (context: QuestProgressCheck) => !!context.bossLocations[MiniBosses.CYCLOPS] || context.mainQuestBytes.yusnaan >= 220 },
+    "mq2_firework_hand_in": {name: 'Return Fireworks', check: (context: QuestProgressCheck) => context.mainQuestBytes.yusnaan >= 350 }
 }
