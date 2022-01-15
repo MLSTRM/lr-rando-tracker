@@ -140,7 +140,7 @@ export const prayers = {
                 "Revenge Has Teeth"
             ],
             canvasByteIndex: 1,
-            canvasByteOffset: 0x04
+            canvasByteOffset: 0x40
         } as QuestInfo,
          "Heretics' Beasts": {
             name: "Heretics' Beasts",

@@ -20,11 +20,27 @@ export interface QuestInfo {
 
 export interface MainQuestLine {
     id: MainQuests;
-    quests: {[key: string]: QuestInfo}
+    quests: {[key: string]: QuestInfo};
 }
 
 export interface QuestRequirement {
-    [key: string]: true | number //TODO: change key here to be KeyItem | Item | Event | Boss and define all events/bosses.
+    [key: string]: true | number; //TODO: change key here to be KeyItem | Item | Event | Boss and define all events/bosses.
+}
+
+export interface EnrichedQuestRequirement {
+    [key: string]: {
+        required: true | number;
+        current: boolean | number
+    };
+}
+
+export interface EnrichedQuestInfo {
+    name: string;
+    requirements: false | EnrichedQuestRequirement | EnrichedQuestRequirement[]
+    prerequisiteQuests?: {name: string, complete: boolean}[], //narrow to quest ids/names
+    prerequisiteOther?: {name: string, complete: boolean}[], //narrowed to specific list below
+    trigger?: string | NpcAvailable; //narrow to only NpcAvailable struct
+    handIn?: string | NpcAvailable;
 }
 
 export interface QuestProgressCheck {
@@ -64,5 +80,6 @@ export const QuestPrerequisites = {
     "accept_rough_beast": {name: 'Accept What Rough Beast Slouches', check: (context: QuestProgressCheck) => context.questState['What Rough Beast Slouches'] >= 2},
     "accept_old_rivals": {name: 'Accept Old Rivals', check: (context: QuestProgressCheck) => context.questState['Old Rivals'] >= 2},
     "area_yusnaan": {name: 'Enter Yusnaan', check: (context: QuestProgressCheck) => !!context.visited[Areas.YUSNAAN]},
-    "boss_{cyclops}": {name: 'Defeat Cyclops', check: (context: QuestProgressCheck) => !!context.bossLocations[MiniBosses.CYCLOPS]}
+    "boss_{cyclops}": {name: 'Defeat Cyclops', check: (context: QuestProgressCheck) => !!context.bossLocations[MiniBosses.CYCLOPS] || context.questState['MQ2'] >= 220 },
+    "mq2_firework_hand_in": {name: 'Return Fireworks', check: (context: QuestProgressCheck) => context.questState['MQ2'] >= 350 }
 }

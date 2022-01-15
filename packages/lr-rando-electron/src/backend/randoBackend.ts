@@ -2,7 +2,7 @@ import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } f
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem,
     getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo } from "lr-rando-core";
 import _ from 'lodash';
-import { QuestInfo, QuestPrerequisites } from "lr-rando-core";
+import { QuestInfo, QuestPrerequisites, EnrichedQuestRequirement, EnrichedQuestInfo } from "lr-rando-core";
 
 const reservedKeys = ['time', 'region'];
 
@@ -197,7 +197,7 @@ export class RandoBackend {
         key: for(const key of keys){
             for(const locs of areas){
                 if(this.oldState.canvasOfPrayers?.completed[locs]?.includes(key)){
-                    map.set(key, 'Completed');
+                    map.set(key, 'Complete');
                     continue key;
                 } else if (this.oldState.canvasOfPrayers?.accepted[locs]?.includes(key)){
                     map.set(key, 'Accepted');
@@ -214,7 +214,7 @@ export class RandoBackend {
         const areas = [0, 1, 2, 3, 4];
         for(const locs of areas){
             if(this.oldState.canvasOfPrayers?.completed[locs]?.includes(name)){
-                status = 'Completed';
+                status = 'Complete';
                 break;
             } else if (this.oldState.canvasOfPrayers?.accepted[locs]?.includes(name)){
                 status = 'Accepted';
@@ -224,7 +224,7 @@ export class RandoBackend {
         const info = getCanvasQuestInfo(name);
         if(info){
             const {quest, region} = info;
-            const displayQuest = enrichCanvasRequirements(quest, this.settings);
+            const displayQuest = enrichSideQuestInfo(quest, this.oldState, this.settings);
             //translate names into better forms
             return Object.assign(displayQuest, {status, region: areaIndexStringToAreaName(region)});
         }
@@ -240,7 +240,7 @@ export class RandoBackend {
             if(progress){
                 status = progress.status;
             }
-            const displayQuest = enrichSideQuestRequirements(quest);
+            const displayQuest = enrichSideQuestInfo(quest, this.oldState);
             //translate names into better forms
             return Object.assign(displayQuest, {status, region: areaIndexStringToAreaName(region)});
         }
@@ -257,62 +257,81 @@ export class RandoBackend {
     }
 }
 
-function enrichSideQuestRequirements(info: QuestInfo): QuestInfo {
-    if(info.requirements){
-        if(!Array.isArray(info.requirements)){
-            const requirement = info.requirements;
-            const mappedRequirement = mapRequirements(requirement);
-            info = Object.assign({}, info, {requirements: mappedRequirement});
-        }
-    }
+function enrichSideQuestInfo(info: QuestInfo, state: Partial<RandoMemoryState>, settings?: BackendSettings): EnrichedQuestInfo {
+    const mutable: EnrichedQuestInfo = {
+        name: info.name,
+        requirements: enrichRequirements(info.requirements, state, settings)
+    };
     if(info.prerequisiteOther){
-        const mappedPrerequisites = info.prerequisiteOther.map(e => QuestPrerequisites[e].name);
-        info = Object.assign({}, info, {prerequisiteOther: mappedPrerequisites});
+        const mappedPrerequisites = info.prerequisiteOther.map(e => ({name: QuestPrerequisites[e].name, complete: false}));
+        mutable.prerequisiteOther = mappedPrerequisites;
     }
     if(info.prerequisiteQuests){
         const mappedPrerequisites = info.prerequisiteQuests.map(mapMainQuestName);
-        info = Object.assign({}, info, {prerequisiteQuests: mappedPrerequisites});
+        mutable.prerequisiteQuests = mappedPrerequisites;
     }
-    return info;
+    if(info.handIn){
+        mutable.handIn = info.handIn;
+    }
+    if(info.trigger){
+        mutable.trigger = info.trigger;
+    }
+    return mutable;
 }
 
-function mapMainQuestName(name: string): string {
+function enrichRequirements(reqs: false | QuestRequirement | QuestRequirement[], state: Partial<RandoMemoryState>, settings?: BackendSettings): false | EnrichedQuestRequirement | EnrichedQuestRequirement[] {
+    if(!reqs){
+        return reqs;
+    }
+    if(!Array.isArray(reqs)){
+        const requirement = reqs;
+        const mappedRequirement = mapRequirements(requirement, state, settings);
+        return mappedRequirement;
+    }
+    return reqs.map(r => mapRequirements(r, state));
+}
+
+function mapMainQuestName(name: string): {name: string, complete: boolean} {
     const match = name.match(/[A-Za-z]*_([0-9])_([0-9])/);
     if(!match){
-        return name;
+        return {
+            name,
+            complete: false
+        };
     }
-    return `Main Quest ${match[1]}-${match[2]}`;
+    return {
+        name: `Main Quest ${match[1]}-${match[2]}`,
+        complete: false
+    };
 }
 
-function enrichCanvasRequirements(info: QuestInfo, settings: BackendSettings): QuestInfo {
-    if(info.requirements){
-        if(!Array.isArray(info.requirements)){
-            const requirement = info.requirements;
-            const mappedRequirement = mapRequirements(requirement, settings);
-            info = Object.assign({}, info, {requirements: mappedRequirement});
-        }
-    }
-    return info;
-}
-
-function mapRequirements(requirement: QuestRequirement, settings?: BackendSettings): QuestRequirement {
-    const mappedRequirement: QuestRequirement = {};
+function mapRequirements(requirement: QuestRequirement, state: Partial<RandoMemoryState>, settings?: BackendSettings): EnrichedQuestRequirement {
+    const mappedRequirement: EnrichedQuestRequirement = {};
     for(const key of Object.keys(requirement)){
         const value = requirement[key];
         let name = key;
         let newValue = value;
+        let current: number | boolean = 0;
         const isItemWithInfo = prettyPrintItem(key);
         if(isItemWithInfo.known){
-            if(typeof value === 'number' && settings && settings.halfCanvas){
+            if(typeof value === 'number' && settings && settings.halfCanvas && !isItemWithInfo.name.includes('key_')){
                 newValue = Math.ceil(value / 2);
             }
             name = isItemWithInfo.name;
+            current = state.items?.get(key) ?? 0;
         }
         const isKeyItemWithInfo = prettyPrintKeyItem(key);
         if(isKeyItemWithInfo.known){
             name = isKeyItemWithInfo.name;
+            current = state.keyItems?.get(key) ?? 0;
         }
-        mappedRequirement[name] = newValue;
+        if(typeof value === 'boolean'){
+            current = !!current;
+        }
+        mappedRequirement[name] = {
+            required: newValue,
+            current
+        };
     }
     return mappedRequirement;
 }

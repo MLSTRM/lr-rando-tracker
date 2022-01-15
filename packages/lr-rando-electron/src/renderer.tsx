@@ -8,7 +8,7 @@
 import { ipcRenderer } from "electron";
 import type { RandoMemoryState } from "lr-rando-autotracker";
 import type { SideQuestProgress } from "lr-rando-core";
-import type { QuestInfo } from "lr-rando-core/build/quests/model";
+import type { EnrichedQuestInfo, EnrichedQuestRequirement } from "lr-rando-core/build/quests/model";
 
 let pollInterval: NodeJS.Timer;
 
@@ -285,6 +285,19 @@ function beginPoll() {
       }, 2000);
       pollingObtainedChecks.push(interval);
     }
+    const sideq = elem.getAttribute('data-sideq');
+    if(sideq){
+      const interval = setInterval(() => {
+        ipcRenderer.invoke('sideQuestNamedInfo', sideq).then((result: {status: string}) => {
+          if(elem.classList.contains('clickToggle')){
+            if(result?.status === 'Complete' && elem.classList.contains(inactive)){
+              elem.classList.remove(inactive);
+            }
+          }
+        });
+      }, 2000);
+      pollingObtainedChecks.push(interval);
+    }
     //setInterval(updateCanvasRegion, 5000);
     setInterval(updateSideQuestRegion, 5000);
   }
@@ -342,6 +355,13 @@ function convertArrayToList(arr?: any[]): string | undefined {
   return arr.map(el => `<li>${el}</li>`).join('');
 }
 
+function convertPrerequisiteToTable(arr?: {name: string; complete: boolean;}[]): string | undefined {
+  if(!arr){
+    return undefined;
+  }
+  return arr.map(el => `<tr><td>${el.name}</td><td>${el.complete ? 'Y' : 'N'}</td></tr>`).join('');
+}
+
 function convertMapToTable(map?: Map<any, any>): string | undefined {
   if(!map){
     return undefined;
@@ -349,11 +369,17 @@ function convertMapToTable(map?: Map<any, any>): string | undefined {
   return [...map].map(obj => `<tr><td>${obj[0]}</td><td>${obj[1]}</td></tr>`).join('');
 }
 
-function convertObjectToTable(obj?: Record<string, any>): string | undefined {
+function convertRequirementsToTable(obj?: EnrichedQuestRequirement): string | undefined {
   if(!obj){
     return undefined;
   }
-  return Object.entries(obj).map(v => `<tr><td>${v[0]}</td><td>${v[1]}</td></tr>`).join('');
+  return Object.entries(obj).map(v => {
+    if(typeof v[1].required === 'boolean'){
+      return `<tr><td>${v[0]}</td><td></td><td>${v[1].current ? 'Y' : 'N'}</td></tr>`;
+    } else {
+      return `<tr><td>${v[0]}</td><td>${v[1].required}</td><td>${v[1].current}</td></tr>`;
+    }
+  }).join('');
 }
 
 function convertSideQuestProgressToTable(obj?: {[key: string]: SideQuestProgress[]}): string | undefined {
@@ -509,18 +535,28 @@ function statusToImage(status: string): string {
 }
 
 async function getCanvasQuestInfo(el: HTMLElement){
-  const info = await ipcRenderer.invoke('canvasNamedInfo', el.textContent) as QuestInfo & {status: string; region: string};
+  const info = await ipcRenderer.invoke('canvasNamedInfo', el.textContent) as EnrichedQuestInfo & {status: string; region: string};
   //TODO:
-  //extract pre-requisites
-  //extract requirements
   //hook into inventory to check possibility
-  //add in status (accepted / completed)
   setPropOnElem('#canvasLookupSelectedName', info.name);
   setPropOnElem('#canvasLookupSelectedRegion', info.region);
-  setPropOnElem('#canvasLookupSelectedStatus', info.status);
-  setPropOnElem('#canvasLookupSelectedPrerequisites', convertArrayToList([...(info.prerequisiteQuests ?? []), ...(info.prerequisiteOther ?? [])]));
+  if(info.status){
+    setPropOnElem('#canvasLookupSelectedStatus', statusToImage(info.status) + info.status);
+  } else {
+    setPropOnElem('#canvasLookupSelectedStatus','');
+  }
+  const prereqTable = convertPrerequisiteToTable([...(info.prerequisiteQuests ?? []), ...(info.prerequisiteOther ?? [])]);
+  if(prereqTable){
+    setPropOnElem('#canvasLookupSelectedPrerequisites', '<tr><th style="width:100%-20px">Prerequisite</th><th>#</th></tr>' + prereqTable);
+  } else {
+    setPropOnElem('#canvasLookupSelectedPrerequisites', '');
+  }
   if(info.requirements){
-    setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Item</th><th>#</th></tr>' + convertObjectToTable(info.requirements));
+    if(!Array.isArray(info.requirements)){
+      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th><th>c</th></tr>' + convertRequirementsToTable(info.requirements));
+    } else {
+      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th><th>c</th></tr>' + info.requirements.map(convertRequirementsToTable).join('<tr><td colspan="2">OR</td></tr>'));
+    }
   }
   setPropOnElem('#sideLookupSelectedAccept', '');
   setPropOnElem('#sideLookupSelectedAcceptTime', '');
@@ -529,18 +565,27 @@ async function getCanvasQuestInfo(el: HTMLElement){
 }
 
 async function getSideQuestInfo(el: HTMLElement){
-  const info = await ipcRenderer.invoke('sideQuestNamedInfo', el.textContent) as QuestInfo & {status: string; region: string};
+  const info = await ipcRenderer.invoke('sideQuestNamedInfo', el.textContent) as EnrichedQuestInfo & {status: string; region: string};
   //TODO:
   //hook into inventory to check possibility
   setPropOnElem('#canvasLookupSelectedName', info.name);
   setPropOnElem('#canvasLookupSelectedRegion', info.region);
-  setPropOnElem('#canvasLookupSelectedStatus', info.status);
-  setPropOnElem('#canvasLookupSelectedPrerequisites', convertArrayToList([...(info.prerequisiteQuests ?? []), ...(info.prerequisiteOther ?? [])]));
+  if(info.status){
+    setPropOnElem('#canvasLookupSelectedStatus', statusToImage(info.status) + info.status);
+  } else {
+    setPropOnElem('#canvasLookupSelectedStatus','');
+  }
+  const prereqTable = convertPrerequisiteToTable([...(info.prerequisiteQuests ?? []), ...(info.prerequisiteOther ?? [])]);
+  if(prereqTable){
+    setPropOnElem('#canvasLookupSelectedPrerequisites', '<tr><th style="width:100%-20px">Prerequisite</th><th>#</th></tr>' + prereqTable);
+  } else {
+    setPropOnElem('#canvasLookupSelectedPrerequisites', '');
+  }
   if(info.requirements){
     if(!Array.isArray(info.requirements)){
-      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th></tr>' + convertObjectToTable(info.requirements));
+      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th><th>c</th></tr>' + convertRequirementsToTable(info.requirements));
     } else {
-      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th></tr>' + info.requirements.map(convertObjectToTable).join('<tr><td colspan="2">OR</td></tr>'));
+      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th><th>c</th></tr>' + info.requirements.map(convertRequirementsToTable).join('<tr><td colspan="2">OR</td></tr>'));
     }
   } else {
     setPropOnElem('#canvasLookupSelectedRequirements', '');
@@ -718,9 +763,6 @@ function inflateHintGrid(input: string[][]): void {
 // quest hints as well as libras. - do some CE stuff to see if it can be scraped from display text somewhere
 
 /*
-To fix: 0.7.2
-TODO: highlight on soul seeds and unappraised - would side quest hook be better here? Yes it would. Do it. Test this properly on a seed that works...
-
 New features to do:
 allow for manual toggle of side/canvas completion (and push to backend + store)
 Add way to mark hints as complete rather than deleting?
@@ -729,7 +771,8 @@ allow for rando state persistence, save state to file (works for config), push s
 
 EP ability cost selection (start at default and allow adjustment up/down)
 
-hook in autotracker to prerequisites and item check for canvas/side
+Fill out remaining quest requirements for formatting.
+Hook up questProgressCheck in backend to populate values for prerequisites properly.
 
 pane selection/ordering controls (rather than pop in/out or fixed)
 -tracker grid (large)
@@ -744,10 +787,9 @@ SORT:
 pull boss names from spoiler log
 pull hints from spoiler log
 
-
-serialize hints and shop notes to a file on save button, reload on startup (copy/paste for now, hook up localstorage).
-
 Begin work on enriched event/boss names and checks
 
-Add currently playing music to tracker?
+Quest issues:
+Faster than lightning in progress still available
+oneway persist by element id in import/export?
 */

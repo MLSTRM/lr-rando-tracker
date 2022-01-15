@@ -68,6 +68,13 @@ export const YusnaanSideQuests = {
             "match_2": true,
             "match_3": true
         },
+        prerequisiteQuests: [
+            'Yus_2_1'
+        ],
+        prerequisiteOther: [
+            "keyItem_boss_note",
+            "mq2_firework_hand_in"
+        ],
         trigger: Zoe,
         sideQuestId: 62
     } as QuestInfo,
