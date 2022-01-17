@@ -4,7 +4,7 @@ import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintIt
 import _ from 'lodash';
 import { QuestInfo, QuestPrerequisites, EnrichedQuestRequirement, EnrichedQuestInfo } from "lr-rando-core";
 
-const reservedKeys = ['time', 'region'];
+const reservedKeys = ['time', 'region', 'mainQuestBytes'];
 
 export class RandoBackend {
     private reader: LrMemoryReader;
@@ -100,6 +100,7 @@ export class RandoBackend {
     prettifyState(state: Partial<BackendRandoMemoryState>): Partial<BackendRandoMemoryState> {
         if(state.mainQuestBytes){
             state.mainQuestProgress = resolveMainQuestProgress(state.mainQuestBytes);
+            this.oldState.mainQuestProgress = state.mainQuestProgress;
         }
 
         if(state.region){
