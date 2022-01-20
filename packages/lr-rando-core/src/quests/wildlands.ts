@@ -262,6 +262,9 @@ export const WildlandsSideQuests = {
         requirements: {
             "key_w_hiyaku": true
         },
+        prerequisiteQuests: [
+            'A Final Cure'
+        ],
         trigger: Taleb,
         handIn: Taleb,
         sideQuestId: 38
