@@ -96,6 +96,14 @@ export const Alrick: NpcAvailable = {
     }
 }
 
+export const Ranulph: NpcAvailable = {
+    name: "Ranulph",
+    available: {
+        from: "05:00",
+        to: "23:00"
+    }
+}
+
 export const LuxerionNpcs = {
     Dolce,
     Armena,

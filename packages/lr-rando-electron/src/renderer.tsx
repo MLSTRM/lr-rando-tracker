@@ -506,10 +506,10 @@ async function updateSideQuestRegion(){
     canvasNameArray.sort(([s1,],[s2,]) => s1.localeCompare(s2));
   }
 
-  const sideTableOut = sideNameArray.map((name) => `<tr><td>${statusToImage(name[1]?.status ?? '')}</td><td onclick="getSideQuestInfo(this)">${name[0]}</td></tr>`).join('');
+  const sideTableOut = sideNameArray.map((name) => `<tr><td>${statusToImage(name[1]?.status ?? '')}</td><td onclick="getSideQuestInfo(this, 'sideQuest')">${name[0]}</td></tr>`).join('');
   setPropOnElem('#base_side_quests', sideTableHeader + sideTableOut);
 
-  const canvasTableOut = canvasNameArray.map((name) => `<tr><td>${statusToImage(name[1])}</td><td onclick="getCanvasQuestInfo(this)">${name[0]}</td></tr>`).join('');
+  const canvasTableOut = canvasNameArray.map((name) => `<tr><td>${statusToImage(name[1])}</td><td onclick="getSideQuestInfo(this, 'canvas')">${name[0]}</td></tr>`).join('');
   setPropOnElem('#canvasLookupList', sideTableHeader + canvasTableOut);
 }
 
@@ -519,7 +519,8 @@ function statusToImage(status: string): string {
   switch(status){
     case 'Complete':
       return '<img src="resources/images/icon_m_pass.png" height="18px" />';
-    case 'Failed / Missed':
+    case 'Failed':
+    case 'Missed':
       return '<img src="resources/images/icon_m_fail.png" height="18px" />';
     case 'In Progress':
       return '<img src="resources/images/icon_m_prog.png" height="18px" />';
@@ -534,40 +535,9 @@ function statusToImage(status: string): string {
   return status;
 }
 
-async function getCanvasQuestInfo(el: HTMLElement){
-  const info = await ipcRenderer.invoke('canvasNamedInfo', el.textContent) as EnrichedQuestInfo & {status: string; region: string};
-  //TODO:
-  //hook into inventory to check possibility
-  setPropOnElem('#canvasLookupSelectedName', info.name);
-  setPropOnElem('#canvasLookupSelectedRegion', info.region);
-  if(info.status){
-    setPropOnElem('#canvasLookupSelectedStatus', statusToImage(info.status) + info.status);
-  } else {
-    setPropOnElem('#canvasLookupSelectedStatus','');
-  }
-  const prereqTable = convertPrerequisiteToTable([...(info.prerequisiteQuests ?? []), ...(info.prerequisiteOther ?? [])]);
-  if(prereqTable){
-    setPropOnElem('#canvasLookupSelectedPrerequisites', '<tr><th style="width:100%-20px">Prerequisite</th><th>#</th></tr>' + prereqTable);
-  } else {
-    setPropOnElem('#canvasLookupSelectedPrerequisites', '');
-  }
-  if(info.requirements){
-    if(!Array.isArray(info.requirements)){
-      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th><th>c</th></tr>' + convertRequirementsToTable(info.requirements));
-    } else {
-      setPropOnElem('#canvasLookupSelectedRequirements', '<tr><th style="width:100%-20px">Event</th><th>#</th><th>c</th></tr>' + info.requirements.map(convertRequirementsToTable).join('<tr><td colspan="2">OR</td></tr>'));
-    }
-  }
-  setPropOnElem('#sideLookupSelectedAccept', '');
-  setPropOnElem('#sideLookupSelectedAcceptTime', '');
-  setPropOnElem('#sideLookupSelectedHandIn', '');
-  setPropOnElem('#sideLookupSelectedHandInTime', '');
-}
-
-async function getSideQuestInfo(el: HTMLElement){
-  const info = await ipcRenderer.invoke('sideQuestNamedInfo', el.textContent) as EnrichedQuestInfo & {status: string; region: string};
-  //TODO:
-  //hook into inventory to check possibility
+let activeSideQuestPoll: NodeJS.Timer;
+async function getSideQuestInfo(el: HTMLElement, type: 'sideQuest'|'canvas'){
+  const info = await ipcRenderer.invoke(type+'NamedInfo', el.textContent) as EnrichedQuestInfo & {status: string; region: string; bytes: number[]};
   setPropOnElem('#canvasLookupSelectedName', info.name);
   setPropOnElem('#canvasLookupSelectedRegion', info.region);
   if(info.status){
@@ -613,6 +583,18 @@ async function getSideQuestInfo(el: HTMLElement){
   } else {
     setPropOnElem('#sideLookupSelectedHandIn', '');
     setPropOnElem('#sideLookupSelectedHandInTime', '');
+  }
+  if(info.bytes && info.bytes.length > 0){
+    setPropOnElem('#sideLookupDebugStatus', JSON.stringify(info.bytes));
+  } else {
+    setPropOnElem('#sideLookupDebugStatus', '');
+  }
+  //Set 5 second loop for current side quest pane
+  if(activeSideQuestPoll){
+    clearTimeout(activeSideQuestPoll);
+  }
+  if(pollInterval){
+    activeSideQuestPoll = setTimeout(() => getSideQuestInfo(el, type), 5000);
   }
 }
 
@@ -763,9 +745,17 @@ function inflateHintGrid(input: string[][]): void {
 // quest hints as well as libras. - do some CE stuff to see if it can be scraped from display text somewhere
 
 /*
+TODO:
+check TAR using save from dyne
+Need to actually complete cried wolf on a save
+
 New features to do:
 allow for manual toggle of side/canvas completion (and push to backend + store)
 Add way to mark hints as complete rather than deleting?
+
+Shop hints
+
+Select multiple quests for requirement item tracking
 
 allow for rando state persistence, save state to file (works for config), push state back from UI to backend for non-auto use
 

@@ -1,4 +1,4 @@
-import { MainQuestLine, QuestInfo } from "./model";
+import { MainQuestLine, PartialQuestProgress, QuestInfo, QuestStringStatus } from "./model";
 import { MainQuests } from "../constants";
 import { Adonis, Elmer, Jamus, Nolan, Ramon, Tobias, Zanford } from "../npcs/deaddunes";
 
@@ -69,16 +69,22 @@ export const DeadDunesSideQuests = {
         ],
         trigger: "Bhakti",
         handIn: "Bhakti",
-        sideQuestId: 41 //check
+        sideQuestId: 41, //check
+        sideQuestProgress: new Map([
+            [1100, "Accepted"],
+            // [1200, "return_oil"],
+            // [1300, "open_door"]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "Old Rivals": {
         name: "Old Rivals",
         requirements: {
-            "his_wifes_dream": true
+            "His Wife's Dream": true
         },
         trigger: Tobias,
         handIn: Tobias,
-        sideQuestId: 42
+        sideQuestId: 42,
+        sideQuestProgress: new Map([[1000, "Accepted"]])
     } as QuestInfo,
     "His Wife's Dream": {
         name: "His Wife's Dream",
@@ -90,7 +96,8 @@ export const DeadDunesSideQuests = {
         ],
         trigger: Ramon,
         handIn: Ramon,
-        sideQuestId: 44
+        sideQuestId: 44,
+        sideQuestProgress: new Map([[2000, "Accepted"]])
     } as QuestInfo,
     "Tool of the Trade": {
         name: "Tool of the Trade",
@@ -99,7 +106,8 @@ export const DeadDunesSideQuests = {
         },
         trigger: Elmer,
         handIn: Elmer,
-        sideQuestId: 45
+        sideQuestId: 45,
+        sideQuestProgress: new Map([[1100, "Accepted"]])
     } as QuestInfo,
     "Adonis' Audition": {
         name: "Adonis' Audition",
@@ -108,7 +116,12 @@ export const DeadDunesSideQuests = {
         },
         trigger: Adonis,
         handIn: Adonis,
-        sideQuestId: 46
+        sideQuestId: 46,
+        sideQuestProgress: new Map([
+            [1000, "Accepted"],
+            [9000, ()=>({requirements: {"{gurangatch}": true}})],
+            [9100, "Complete"]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "What Rough Beast Slouches": {
         name: "What Rough Beast Slouches",
@@ -120,7 +133,8 @@ export const DeadDunesSideQuests = {
         ],
         trigger: Nolan,
         handIn: Nolan,
-        sideQuestId: 47
+        sideQuestId: 47,
+        sideQuestProgress: new Map([[1010, "Accepted"]])
     } as QuestInfo,
     "Skeletons in the Closet": {
         name: "Skeletons in the Closet",
@@ -135,7 +149,8 @@ export const DeadDunesSideQuests = {
         ],
         trigger: Jamus,
         handIn: Jamus,
-        sideQuestId: 48
+        sideQuestId: 48,
+        sideQuestProgress: new Map([[1010, "Accepted"]])
     } as QuestInfo,
     "Last one Standing": {
         name: "Last one Standing",
@@ -144,6 +159,7 @@ export const DeadDunesSideQuests = {
         },
         trigger: Zanford,
         handIn: Zanford,
-        sideQuestId: 49
+        sideQuestId: 49,
+        sideQuestProgress: new Map([[1010, "Accepted"]])
     } as QuestInfo
 };

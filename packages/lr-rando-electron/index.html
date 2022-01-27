@@ -453,14 +453,14 @@
             </div>
 
             <div class="cell20 cell20s">
-              <div class="clickToggle" data-key="key_soulcd">
+              <div class="clickToggle" data-key="key_soulcd" data-sideq="Soul Seeds">
                 <img src="resources/images/seedcard.jpg" alt="Seedhunter Membership Card" title="Seedhunter Membership Card" class="iconmono"/>
               </div>
               <!--change to sidequest soul seeds: id=7-->
               <div class="clickRange clickToggle" data-sideq="Soul Seeds" data-min="0" data-max="100" id="seed-parent">
                 <img src="resources/images/icon-item.png" alt="Seeds:" class="iconmono"><span id="auto-seeds" class="value">0</span>
               </div>
-              <div class="clickToggle" data-key="key_d_lupe" data-oneway="true">
+              <div class="clickToggle" data-key="key_d_lupe" data-oneway="true" data-sideq="Tool of the Trade">
                 <img src="resources/images/icon-loupe.jpg" alt="Loupe" title="Loupe" class="iconmono"/>
               </div>
               <!--change to sidequest tool of the trade: id=45-->
@@ -494,7 +494,7 @@
               <div class="centerImage clickToggle" data-key="key_y_serap">
                 <img src="resources/images/icon-pendant.png" alt="Serah's Pendant" title="Serah's Pendant" class="iconmono"/>
               </div>
-              <div class="clickToggle" data-key="key_w_yasai_t">
+              <div class="clickToggle" data-key="key_w_yasai_t"> <!--MQ3-2 or Saving an Angel-->
                 <img src="resources/images/icon-greens.png" alt="Main Greens" class="iconmono" />
               </div>
               <div class="clickRange" data-min="0" data-key="key_d_key">
@@ -509,7 +509,7 @@
             </div>
 
             <div class="cell20 cell20s">
-              <div class="column20 clickToggle" data-key="key_s_zyouai" data-oneway="true">
+              <div class="column20 clickToggle" data-key="key_s_zyouai" data-oneway="true"> <!--MQ5??-->
                 <span><img src="resources/images/dajh-base.png" class="icon" title="Fragment of Smiles"/>S</span>
               </div>
               <div class="column20 clickToggle" data-key="key_s_hiai" data-oneway="true">
@@ -533,13 +533,13 @@
               <div class="clickToggle" data-key="key_y_kagi1">
                 <img src="resources/images/icon-music-key.png" class="iconmono" alt="Musical Treasure Sphere Key" title="Musical Treasure Sphere Key" />
               </div>
-              <div class="clickToggle" data-key="key_s_okuri">
+              <div class="clickToggle" data-key="key_s_okuri"> <!--data-canvas="Key to her heart"-->
                 <img src="resources/images/icon-belovedgift.png" class="iconmono" alt="Beloved's Gift" title="Beloved's Gift" />
               </div>
-              <div class="clickToggle" data-key="key_d_keisan">
+              <div class="clickToggle" data-key="key_d_keisan" data-sideq="His Wife's Dream">
                 <img src="resources/images/icon-calc.png" class="iconmono" alt="Arithmometer" title="Arithmometer" />
               </div>
-              <div class="clickToggle" data-key="key_w_mogsoul" data-oneway="true">
+              <div class="clickToggle" data-key="key_w_mogsoul" data-oneway="true"> <!--radiance / MQ5?-->
                 <img src="resources/images/icon-moogle.jpg" class="iconmono" title="Moogle Fragment"/>
               </div>
             </div>
@@ -643,6 +643,11 @@
               <span id="sideLookupSelectedHandIn"></span>
               <span id="sideLookupSelectedHandInTime" style="white-space: pre-line;"></span>
               <!-- <div id="canvasLookupSelected"></div> -->
+              <br/>
+              <br/>
+              DEBUG: side quest bytes:
+              <br/>
+              <span id="sideLookupDebugStatus"></span>
             </div>
           </div>
         </div>

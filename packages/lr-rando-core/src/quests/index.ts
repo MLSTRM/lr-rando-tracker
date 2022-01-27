@@ -2,7 +2,7 @@ import { Areas, QuestState } from "..";
 import { prayers } from "./canvas";
 import { DeadDunesMainQuest, DeadDunesSideQuests, DeadMainQuestCompletionValues } from "./deaddunes";
 import { LuxerionMainQuest, LuxerionSideQuests, LuxMainQuestCompletionValues } from "./luxerion";
-import { QuestInfo, QuestPrerequisites, QuestProgressCheck } from "./model";
+import { QuestInfo, QuestPrerequisites, QuestProgressCheck, QuestStringStatus } from "./model";
 import { SazhMainQuest } from "./sazh";
 import { WildlandsMainQuest, WildlandsSideQuests, WildMainQuestCompletionValues } from "./wildlands";
 import { YusMainQuestCompletionValues, YusnaanMainQuest, YusnaanSideQuests } from "./yusnaan";
@@ -113,7 +113,7 @@ export interface MainQuestProgressValues {
     wildlands1: number; //This is the one with the HIGHER memory address
     wildlands2: number;
     deaddunes: number;
-    sazh: number;
+    sazh: number[];
 }
 
 export interface MainQuestPosition {
@@ -172,13 +172,16 @@ const Available = 1000;
 const Accepted = 1010;
 const Cleared = 9000;
 const Failed = 9900;
-function resolveProgress(input: number): string {
+const Missed = 9999;
+function resolveProgress(input: number): QuestStringStatus {
     if(input === Available){
         return 'Available';
     } else if (input === Accepted){
         return 'Accepted';
-    } else if (input === Failed){
-        return 'Failed / Missed';
+    } else if (input === Missed) {
+        return 'Missed';
+    } else if (input >= Failed){
+        return 'Failed';
     } else if (input >= Cleared){
         return 'Complete';
     }
@@ -190,9 +193,11 @@ export interface SideQuestProgress {
     name: string;
     status: string;
     progress?: string;
+    bytes: number[];
 }
 
-export function getSideQuestProgress(region: SideQuestAreas | undefined, id: number, progress: number): SideQuestProgress {
+export function getSideQuestProgress(region: SideQuestAreas | undefined, id: number, bytes: number[]): SideQuestProgress {
+    const [ progress ] = bytes;
     const questsToScan: {[key: string]: QuestInfo} = region !== undefined ? sideQuests[region] : {
         ...sideQuests[Areas.LUXERION],
         ...sideQuests[Areas.YUSNAAN],
@@ -209,8 +214,9 @@ export function getSideQuestProgress(region: SideQuestAreas | undefined, id: num
         known: !!name,
         name: name ?? 'Unknown',
         status,
-        progress: status === 'In Progress' ? progress.toString() : undefined 
-    }
+        progress: status === 'In Progress' ? progress.toString() : undefined,
+        bytes
+    };
 }
 
 export function inflateCanvasBytes(region: SideQuestAreas, bytes: Uint8Array): string[] {

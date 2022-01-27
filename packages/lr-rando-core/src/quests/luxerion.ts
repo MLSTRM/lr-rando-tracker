@@ -1,6 +1,6 @@
-import { MainQuestLine, QuestInfo } from "./model";
+import { MainQuestLine, PartialQuestProgress, QuestInfo, QuestStringStatus } from "./model";
 import { MainQuests } from "../constants";
-import { Alrick, Aremiah, Armand, Armena, Blythe, Dolce, Gem, Lackley, Lamont, Luka, Talbot, Virgil } from "../npcs/luxerion";
+import { Alrick, Aremiah, Armand, Armena, Blythe, Dolce, Gem, Lackley, Lamont, Luka, Ranulph, Talbot, Virgil } from "../npcs/luxerion";
 
 const Lux_1_1: QuestInfo = {
     name: "An Evil Savior",
@@ -73,10 +73,12 @@ export const LuxerionSideQuests = {
     "Whither Faith": {
         name: "Whither Faith",
         requirements: {
-            "info_pieces": 9
+            "info_pieces": 9,
+            "inquisitor_talk": true
         },
         handIn: "Inquisitor",
-        sideQuestId: 12
+        sideQuestId: 12,
+        sideQuestProgress: new Map([[1010,()=>({status: "In Progress", requirements: {"inquisitor_talk": true}})]])
     } as QuestInfo,
     "Where are you, Holmes?": {
         name: "Where are you, Holmes?",
@@ -85,7 +87,8 @@ export const LuxerionSideQuests = {
         },
         trigger: "Thorton",
         handIn: "Thorton",
-        sideQuestId: 2
+        sideQuestId: 2,
+        sideQuestProgress: new Map([[1020,()=>({status: "In Progress", requirements: {"holmes_follow": true}})]])
     } as QuestInfo,
     "The Things She's Lost": {
         name: "The Things She's Lost",
@@ -111,7 +114,8 @@ export const LuxerionSideQuests = {
         ],
         handIn: Armena,
         trigger: Armena,
-        sideQuestId: 3
+        sideQuestId: 3,
+        sideQuestProgress: new Map([[1010, (bytes) => ({status: "Accepted", requirements: { "clocks_checked": bytes[1]}})]]) //clocks on second byte
     } as QuestInfo,
     "Dying Wish": {
         name: "Dying Wish",
@@ -126,7 +130,8 @@ export const LuxerionSideQuests = {
         ],
         trigger: Blythe,
         handIn: Blythe,
-        sideQuestId: 4
+        sideQuestId: 4,
+        sideQuestProgress: new Map([[1010, "Accepted"]]) //basic hand in
     } as QuestInfo,
     "Suspicious Spheres": {
         name: "Suspicious Spheres",
@@ -140,19 +145,21 @@ export const LuxerionSideQuests = {
         ],
         trigger: Virgil,
         handIn: Virgil,
-        sideQuestId: 5
+        sideQuestId: 5,
+        sideQuestProgress: new Map([[1010, "Accepted"]]) //No chest register.
     } as QuestInfo,
     "Born from Chaos": {
         name: "Born from Chaos",
         requirements: {
-            "{zomok}": true
+            "key_tume": true
         },
         prerequisiteQuests: [
             "Lux_1_2"
         ],
         trigger: "Solandra",
         handIn: "Solandra",
-        sideQuestId: 6
+        sideQuestId: 6,
+        sideQuestProgress: new Map([[1010, "Accepted"]])
     } as QuestInfo,
     "Soul Seeds": {
         name: "Soul Seeds",
@@ -165,7 +172,8 @@ export const LuxerionSideQuests = {
         ],
         trigger: "Baird",
         handIn: "Baird",
-        sideQuestId: 7
+        sideQuestId: 7,
+        sideQuestProgress: new Map([[1010, "Accepted"]])
     } as QuestInfo,
     "Faster Than Lightning": {
         name: "Faster Than Lightning",
@@ -174,7 +182,8 @@ export const LuxerionSideQuests = {
             "Lux_1_2"
         ],
         trigger: Lamont,
-        sideQuestId: 8
+        sideQuestId: 8,
+        sideQuestProgress: new Map([[1000, "Available"]]) //Stays available when race starts. annoying.
     } as QuestInfo,
     "Treasured Ball": {
         name: "Treasured Ball",
@@ -186,7 +195,8 @@ export const LuxerionSideQuests = {
         ],
         trigger: Talbot,
         handIn: Talbot,
-        sideQuestId: 9
+        sideQuestId: 9,
+        sideQuestProgress: new Map([[1010, "Accepted"]])
     } as QuestInfo,
     "The Angel's Tears": {
         name: "The Angel's Tears",
@@ -200,7 +210,13 @@ export const LuxerionSideQuests = {
         ],
         trigger: Luka,
         handIn: Luka,
-        sideQuestId: 10
+        sideQuestId: 10,
+        sideQuestProgress: new Map([
+            [5, ()=>({status: "In Progress"})],
+            [10, ()=>({status: "In Progress", requirements: {"purchase_day_1": true}})],
+            [20, ()=>({status: "In Progress", requirements: {"purchase_day_2": true}})],
+            [1000, ()=>({status: "In Progress", requirements: {"purchase_day_3": true}})]
+        ]) //second byte is purchase number, third is day purchased on
     } as QuestInfo,
     "The Saint's Stone": {
         name: "The Saint's Stone",
@@ -212,17 +228,60 @@ export const LuxerionSideQuests = {
         prerequisiteQuests: [
             "Lux_1_5"
         ],
-        sideQuestId: 11
+        sideQuestId: 11,
+        sideQuestProgress: new Map([[1010, "Accepted"], [1020, "In Progress"]])
     } as QuestInfo,
     "The Avid Reader": {
         name: "The Avid Reader",
-        requirements: false, //TODO this one is a mess
-        sideQuestId: 13
+        prerequisiteQuests: [
+            "Lux_1_5"
+        ],
+        requirements: {
+            "talk_mitka": true,
+            "man_with_no_name": true,
+            "key_l_syokai": true,
+            "erine": true,
+            "key_l_diary": true
+        },
+        sideQuestId: 13,
+        failable: true,
+        trigger: Ranulph,
+        handIn: Ranulph,
+        sideQuestProgress: new Map([
+            [1010, "Accepted"],
+            [1050, ()=>({status: 'In Progress', requirements: {"talk_mitka": true}})],
+            [1060, ()=>({status: 'In Progress', requirements: {"man_with_no_name": true}})],
+            [1070, ()=>({status: 'In Progress', requirements: {"erine": true}})],
+            [1100, ()=>({status: "Failed"})],
+            [9000, "Complete"] // TODO check this value to see if its different for TAR and TSTS
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][]) //1070 is 5am + either journal
     } as QuestInfo,
     "To Save the Sinless": {
         name: "To Save the Sinless",
-        requirements: false, //TODO So is this one
-        sideQuestId: 91
+        prerequisiteQuests: [
+            "Lux_1_5",
+            "Buried Passion"
+        ],
+        prerequisiteOther: [
+            "buried_passion_plus_1_day" //second byte on buried passion
+        ],
+        requirements: {
+            "key_l_diary_2": true,
+            "ranulph": true,
+            "armand": true,
+            "Born from Chaos or Fuzzy Search": true,
+            "armand_again": true,
+            "reddick": true
+        },
+        sideQuestId: 13, //Uses same id as Avid Reader... Name is on 91.
+        handIn: Ranulph,
+        sideQuestProgress: new Map([
+            [1100, ()=>({status: 'In Progress', requirements: {"ranulph": true}})],
+            [1150, ()=>({status: 'In Progress', requirements: {"armand": true}})],
+            [1200, ()=>({status: 'In Progress', requirements: {"armand_again": true}})],
+            [2000, ()=>({status: 'In Progress', requirements: {"reddick": true}})],
+            [9000, "Complete"] // Might be shared with TAR - how to determine?
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "Buried Passion": {
         name: "Buried Passion",
@@ -237,7 +296,13 @@ export const LuxerionSideQuests = {
         ],
         trigger: Armand,
         handIn: Armand,
-        sideQuestId: 14
+        sideQuestId: 14,
+        sideQuestProgress: new Map([
+            [1100, "Accepted"],
+            [1200, ()=>({status: 'In Progress', requirements: {"armand_return_1": true}})],
+            [1300, ()=>({status: 'In Progress', requirements: {"armand_return_2": true}})],
+            [9000, "Complete"]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][]) //second byte used for save the sinless.
     } as QuestInfo,
     "The Girl Who Cried Wolf": {
         name: "The Girl Who Cried Wolf",
@@ -251,16 +316,22 @@ export const LuxerionSideQuests = {
         ],
         trigger: "North_station_phone",
         handIn: "Louise",
-        sideQuestId: 15
+        sideQuestId: 15,
+        sideQuestProgress: new Map([[9900, "Failed"], [9999, 'Missed']]) //Fails when you touch down from the ark on the next day.
     } as QuestInfo,
     "Stuck in a Gem": {
         name: "Stuck in a Gem",
         requirements: {
+            "talk_to_stall": true,
             "key_l_kusa": true
         },
         trigger: Gem,
         handIn: "Ronan",
-        sideQuestId: 16
+        sideQuestId: 16,
+        sideQuestProgress: new Map([
+            [1010, "Accepted"],
+            [1020, ()=>({status: "In Progress", requirements: {"talk_to_stall": true}})]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "Get the Girl": {
         name: "Get the Girl",
@@ -274,7 +345,13 @@ export const LuxerionSideQuests = {
         ],
         trigger: Lackley,
         handIn: "Seila",
-        sideQuestId: 17
+        sideQuestId: 17,
+        sideQuestProgress: new Map([
+            [1010, "Accepted"],
+            [1020, ()=>({status: "In Progress", requirements: {"maitre-d": true}})],
+            [1030, ()=>({status: "In Progress", requirements: {"seila": true}})],
+            //[1040, "graveyard"] //No real point having this here
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "A Rose by Any Other Name": {
         name: "A Rose by Any Other Name",
@@ -286,17 +363,20 @@ export const LuxerionSideQuests = {
         ],
         trigger: Alrick,
         handIn: Alrick,
-        sideQuestId: 19
+        sideQuestId: 19,
+        sideQuestProgress: new Map([[1010, "Accepted"]])
     } as QuestInfo,
     "Voices from the Grave": {
         name: "Voices from the Grave",
         requirements: {
+            "talk_to_guard": true,
             "black_jacket_resident": true,
             "black_dress_woman": true,
             "white_brown_woman": true,
             "ghosts_found": 3
         },
         trigger: "Clock tower guard",
-        sideQuestId: 20
+        sideQuestId: 20,
+        sideQuestProgress: new Map([[1000, "Accepted"]]) //Doesn't seem to track state in the normal way...
     } as QuestInfo
 }

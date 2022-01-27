@@ -93,7 +93,12 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
             wildlands1: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0x94, SHORT, true),
             wildlands2: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0x8C, SHORT, true),
             deaddunes: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0xA0, SHORT, true),
-            sazh: reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34), SHORT, true)
+            sazh: [
+                reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34), SHORT, true),
+                reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34) + 2, SHORT, true),
+                reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34) + 4, SHORT, true),
+                reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34) + 6, SHORT, true)
+            ]
         },
         sideQuestProgress: extractSideQuestProgress(reader, pSomeStatsBase + sideQuestOffset),
         canvasOfPrayers: {
@@ -131,23 +136,38 @@ function extractSideQuestProgress(reader: LrMemoryReader, base: number): {[key: 
             continue;
         }
         const questProgress = reader.readMemoryAddress(base + (0x8 * i), SHORT, true);
+        const questBytes = [
+            questProgress,
+            reader.readMemoryAddress(base + (0x8 * i) + 0x2, SHORT, true),
+            reader.readMemoryAddress(base + (0x8 * i) + 0x4, SHORT, true),
+            reader.readMemoryAddress(base + (0x8 * i) + 0x6, SHORT, true)
+        ]
         if(questProgress > 0){
-            let resolvedProgress = getSideQuestProgress(Areas.LUXERION, i, questProgress);
+            let resolvedProgress = getSideQuestProgress(Areas.LUXERION, i, questBytes);
             if(resolvedProgress.known){
+                if (resolvedProgress.name === 'To Save The Sinless'){
+                    // This uses a clone of TAR
+                    continue;
+                }
                 progress[0].push(resolvedProgress);
+                if(resolvedProgress.name === 'The Avid Reader'){
+                    // TSTS is a clone of TAR
+                    const sinless = Object.assign({}, resolvedProgress, {name: 'To Save The Sinless'});
+                    progress[0].push(sinless);
+                }
                 continue;
             }
-            resolvedProgress = getSideQuestProgress(Areas.YUSNAAN, i, questProgress);
+            resolvedProgress = getSideQuestProgress(Areas.YUSNAAN, i, questBytes);
             if(resolvedProgress.known){
                 progress[1].push(resolvedProgress);
                 continue;
             }
-            resolvedProgress = getSideQuestProgress(Areas.WILDLANDS, i, questProgress);
+            resolvedProgress = getSideQuestProgress(Areas.WILDLANDS, i, questBytes);
             if(resolvedProgress.known){
                 progress[3].push(resolvedProgress);
                 continue;
             }
-            resolvedProgress = getSideQuestProgress(Areas.DEAD_DUNES, i, questProgress);
+            resolvedProgress = getSideQuestProgress(Areas.DEAD_DUNES, i, questBytes);
             if(resolvedProgress.known){
                 progress[2].push(resolvedProgress);
                 continue;
@@ -169,7 +189,7 @@ function generateItemMap(reader: LrMemoryReader, base: number): Map<string, numb
             return map;
         }
     }
-    console.log('Reached end of iteration, might be some missing items at the end');
+    // console.log('Reached end of iteration, might be some missing items at the end');
     return map;
 }
 
@@ -184,7 +204,7 @@ function resolveGarbList(reader: LrMemoryReader, base: number): string[] {
             return arr;
         }
     }
-    console.log('Reached end of iteration, might be some missing items at the end');
+    // console.log('Reached end of iteration, might be some missing garbs at the end');
     return arr;
 }
 

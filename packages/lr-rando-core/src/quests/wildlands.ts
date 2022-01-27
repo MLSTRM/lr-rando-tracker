@@ -1,6 +1,7 @@
-import { MainQuestLine, QuestInfo } from "./model";
+import { MainQuestLine, QuestInfo, QuestStringStatus } from "./model";
 import { MainQuests } from "../constants";
 import { Aryas_Chef, Brella, Cardesia, Cornelia, Dr_Gysahl, Dr_Sheep, Hopeful_Hunter, Hunter_Chief, Millie, Moggel, Moogle, Nadia, Old_Man, Professor, Research_Leader, Sarala, Taleb, Thirteen, Tilda } from "../npcs/wildlands";
+import { PartialQuestProgress } from ".";
 
 const Wild_3_1: QuestInfo = {
     name: "The Angel of Valhalla",
@@ -50,14 +51,20 @@ export const WildlandsSideQuests = {
         name: "A Father's Request",
         requirements: {
             "key_w_mori": true,
-            "wandering_man": true
+            "wandering_man": true,
+            "give_fertiliser": true,
         },
         prerequisiteQuests: [
             "Wild_3_1"
         ],
         trigger: Sarala,
         handIn: Sarala,
-        sideQuestId: 21
+        sideQuestId: 21,
+        sideQuestProgress: new Map([
+            [1050, "Accepted"],
+            [1100, ()=>({requirements: {"wandering_man": true}})],
+            [1200, ()=>({requirements: {"give_fertiliser": true}})]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "The Hunter's Challenge": {
         name: "The Hunter's Challenge",
@@ -71,40 +78,59 @@ export const WildlandsSideQuests = {
         ],
         trigger: Hunter_Chief,
         handIn: Hunter_Chief,
-        sideQuestId: 22
+        sideQuestId: 22,
+        sideQuestProgress: new Map([
+            [2000, "Accepted"],
+            [4000, ()=>({status: "In Progress", requirements: {"hand_in": true}})]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "A Final Cure": {
         name: "A Final Cure",
         requirements: {
+            "make_chocobull": true,
+            "second_option": true,
             "key_w_kino": 4,
             "key_w_kino2": 4,
-            "key_w_mash": 1,
-            "second_option": true
+            "key_w_mash": 1
         },
         prerequisiteQuests: [
             "Wild_3_1", //Not just this it seems
         ],
         prerequisiteOther: [
             "odin_level_1", //verify????
-            "event_make_chocobull" //6 slug sweet, 8 chocoborel
         ],
         trigger: Cardesia,
         handIn: Cardesia,
-        sideQuestId: 23
+        sideQuestId: 23,
+        sideQuestProgress: new Map([
+            [1500, ()=>({status: 'Available'})],
+            [2000, ()=>({requirements: {"make_chocobull": true}})],
+            [3000, ()=>({requirements: {"second_option": true}})]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "Fuzzy Search": {
         name: "Fuzzy Search",
         requirements: {
+            "start_herding": true,
             "herd_sheep": 3
         },
         trigger: Dr_Sheep,
         handIn: Dr_Sheep,
-        sideQuestId: 24
-    } as QuestInfo,
+        sideQuestId: 24,
+        sideQuestProgress: new Map([
+            [1000, ()=>({status: "Accepted"} as PartialQuestProgress)],
+            [2000, ()=>({status: "In Progress", requirements: {"start_herding": true}})],
+            [3000, ()=>({requirements: {"herd_sheep": 1}})],
+            [4000, ()=>({requirements: {"herd_sheep": 2}})],
+            [5000, ()=>({requirements: {"herd_sheep": 3}})]
+        ])
+    } as QuestInfo, //Requirements: T, progress: Map<number, Partial<T>> assign value from map across based on main progress value (enriched by bytes?)
     "Round 'Em Up": {
         name: "Round 'Em Up",
         requirements: {
-            "herd_sheep": 3
+            "start_herding": true,
+            "herd_sheep": 3,
+            "sheep_return": true
         },
         prerequisiteQuests: [
             "Fuzzy Search",
@@ -115,7 +141,14 @@ export const WildlandsSideQuests = {
         ],
         trigger: Dr_Sheep,
         handIn: Millie,
-        sideQuestId: 25
+        sideQuestId: 25,
+        sideQuestProgress: new Map([
+            [2000, ()=>({requirements: {"start_herding": true}} as PartialQuestProgress)],
+            [3000, ()=>({requirements: {"herd_sheep": 1}})],
+            [4000, ()=>({requirements: {"herd_sheep": 2}})],
+            [5000, ()=>({requirements: {"herd_sheep": 3}})],
+            [6000, ()=>({requirements: {"sheep_return": true}})]
+        ])
     } as QuestInfo,
     "Chocobo Cheer": {
         name: "Chocobo Cheer",
@@ -127,7 +160,8 @@ export const WildlandsSideQuests = {
         ],
         trigger: Nadia,
         handIn: Nadia,
-        sideQuestId: 26
+        sideQuestId: 26,
+        sideQuestProgress: new Map([[2000, "Accepted"], /*[3000, "eat flower"]*/])
     } as QuestInfo,
     "Peace and Quiet, Kupo": {
         name: "Peace and Quiet, Kupo",
@@ -136,17 +170,21 @@ export const WildlandsSideQuests = {
         },
         trigger: Moogle,
         handIn: Moogle,
-        sideQuestId: 27
+        sideQuestId: 27,
+        sideQuestProgress: new Map([[3000, ()=>({requirements: {"dryads": 3}})]])
     } as QuestInfo,
     "Saving an Angel": {
         name: "Saving an Angel",
         requirements: {
+            "key_w_yasai_t": true,
+            "feed_greens": true,
             "odin": 120
         },
         prerequisiteQuests: [
             "Wild_3_1"
         ],
-        sideQuestId: 28
+        sideQuestId: 28,
+        sideQuestProgress: new Map([[3000, ()=>({requirements: {"feed_greens": true}})]])
     } as QuestInfo,
     "Omega Point": {
         name: "Omega Point",
@@ -161,7 +199,8 @@ export const WildlandsSideQuests = {
         ],
         trigger: Research_Leader,
         handIn: Research_Leader,
-        sideQuestId: 29
+        sideQuestId: 29,
+        sideQuestProgress: new Map([[1100, "Accepted"], [1200,  ()=>({requirements: {"data_scans": 4}})]] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "The Old Man and the Field": {
         name: "The Old Man and the Field",
@@ -177,20 +216,30 @@ export const WildlandsSideQuests = {
         ],
         trigger: Old_Man,
         handIn: Old_Man,
-        sideQuestId: 30
+        sideQuestId: 30,
+        sideQuestProgress: new Map([
+            [1100, ()=>({status: "Available"}) /*"plant_seed"*/],
+            [2000, ()=>({prerequisiteOther: ["event_harvest_tantal"]})],
+            [3000, "Accepted"]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "Land of Our Forbears": {
         name: "Land of Our Forbears",
         requirements: {
-            "talk_to_old_man": true,
-            "talk_to_sarala": true
+            "old_man": true,
+            "sarala": true
         },
         prerequisiteQuests: [
             "The Old Man and The Field"
         ],
         trigger: Aryas_Chef,
         handIn: Aryas_Chef,
-        sideQuestId: 31
+        sideQuestId: 31,
+        sideQuestProgress: new Map([
+            [1100, "Accepted"],
+            [1500, ()=>({requirements: {"old_man": true}})],
+            [2000, ()=>({requirements: {"sarala": true}})]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "A Taste of the Past": {
         name: "A Taste of the Past",
@@ -203,7 +252,8 @@ export const WildlandsSideQuests = {
         ],
         trigger: Aryas_Chef,
         handIn: Aryas_Chef,
-        sideQuestId: 32
+        sideQuestId: 32,
+        sideQuestProgress: new Map([[2000, "Accepted"]])
     } as QuestInfo,
     "Dog, Doctor and Assistant": {
         name: "Dog, Doctor and Assistant",
@@ -218,7 +268,8 @@ export const WildlandsSideQuests = {
         ],
         trigger: Thirteen,
         handIn: Thirteen,
-        sideQuestId: 33
+        sideQuestId: 33,
+        sideQuestProgress: new Map([[2000, "Accepted"], [3000, "heal_dog"]])
     } as QuestInfo,
     "The Right Stuff": {
         name: "The Right Stuff",
@@ -230,7 +281,8 @@ export const WildlandsSideQuests = {
         ],
         trigger: Hopeful_Hunter,
         handIn: Hopeful_Hunter,
-        sideQuestId: 35
+        sideQuestId: 35,
+        sideQuestProgress: new Map([[2000, "Accepted"]])
     } as QuestInfo,
     "The Secret Lives of Sheep": {
         name: "The Secret Lives of Sheep",
@@ -241,7 +293,8 @@ export const WildlandsSideQuests = {
             "Round 'Em Up"
         ],
         trigger: Cornelia,
-        sideQuestId: 36
+        sideQuestId: 36,
+        sideQuestProgress: new Map([[2000, "Accepted"]])
     } as QuestInfo,
     "Where Are You, Moogle?": {
         name: "Where Are You, Moogle?",
@@ -255,7 +308,13 @@ export const WildlandsSideQuests = {
         ],
         trigger: Moggel,
         handIn: Moggel,
-        sideQuestId: 37
+        sideQuestId: 37,
+        sideQuestProgress: new Map([
+            [1500, "Accepted"],
+            [2000, ()=>({requirements: {"yeet_moogle_1": true}})],
+            [3000, ()=>({requirements: {"yeet_moogle_2": true}})],
+            [4000, ()=>({requirements: {"yeet_moogle_3": true}})]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "Mercy of a Goddess": {
         name: "Mercy of a Goddess",
@@ -267,13 +326,18 @@ export const WildlandsSideQuests = {
         ],
         trigger: Taleb,
         handIn: Taleb,
-        sideQuestId: 38
+        sideQuestId: 38,
+        sideQuestProgress: new Map([
+            [1500, "Accepted"],
+            //[2000, "cure"]
+        ])
     } as QuestInfo,
     "The Grail of Valhalla": {
         name: "The Grail of Valhalla",
         requirements: {
             "key_w_moji1": true,
             "key_w_moji2": true,
+            "give_glyphs": true,
             "poltae_panel": true,
             "key_w_buhin1": true,
             "key_w_buhin2": true,
@@ -281,7 +345,15 @@ export const WildlandsSideQuests = {
         },
         trigger: Professor,
         handIn: Professor,
-        sideQuestId: 39
+        sideQuestId: 39,
+        sideQuestProgress: new Map([
+            [2000, "Accepted"],
+            [3000, ()=>({requirements: {"give_glyphs": true}})],
+            [4000, ()=>({requirements: {"poltae_panel": true}})],
+            //[5000, "key_w_buhin1"],
+            //[6000, "key_w_buhin2"],
+            //[7000, "key_w_buhin3"]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "To Live in Chaos": {
         name: "To Live in Chaos",
@@ -295,7 +367,8 @@ export const WildlandsSideQuests = {
             "odin_level_3"
         ],
         trigger: "Station",
-        sideQuestId: 40
+        sideQuestId: 40,
+        sideQuestProgress: new Map([[900, ()=>({status: "Available"})], [1000, ()=>({status: "Accepted"})]])
     } as QuestInfo,
     "Killing Time": {
         name: "Killing Time",
@@ -304,7 +377,8 @@ export const WildlandsSideQuests = {
             "odin_level_2"
         ],
         handIn: "Poltae Ledge",
-        sideQuestId: 81
+        sideQuestId: 81,
+        sideQuestProgress: new Map([[1200, "Accepted"]])
     } as QuestInfo,
     "Matchmaker": {
         name: "Matchmaker",
@@ -319,8 +393,12 @@ export const WildlandsSideQuests = {
             "Round 'Em Up"
         ],
         trigger: Tilda,
-        handIn: Dr_Sheep,
-        sideQuestId: 82
+        handIn: Dr_Sheep, // No time restriction on this hand in?
+        sideQuestId: 82,
+        sideQuestProgress: new Map([
+            [1500, "Accepted"],
+            [2000, ()=>({requirements: {"give_to_tilda": true}})]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo,
     "Mother and Daughter": {
         name: "Mother and Daughter",
@@ -330,6 +408,10 @@ export const WildlandsSideQuests = {
         },
         trigger: Brella,
         handIn: Brella,
-        sideQuestId: 83
+        sideQuestId: 83,
+        sideQuestProgress: new Map([
+            [2000, "Accepted"],
+            [3000, ()=>({requirements: {"tilda_dog_scene": true}})]
+        ] as [number, QuestStringStatus | ((bytes: number[]) => PartialQuestProgress)][])
     } as QuestInfo
 }

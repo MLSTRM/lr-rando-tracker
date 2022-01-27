@@ -236,18 +236,57 @@ export class RandoBackend {
         return undefined;
     }
 
-    public getSideQuestInfoByName(name: string): any {
-        let status = '';
+    public getSideQuestInfoByName(name: string): undefined | (EnrichedQuestInfo & {status: string, region: string, bytes: number[]}) {
         const info = getSideQuestInfo(name);
         if(info){
+            let status = '';
+            let bytes: number[] = [];
             const {quest, region} = info;
             const progress = this.oldState.sideQuestProgress?.[Number(region)]?.find(q => q.name === name)
             if(progress){
                 status = progress.status;
+                bytes = progress.bytes;
             }
             const displayQuest = enrichSideQuestInfo(quest, this.constructProgressCheck());
+            if(quest.sideQuestProgress){
+                const appliedProgress = [...quest.sideQuestProgress].filter(([k,v]) => k <= bytes[0]).map(([k,v]) => v).reduce((p, c) => {
+                    const resolved = typeof c === 'function' ? c(bytes) : c;
+                    if(typeof resolved === 'string'){
+                        return Object.assign(p, {status: resolved});
+                    } else if (typeof resolved === 'object'){
+                        // More accurately need to check each requirement by original key and merge?
+                        if(resolved.status){
+                            p.status = resolved.status;
+                        }
+                        if(resolved.prerequisiteOther && p.prerequisiteOther){
+                            resolved.prerequisiteOther.forEach(k => {
+                                p.prerequisiteOther!.filter(pre => pre.name === k).forEach(pre => pre.complete = true);
+                            });
+                        }
+                        if(resolved.requirements && p.requirements){
+                            if(Array.isArray(p.requirements)){
+                                for(const option of p.requirements){
+                                    for(const key of Object.keys(option)){
+                                        if(resolved.requirements[option[key].oldName]){
+                                            option[key].current = resolved.requirements[option[key].oldName];
+                                        }
+                                    }
+                                }
+                            } else {
+                                for(const key of Object.keys(p.requirements)){
+                                    if(resolved.requirements[p.requirements[key].oldName]){
+                                        p.requirements[key].current = resolved.requirements[p.requirements[key].oldName];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return p;
+                }, displayQuest as EnrichedQuestInfo & {status: string});
+                return Object.assign({status, region: areaIndexStringToAreaName(region), bytes}, appliedProgress);
+            }
             //translate names into better forms
-            return Object.assign(displayQuest, {status, region: areaIndexStringToAreaName(region)});
+            return Object.assign(displayQuest, {status, region: areaIndexStringToAreaName(region), bytes});
         }
         return undefined;
     }
@@ -330,13 +369,13 @@ function mapMainQuestName(name: string, state: QuestProgressCheck): {name: strin
     if(!match){
         return {
             name,
-            complete: state.questState[name] === QuestState.COMPLETED
+            complete: state?.questState?.[name] === QuestState.COMPLETED
         };
     }
     const key = getAreaFromKey(match[1]);
     return {
         name: `Main Quest ${match[1]}-${match[2]}`,
-        complete: !!key && state.mainQuestProgress[key] >= Number(match[2])
+        complete: !!key && state?.mainQuestProgress?.[key] >= Number(match[2])
     };
 }
 
@@ -385,7 +424,8 @@ function mapRequirements(requirement: QuestRequirement, state: QuestProgressChec
         }
         mappedRequirement[name] = {
             required: newValue,
-            current
+            current,
+            oldName: key
         };
     }
     return mappedRequirement;
