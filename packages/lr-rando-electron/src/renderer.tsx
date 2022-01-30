@@ -584,11 +584,13 @@ async function getSideQuestInfo(el: HTMLElement, type: 'sideQuest'|'canvas'){
     setPropOnElem('#sideLookupSelectedHandIn', '');
     setPropOnElem('#sideLookupSelectedHandInTime', '');
   }
+  /*
   if(info.bytes && info.bytes.length > 0){
     setPropOnElem('#sideLookupDebugStatus', JSON.stringify(info.bytes));
   } else {
     setPropOnElem('#sideLookupDebugStatus', '');
   }
+  */
   //Set 5 second loop for current side quest pane
   if(activeSideQuestPoll){
     clearTimeout(activeSideQuestPoll);

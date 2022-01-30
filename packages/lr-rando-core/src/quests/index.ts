@@ -188,6 +188,30 @@ function resolveProgress(input: number): QuestStringStatus {
     return `In Progress`;
 }
 
+export function resolveHighestProgress(left: string, right: string): QuestStringStatus | undefined {
+    const leftRank = statusToRank(left);
+    const rightRank = statusToRank(right);
+    return resolveProgress(Math.max(leftRank, rightRank));
+}
+
+function statusToRank(status: string): number {
+    if(status === 'Available'){
+        return 1000;
+    }
+    else if (status === 'Accepted') {
+        return 1010;
+    } else if (status === 'In Progress') {
+        return 1500;
+    } else if (status === 'Complete'){
+        return 9000;
+    } else if (status==='Failed'){
+        return 9900;
+    } else if (status==='Missed'){
+        return 9999;
+    }
+    return 0;
+}
+
 export interface SideQuestProgress {
     known: boolean;
     name: string;

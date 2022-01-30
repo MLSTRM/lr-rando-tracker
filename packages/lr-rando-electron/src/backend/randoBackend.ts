@@ -2,7 +2,7 @@ import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } f
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem,
     getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo, QuestProgressCheck, QuestState, resolveMainQuestProgress } from "lr-rando-core";
 import _ from 'lodash';
-import { QuestInfo, QuestPrerequisites, EnrichedQuestRequirement, EnrichedQuestInfo } from "lr-rando-core";
+import { QuestInfo, QuestPrerequisites, EnrichedQuestRequirement, EnrichedQuestInfo, resolveHighestProgress } from "lr-rando-core";
 
 const reservedKeys = ['time', 'region', 'mainQuestBytes'];
 
@@ -283,7 +283,9 @@ export class RandoBackend {
                     }
                     return p;
                 }, displayQuest as EnrichedQuestInfo & {status: string});
-                return Object.assign({status, region: areaIndexStringToAreaName(region), bytes}, appliedProgress);
+                // Ensure completed/failed overrides anything else. What to do about TAR/TSTS?
+                const forceStatus = {status: resolveHighestProgress(status, appliedProgress.status)};
+                return Object.assign({status, region: areaIndexStringToAreaName(region), bytes}, appliedProgress, forceStatus);
             }
             //translate names into better forms
             return Object.assign(displayQuest, {status, region: areaIndexStringToAreaName(region), bytes});
@@ -325,6 +327,8 @@ function statusToIndex(status?: string): QuestState {
     switch(status){
         case 'Complete':
             return QuestState.COMPLETED;
+        case 'In Progress':
+            return QuestState.STARTED_OPEN;
         default:
             return QuestState.AVAILABLE;
     }

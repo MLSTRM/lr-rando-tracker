@@ -292,7 +292,7 @@ export const LuxerionSideQuests = {
             "key_l_pen": true
         },
         prerequisiteQuests: [
-            "Lux_1_5"
+            "Lux_1_4" //Check?
         ],
         trigger: Armand,
         handIn: Armand,
