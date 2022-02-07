@@ -784,4 +784,6 @@ Begin work on enriched event/boss names and checks
 Quest issues:
 Faster than lightning in progress still available
 oneway persist by element id in import/export?
+
+Grave opf the colossi gets cropped off...
 */

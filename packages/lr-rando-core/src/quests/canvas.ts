@@ -208,7 +208,7 @@ export const prayers = {
                 "key_b_20": 1
             },
             prerequisiteQuests: [
-                "Yus_2_2"
+                "The Fighting Actress" //TFA?
             ],
             canvasByteIndex: 3,
             canvasByteOffset: 0x01

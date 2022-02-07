@@ -171,14 +171,15 @@ function processValueBoundaries(mapping: {[key: string]: {num: number; complete:
 const Available = 1000;
 const Accepted = 1010;
 const Cleared = 9000;
-const Failed = 9900;
+const Failed = 9800;
 const Missed = 9999;
+const Missed_Lower = 9500;
 function resolveProgress(input: number): QuestStringStatus {
     if(input === Available){
         return 'Available';
     } else if (input === Accepted){
         return 'Accepted';
-    } else if (input === Missed) {
+    } else if (input === Missed || input === Missed_Lower) {
         return 'Missed';
     } else if (input >= Failed){
         return 'Failed';
