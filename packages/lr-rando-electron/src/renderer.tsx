@@ -29,6 +29,7 @@ window.onload = () => {
   //updateCanvasRegion();
   updateSideQuestRegion();
   addQuestHintRow();
+  prepareShopHints();
 }
 
 function setupClickToggle() {
@@ -626,6 +627,35 @@ function removeQuestHintRow(cell: HTMLTableCellElement){
     const table = row.parentElement as HTMLTableElement;
     table.deleteRow(row.rowIndex);
     return undefined;
+  }
+}
+
+function prepareShopHints(){
+  const headersTable = document.getElementById('shopHeaders') as HTMLTableElement;
+  const headerIdMap = new Map([...headersTable.rows].map((e,i) => ([e.id,{name: e.textContent, idx:i}])));
+  const shopHintsBody = document.getElementById('shopBody');
+  for(const [id, {name,idx}] of headerIdMap.entries()){
+    const [shop, idname,] = id.split('_');
+    const shopDiv = document.createElement('div');
+    shopDiv.id = [shop,idname].join('_');
+    shopDiv.style.display = 'none';
+    let divContent = `${name}<br/>`;
+    for(var i = 0; i<8; i++){
+      divContent += `<input id="${[shopDiv.id,i].join('_')}"/>`;
+    }
+    shopDiv.innerHTML = divContent;
+    headersTable.rows[idx].addEventListener('click', ()=>{
+      hideAllShops();
+      shopDiv.style.display = 'block';
+    });
+    shopHintsBody?.appendChild(shopDiv);
+  }
+}
+
+function hideAllShops(){
+  const shopHintsBody = document.getElementById('shopBody');
+  for(const element of [...shopHintsBody?.children ?? []]){
+    (element as HTMLElement).style.display = 'none';
   }
 }
 

@@ -73,6 +73,12 @@
       min-width: calc(var(--column-width)*2.5);
     }
 
+    .column55 {
+      float: left;
+      width: calc(var(--column-width)*2.75);
+      min-width: calc(var(--column-width)*2.75);
+    }
+
     .column60 {
       float: left;
       width: calc(var(--column-width)*3);
@@ -311,6 +317,11 @@
       min-height: 240px;
       max-height: 240px;
       overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
+    .noscroll {
+      overflow-y: hidden;
       overflow-x: hidden;
     }
 
@@ -718,6 +729,48 @@
                 <td></td>
               </tr>
             </table>
+          </div>
+        </div>
+        <div id="shopNotesArea" class="flexRegion noSelect">
+          <div class="row column120 columnHalf noscroll">
+            Shop notes:<br/>
+            <div class="row column60" style="height: inherit;">
+              <table id="shopHeaders">
+                <tr id="shop_mock_header"><td>Mock (Lux North)</td></tr>
+                <tr id="shop_lena_header"><td>Lena (Lux Warren)</td></tr>
+                <tr id="shop_stinky_header"><td>Stinky (Yus Reveller's)</td></tr>
+                <tr id="shop_soldier_header"><td>Soldier (Yus Industrial)</td></tr>
+                <tr id="shop_plain_header"><td>Plain (Wild Farm/Camp)</td></tr>
+                <tr id="shop_hunter_header"><td>Hunter (Wild Jagd)</td></tr>
+                <tr id="shop_kasper_header"><td>Kasper (Wild Poltae)</td></tr>
+                <tr id="shop_ramon_header"><td>Ramon (Dead Dunes)</td></tr>
+              </table>
+            </div>
+            <!--TODO: fill these out, hook up the JS on click above. Serialize to notes and reinflate-->
+            <div id="shopBody" class="row column60">
+              <!--<div id="shop_plain">
+                Plain (Wild Farm/Camp)<br/>
+                <input id="shop_plain_1" />
+                <input id="shop_plain_2"/>
+                <input id="shop_plain_3"/>
+                <input id="shop_plain_4"/>
+                <input id="shop_plain_5"/>
+                <input id="shop_plain_6"/>
+                <input id="shop_plain_7"/>
+                <input id="shop_plain_8"/>
+              </div>
+              <div id="shop_hunter" style="visibility: hidden;">
+                Hunter (Wild Jagd)<br/>
+                <input id="shop_hunter_1" />
+                <input id="shop_hunter_2"/>
+                <input id="shop_hunter_3"/>
+                <input id="shop_hunter_4"/>
+                <input id="shop_hunter_5"/>
+                <input id="shop_hunter_6"/>
+                <input id="shop_hunter_7"/>
+                <input id="shop_hunter_8"/>
+              </div>-->
+            </div>
           </div>
         </div>
         <div id="exportArea" class="flexRegion noSelect" hidden>
