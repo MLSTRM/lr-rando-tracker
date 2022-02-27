@@ -659,6 +659,18 @@ function hideAllShops(){
   }
 }
 
+function deflateShopHints(id: string): string[]{
+  const inputList = [...document.getElementById(id)?.children ?? []];
+  inputList.shift();
+  return inputList.map(c => (c as HTMLInputElement).value ?? '');
+}
+
+function inflateShopHints(id: string, toFill: string[]): void {
+  const inputList = [...document.getElementById(id)?.children ?? []];
+  inputList.shift();
+  toFill.forEach((v, i) => (inputList[i] as HTMLInputElement).value = v);
+}
+
 const questSelectBody = `<option value="-1">Unknown</option>
 <option value="0">Yus 0-1</option>
 <option value="1">Lux 1-1</option>
@@ -687,9 +699,10 @@ const questSelectBody = `<option value="-1">Unknown</option>
 function exportData(){
   const data = {
     seed: (document.getElementById('seed') as HTMLInputElement)?.value,
-    shops: (document.getElementById('shopNotes') as HTMLTextAreaElement)?.value,
+    notes: (document.getElementById('notes') as HTMLTextAreaElement)?.value,
     hintNumbers: deflateHintGrid(document.getElementById('hintNumberGrid')!),
-    hintList: deflateTable(document.getElementById('questHintTable') as HTMLTableElement)
+    hintList: deflateTable(document.getElementById('questHintTable') as HTMLTableElement),
+    shopContents: [...document.getElementById('shopBody')?.children ?? []].map(c => ({id: c.id, body: deflateShopHints(c.id)}))
   };
   (document.getElementById('exportAreaContent') as HTMLTextAreaElement).value = JSON.stringify(data);
   document.getElementById('exportArea')?.removeAttribute('hidden');
@@ -701,9 +714,10 @@ function importData(){
   try {
     const parsed = JSON.parse(raw);
     (document.getElementById('seed') as HTMLInputElement).value = parsed.seed;
-    (document.getElementById('shopNotes') as HTMLTextAreaElement).value = parsed.shops;
+    (document.getElementById('notes') as HTMLTextAreaElement).value = parsed.notes;
     inflateHintGrid(parsed.hintNumbers);
     inflateHintTable(parsed.hintList);
+    (parsed.shopContents as {id: string, body: string[]}[]).forEach(({id, body}) => inflateShopHints(id, body));
   } catch (e){
     console.log('Error while importing data');
   }
