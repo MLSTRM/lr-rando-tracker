@@ -841,14 +841,11 @@ function inflateHintGrid(input: string[][]): void {
 
 /*
 TODO:
-check TAR using save from dyne
 Need to actually complete cried wolf on a save
 
 New features to do:
 allow for manual toggle of side/canvas completion (and push to backend + store)
 Add way to mark hints as complete rather than deleting?
-
-Shop hints
 
 Select multiple quests for requirement item tracking
 
