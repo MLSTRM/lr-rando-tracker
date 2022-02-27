@@ -17,6 +17,7 @@ let pollingObtainedChecks: NodeJS.Timer[] = [];
 const inactive = 'inactive';
 
 window.onload = () => {
+  setupClickIds();
   setupClickToggle();
   setupClickRange();
   hideAutotrackerElements();
@@ -30,6 +31,26 @@ window.onload = () => {
   updateSideQuestRegion();
   addQuestHintRow();
   prepareShopHints();
+}
+
+function setupClickIds(){
+  let id = 0;
+  const toggleElements = document.getElementsByClassName('clickToggle');
+  for(var i = 0; i < toggleElements.length; i++){
+    const element = toggleElements[i];
+    if(!element.id){
+      element.id=`click_toggle_${id}`;
+      id++;
+    }
+  }
+  const rangeElements = document.getElementsByClassName('clickRange');
+  for(var i = 0; i < rangeElements.length; i++){
+    const element = rangeElements[i];
+    if(!element.id){
+      element.id=`click_range_${id}`;
+      id++;
+    }
+  }
 }
 
 function setupClickToggle() {
@@ -61,6 +82,32 @@ function setupClickRange(){
     if(valueSpan?.textContent === min.toString() && min <= threshold){
       elem.classList.add(inactive);
     }
+  }
+}
+
+function getActiveBoxes(): string[] {
+  const activeElements: string[] = [];
+  const toggleElems = document.getElementsByClassName('clickToggle');
+  for(var i = 0; i < toggleElems.length; i++){
+    const elem = toggleElems[i];
+    if(!elem.classList.contains(inactive)){
+      activeElements.push(elem.id);
+    }
+  }
+  const rangeElems = document.getElementsByClassName('clickRange');
+  for(var i = 0; i < rangeElems.length; i++){
+    const elem = rangeElems[i];
+    if(!elem.classList.contains(inactive)){
+      activeElements.push(elem.id);
+    }
+  }
+  return activeElements;
+}
+
+function inflateActiveBoxes(ids: string[]){
+  for(const id of ids){
+    const elem = document.getElementById(id);
+    elem?.classList.remove(inactive);
   }
 }
 
@@ -702,7 +749,8 @@ function exportData(){
     notes: (document.getElementById('notes') as HTMLTextAreaElement)?.value,
     hintNumbers: deflateHintGrid(document.getElementById('hintNumberGrid')!),
     hintList: deflateTable(document.getElementById('questHintTable') as HTMLTableElement),
-    shopContents: [...document.getElementById('shopBody')?.children ?? []].map(c => ({id: c.id, body: deflateShopHints(c.id)}))
+    shopContents: [...document.getElementById('shopBody')?.children ?? []].map(c => ({id: c.id, body: deflateShopHints(c.id)})),
+    active: getActiveBoxes()
   };
   (document.getElementById('exportAreaContent') as HTMLTextAreaElement).value = JSON.stringify(data);
   document.getElementById('exportArea')?.removeAttribute('hidden');
@@ -718,6 +766,7 @@ function importData(){
     inflateHintGrid(parsed.hintNumbers);
     inflateHintTable(parsed.hintList);
     (parsed.shopContents as {id: string, body: string[]}[]).forEach(({id, body}) => inflateShopHints(id, body));
+    inflateActiveBoxes(parsed.active);
   } catch (e){
     console.log('Error while importing data');
   }
