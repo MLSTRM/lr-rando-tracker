@@ -410,7 +410,7 @@ function mapRequirements(requirement: QuestRequirement, state: QuestProgressChec
         if(isItemWithInfo.known){
             //Why does this affect luminous mushroom and greens??
             if(typeof value === 'number' && settings && settings.halfCanvas && !isItemWithInfo.name.includes('key_')){
-                console.log(JSON.stringify(isItemWithInfo));
+                //console.log(JSON.stringify(isItemWithInfo));
                 newValue = Math.ceil(value / 2);
             }
             name = isItemWithInfo.name;

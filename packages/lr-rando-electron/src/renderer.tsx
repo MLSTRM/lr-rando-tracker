@@ -85,29 +85,42 @@ function setupClickRange(){
   }
 }
 
-function getActiveBoxes(): string[] {
-  const activeElements: string[] = [];
-  const toggleElems = document.getElementsByClassName('clickToggle');
+function getActiveBoxes(): Array<string|{id: string; value: string}> {
+  const activeElements: Array<string|{id: string; value: string}> = [];
+  const toggleElems = document.getElementById('pretty_tracker_region')!.getElementsByClassName('clickToggle');
   for(var i = 0; i < toggleElems.length; i++){
     const elem = toggleElems[i];
     if(!elem.classList.contains(inactive)){
       activeElements.push(elem.id);
     }
   }
-  const rangeElems = document.getElementsByClassName('clickRange');
+  const rangeElems = document.getElementById('pretty_tracker_region')!.getElementsByClassName('clickRange');
   for(var i = 0; i < rangeElems.length; i++){
     const elem = rangeElems[i];
     if(!elem.classList.contains(inactive)){
-      activeElements.push(elem.id);
+      activeElements.push({id: elem.id, value: elem.getElementsByClassName('value').item(0)?.textContent ?? ''});
     }
   }
   return activeElements;
 }
 
-function inflateActiveBoxes(ids: string[]){
+function inflateActiveBoxes(ids: Array<string|{id: string; value: string}>){
   for(const id of ids){
-    const elem = document.getElementById(id);
-    elem?.classList.remove(inactive);
+    if(typeof id === 'string'){
+      const elem = document.getElementById(id);
+      elem?.classList.remove(inactive);
+    }
+    else {
+      const {id: innerId, value: innerValue} = id;
+      const elem = document.getElementById(innerId);
+      if(Number(innerValue) > 0){
+        elem?.classList.remove(inactive);
+      }
+      const innerHolder = elem?.getElementsByClassName('value')?.item(0);
+      if(innerHolder){
+        innerHolder.textContent = innerValue;
+      }
+    }
   }
 }
 
@@ -773,6 +786,16 @@ function importData(){
 }
 
 function inflateHintTable(data: string[][]): void {
+  //Remove initial hint row if it exists and is empty.
+  const table = document.getElementById('questHintTable') as HTMLTableElement;
+  if(table.rows.length === 3){
+    const row = table.rows[1];
+    const cell = row.cells[1];
+    const hint = cell.firstChild as HTMLSelectElement;
+    if(hint.value === "-1"){
+      removeQuestHintRow(cell)(undefined as unknown as MouseEvent);
+    }
+  }
   data.forEach(row => addQuestHintRow(row));
 }
 
@@ -849,12 +872,9 @@ Add way to mark hints as complete rather than deleting?
 
 Select multiple quests for requirement item tracking
 
-allow for rando state persistence, save state to file (works for config), push state back from UI to backend for non-auto use
+push state back from UI to backend for non-auto use
 
 EP ability cost selection (start at default and allow adjustment up/down)
-
-Fill out remaining quest requirements for formatting.
-Hook up questProgressCheck in backend to populate values for prerequisites properly.
 
 pane selection/ordering controls (rather than pop in/out or fixed)
 -tracker grid (large)
@@ -863,17 +883,15 @@ pane selection/ordering controls (rather than pop in/out or fixed)
 -canvas lookup
 -npc lookup
 
-SORT:
-8 chocoborel, 6 slug sweet cardesia
-
-pull boss names from spoiler log
-pull hints from spoiler log
-
 Begin work on enriched event/boss names and checks
 
 Quest issues:
 Faster than lightning in progress still available
 oneway persist by element id in import/export?
 
-Grave opf the colossi gets cropped off...
+Grave of the colossi gets cropped off...
+
+TODO 0.6.1 rando parity
+hit autoloading from docs
+boss autotracking from docs
 */
