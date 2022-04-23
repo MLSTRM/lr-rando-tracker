@@ -35,6 +35,7 @@
     "memoryjs": "^3.4.0",
     "lr-rando-core": "^1.0.0",
     "lr-rando-autotracker": "^1.0.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "cheerio": "^1.0.0-rc.10"
   }
 }

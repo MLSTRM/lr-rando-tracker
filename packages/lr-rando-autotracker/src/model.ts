@@ -34,6 +34,7 @@ export interface RandoMemoryState {
     };
     soulSeeds: number;
     unappraised: number;
+    btsc: string[];
 }
 
 // data type constants

@@ -1,5 +1,7 @@
+import { val } from "cheerio/lib/api/attributes";
 import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
+import { HintBackend, HintLocation } from "./backend/hintBackend";
 import { RandoBackend } from "./backend/randoBackend";
 
 function createWindow() {
@@ -52,6 +54,7 @@ app.on("window-all-closed", () => {
 // code. You can also put them in separate files and require them here.
 
 const backend = new RandoBackend();
+const hints = new HintBackend();
 //Bootstrap initial state
 ipcMain.handle('randoFull', async (event) => {
   //console.log('Full rando state loading');
@@ -80,8 +83,24 @@ ipcMain.handle('randoEPCheck', async (event, ability) => {
   return backend.checkEPAbility(ability);
 });
 
-ipcMain.handle('randoMainQuestCheck', async (event, main) => {
-  return backend.checkMainQuest(main);
+ipcMain.handle('randoMainQuestCheck', async (event, arg: {mainQuest: string, value: number}) => {
+  const {mainQuest, value} = arg;
+  const {key, value: newState} = backend.checkMainQuest(mainQuest);
+  // console.log(`Quest: ${mainQuest}, old: ${value}, new: ${newState}`);
+  //check if value is updated and if so extract hints
+  const hintArr: HintLocation[] = [];
+  if(newState > value){
+    let hintsToResolve = value+1;
+    while (newState >= hintsToResolve){
+      hintArr.push(...hints.resolveHintsForQuest(`${key}-${hintsToResolve}`));
+      hintsToResolve++;
+      if(hintsToResolve > 5){
+        //sanity check
+        break;
+      }
+    }
+  }
+  return {result: newState, hints: hintArr};
 });
 
 ipcMain.handle('sideQuestList', async (event, area) => {
@@ -106,4 +125,26 @@ ipcMain.handle('garbCheck', async (event, garb) => {
 
 ipcMain.on('settings_halfCanvas', async (event, halfCanvas) => {
   return backend.setSettingsHalfCanvas(halfCanvas);
+});
+
+ipcMain.handle('bossCheck', async (event, _) => {
+  const btscoreBosses = backend.getBattleScores();
+  return hints.mapBossNames(btscoreBosses);
+});
+
+ipcMain.handle('hint-randodataloc', async (event, loc) => {
+  return hints.setupRandoDataLocation(loc);
+});
+
+ipcMain.handle('hint-seeddocsloc', async (event, loc) => {
+  return hints.setupSeedDocsDir(loc);
+});
+
+ipcMain.handle('hint-loadHints', async (event, _) => {
+  hints.prepareHintMapping();
+  return hints.parseSeedData();
+});
+
+ipcMain.on('hint-debugHints', async (event, _) => {
+  hints.debugSeedData();
 });

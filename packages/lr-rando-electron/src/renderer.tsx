@@ -6,8 +6,10 @@
 // needed in the renderer process.
 
 import { ipcRenderer } from "electron";
+import { values } from "lodash";
 import type { RandoMemoryState } from "lr-rando-autotracker";
 import type { SideQuestProgress } from "lr-rando-core";
+import type { HintLocation } from './backend/hintBackend';
 import type { EnrichedQuestInfo, EnrichedQuestRequirement } from "lr-rando-core/build/quests/model";
 
 let pollInterval: NodeJS.Timer;
@@ -33,6 +35,7 @@ window.onload = () => {
   updateSideQuestRegion();
   addQuestHintRow();
   prepareShopHints();
+  presetupHintData();
 }
 
 const domains = new Map([
@@ -323,14 +326,14 @@ function beginPoll() {
     const mainQuest = elem.getAttribute('data-mainquest');
     if(mainQuest){
       const interval = setInterval(() => {
-        ipcRenderer.invoke('randoMainQuestCheck', mainQuest).then((result: number) => {
-          const valueSpan = elem.getElementsByClassName('value').item(0);
-          if(valueSpan){
-            const currentValue = Number(valueSpan.textContent);
+        const valueSpan = elem.getElementsByClassName('value').item(0);
+        if(valueSpan){
+          const currentValue = Number(valueSpan.textContent);
+          ipcRenderer.invoke('randoMainQuestCheck', {mainQuest, value: currentValue}).then(({result, hints}: {result: number, hints: HintLocation[]}) => {
             if(result > currentValue){
               valueSpan.textContent = result.toString();
               const threshold = Number(elem.getAttribute('data-threshold'));
-              if(threshold){
+              if(!isNaN(threshold)){
                 if(result > threshold){
                   elem.classList.remove(inactive);
                   clearInterval(interval);
@@ -339,9 +342,14 @@ function beginPoll() {
                 elem.classList.remove(inactive);
               }
             }
-          }
-        });
-      });
+            if(hints.length > 0){
+              for(const hint of hints){
+                addQuestHintRow(['', hint.area, hint.location, hint.item]);
+              }
+            }
+          });
+        }
+      }, 2000);
     }
     const garb = elem.getAttribute('data-garb');
     if(garb){
@@ -371,6 +379,7 @@ function beginPoll() {
     }
     //setInterval(updateCanvasRegion, 5000);
     setInterval(updateSideQuestRegion, 5000);
+    setInterval(updateBossPanes, 5000);
   }
 }
 
@@ -584,6 +593,24 @@ async function updateSideQuestRegion(){
   setPropOnElem('#canvasLookupList', sideTableHeader + canvasTableOut);
 }
 
+async function updateBossPanes(){
+  const bossNames = await ipcRenderer.invoke('bossCheck') as string[];
+  if(bossNames.length > 0){
+    // console.log(bossNames);
+  }
+  const autoTrackElements = document.getElementsByClassName('inactive clickBoss');
+  for(var i = 0; i<autoTrackElements.length; i++){
+    const elem = autoTrackElements[i];
+    if(elem.getAttribute('data-boss')){
+      const bossName = elem.getAttribute('data-boss')!;
+      if(bossNames.includes(bossName)){
+        elem.classList.remove(inactive);
+      }
+    }
+    continue;
+  }
+}
+
 const sideTableHeader = '<tr><th width="18px"></th><th></th></tr>'
 
 function statusToImage(status: string): string {
@@ -689,7 +716,7 @@ function addQuestHintRow(rowData?: string[]){
   const locationCell = newRow.insertCell();
   locationCell.innerHTML = `<input style="width: 90%;" ${rowData ? `value="${rowData[2]}"` : ''}/>`;
   const itemCell = newRow.insertCell();
-  itemCell.innerHTML = `<input style="width: 90%;" ${rowData ? `value="${rowData[4]}"` : ''}/>`;
+  itemCell.innerHTML = `<input style="width: 90%;" ${rowData ? `value="${rowData[3]}"` : ''}/>`;
 }
 
 function removeQuestHintRow(cell: HTMLTableCellElement){
@@ -746,11 +773,17 @@ function prepareShopHints(){
       divContent += `<input id="${[shopDiv.id,i].join('_')}"/>`;
     }
     shopDiv.innerHTML = divContent;
-    headersTable.rows[idx].addEventListener('click', ()=>{
-      hideAllShops();
-      shopDiv.style.display = 'block';
-    });
+    var row = headersTable.rows[idx];
+    row.addEventListener('click', rowClickListener(shopDiv, row));
     shopHintsBody?.appendChild(shopDiv);
+  }
+}
+
+function rowClickListener(shopDiv: any, row: any) {
+  return () => {
+    hideAllShops();
+    shopDiv.style.display = 'block';
+    row.classList.add('selected');
   }
 }
 
@@ -759,6 +792,8 @@ function hideAllShops(){
   for(const element of [...shopHintsBody?.children ?? []]){
     (element as HTMLElement).style.display = 'none';
   }
+  const headersTable = document.getElementById('shopHeaders') as HTMLTableElement;
+  [...headersTable.rows].forEach(r => r.classList.remove('selected'));
 }
 
 function deflateShopHints(id: string): string[]{
@@ -773,6 +808,7 @@ function inflateShopHints(id: string, toFill: string[]): void {
   toFill.forEach((v, i) => (inputList[i] as HTMLInputElement).value = v);
 }
 
+// Must be kept in sync with hintBackend::hintAreaIdx
 const questSelectBody = `<option value="-1">Unknown</option>
 <option value="0">Ark</option>
 <option value="1">CoP Global</option>
@@ -984,52 +1020,69 @@ function setPanelOrder(initial?: boolean){
   });
 }
 
-// Todo:
-// Check if I can have ipc renderer hooks in both directions maybe (seems yes - that will be helpful for settings etc.)
-// Start hooking up quest/npc info sections (done the backing, need to do the UI side)
+// Hint engine
+function presetupHintData(){
+  const randoVal = document.getElementById('randoDataLocation') as HTMLInputElement;
+  var savedRandoDataLoc = localStorage.getItem('randoDataLocation');
+  if(savedRandoDataLoc){
+    randoVal.value = savedRandoDataLoc;
+    updateRandoDataLocation();
+  }
+  var seedVal = document.getElementById('seedDataLocation') as HTMLInputElement;
+  var savedSeedDataLoc = localStorage.getItem('seedDataLocation');
+  if(savedSeedDataLoc){
+    seedVal.value = savedSeedDataLoc;
+    updateSeedDataLocation();
+  }
+}
 
-// Start working on NPC availability based on time (clamp view window into range[], convert to rectangles?)
-// Create quests section with auto scanning of inventory/completion requirements
+async function updateRandoDataLocation(){
+  const val = document.getElementById('randoDataLocation') as HTMLInputElement;
+  const valid = await ipcRenderer.invoke('hint-randodataloc', val.value);
+  if(!valid){
+    val.setAttribute('invalid', '');
+  } else {
+    val.removeAttribute('invalid');
+    localStorage.setItem('randoDataLocation', val.value);
+  }
+}
 
-// use library on ark for boss tracking (?) - works for location but not name. - sync with hints
+async function updateSeedDataLocation(){
+  const val = document.getElementById('seedDataLocation') as HTMLInputElement;
+  const valid = await ipcRenderer.invoke('hint-seeddocsloc', val.value);
+  if(!valid){
+    val.setAttribute('invalid', '');
+  } else {
+    val.removeAttribute('invalid');
+    localStorage.setItem('seedDataLocation', val.value);
+  }
+}
 
-// find where text pointer moves if hint is open and use that to add to list
-// quest hints as well as libras. - do some CE stuff to see if it can be scraped from display text somewhere
+async function loadHints(){
+  const seed = await ipcRenderer.invoke('hint-loadHints');
+  (document.getElementById('seed') as HTMLInputElement).value = seed;
+  //Post setup of hints auto populate seed value
+}
+
+function debugHints(){
+  ipcRenderer.send('hint-debugHints');
+}
+// Hint engine end
 
 /*
 TODO:
 Need to actually complete cried wolf on a save
 
 New features to do:
-allow for manual toggle of side/canvas completion (and push to backend + store)
-Add way to mark hints as complete rather than deleting?
-
-Select multiple quests for requirement item tracking
-
-push state back from UI to backend for non-auto use
-
-EP ability cost selection (start at default and allow adjustment up/down)
-
-pane selection/ordering controls (rather than pop in/out or fixed)
--tracker grid (large)
--inventory panes
--side quest lookup
--canvas lookup
+-allow for manual toggle of side/canvas completion (and push to backend + store)
+-Select multiple quests for requirement item tracking
+-push state back from UI to backend for non-auto use
+-EP ability cost selection (start at default and allow adjustment up/down)
 -npc lookup
-
-Begin work on enriched event/boss names and checks
+-find where text pointer moves if hint is open and use that to add to list?
 
 Quest issues:
 Faster than lightning in progress still available
-oneway persist by element id in import/export?
 
 Grave of the colossi gets cropped off...
-
-TODO 0.6.5
-change hints to be:
-<area, location, item>
-load check types from treasures.csv
-load enemy data + hints from docs
-autoadd hints
-
 */

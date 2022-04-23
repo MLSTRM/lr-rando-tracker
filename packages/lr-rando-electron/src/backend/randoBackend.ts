@@ -1,6 +1,6 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem,
-    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo, QuestProgressCheck, QuestState, resolveMainQuestProgress } from "lr-rando-core";
+    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo, QuestProgressCheck, QuestState, resolveMainQuestProgress, btscBossMap } from "lr-rando-core";
 import _ from 'lodash';
 import { QuestInfo, QuestPrerequisites, EnrichedQuestRequirement, EnrichedQuestInfo, resolveHighestProgress } from "lr-rando-core";
 
@@ -191,8 +191,8 @@ export class RandoBackend {
         return this.stateValid && !!this.oldState.epAbilities?.includes(name);
     }
 
-    public checkMainQuest(main: string): number {
-        return this.stateValid ? this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0 : 0;
+    public checkMainQuest(main: string): {key: number; value: number} {
+        return {key: getKeyFromArea(main), value: this.stateValid ? this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0 : 0};
     }
 
     public getSideQuestList(area?: number): Map<string, SideQuestProgress | undefined> {
@@ -337,6 +337,13 @@ export class RandoBackend {
         // console.log(`Setting half canvas to: ${value}`);
         this.settings.halfCanvas = !!value;
     }
+
+    public getBattleScores(): string[] {
+        //resolve btscore_xxx values from memory
+        //return as list of vanilla boss names as resolved from scene data
+        const base = this.oldState?.btsc || [];
+        return base.map(b => btscBossMap[b]);
+    }
 }
 
 function statusToIndex(status?: string): QuestState {
@@ -413,6 +420,22 @@ function getAreaFromKey(id: '1' | '2' | '3' | '4' | '5' | string): keyof MainQue
             return 'sazh';
     }
     return undefined;
+}
+
+function getKeyFromArea(id: 'luxerion' | 'yusnaan' | 'wildlands'| 'deaddunes' | 'sazh' | string): number {
+    switch(id){
+        case 'luxerion':
+            return 1;
+        case 'yusnaan':
+            return 2;
+        case 'wildlands':
+            return 3;
+        case 'deaddunes':
+            return 4;
+        case 'sazh':
+            return 5;
+    }
+    return 0;
 }
 
 function mapRequirements(requirement: QuestRequirement, state: QuestProgressCheck, settings?: BackendSettings): EnrichedQuestRequirement {

@@ -33,6 +33,7 @@ const canvasOffsetMaybe = 0xC0F0;
 const charaCounterBaseLocation = 0x20D252C;
 
 const epAbilitiesMaybe = 0x17B50;
+const btscoreOffset = 0x1EF34;
 
 export async function attachAndVerify(reader: LrMemoryReader): Promise<boolean> {
     try {
@@ -106,7 +107,8 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
             completed: extractCanvasInfo(reader, pSomeStatsBase + canvasOffsetMaybe + 0x40),
         },
         soulSeeds: reader.readMemoryAddress(pSomeStatsBase + gameHeader+0x50+(57*8)+6, BYTE, true),
-        unappraised: resolveCharaCounter(reader, pCharaCounterBase, 825)
+        unappraised: resolveCharaCounter(reader, pCharaCounterBase, 825),
+        btsc: resolveBtscores(reader, pSomeStatsBase + btscoreOffset)
     }
 }
 
@@ -238,4 +240,23 @@ function resolveCharaCounter(reader: LrMemoryReader, base: number, index: number
     const pSoulSeed = base + baseCharaCounterOffset + index * 18*8 + 0x30;
     const counterValue = reader.readMemoryAddress(pSoulSeed, SHORT, true);
     return counterValue;
+}
+
+function resolveBtscores(reader: LrMemoryReader, base: number): string[] {
+    //Find btscores
+    //just want the ids, (stored with time and score value)
+    const btscNames: string[] = [];
+    for(var offset = 0; offset<50; offset++){
+        const btscoreToReadLoc = base + 0x10*offset;
+        const constant = reader.readMemoryAddress(btscoreToReadLoc + 4, SHORT, true);
+        if(constant == 0){
+            break;
+        }
+        const encounterName = reader.readMemoryAddress(btscoreToReadLoc, INT, true);
+        // const encounterScore = reader.readMemoryAddress(btscoreToReadLoc+8, INT, true);
+        // const encounterTime = reader.readMemoryAddress(btscoreToReadLoc + 12, INT, true);
+        const name = `btsc${encounterName.toString().padStart(5,'0')}`;
+        btscNames.push(name);
+    }
+    return btscNames;
 }

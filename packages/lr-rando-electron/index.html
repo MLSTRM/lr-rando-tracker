@@ -361,6 +361,10 @@
       height: inherit;
     }
 
+    .shopSelect tr.selected {
+      text-decoration: underline solid black 3px;
+    }
+
     /* scrollbar section start */
     /* width */
     ::-webkit-scrollbar {
@@ -417,6 +421,9 @@
       &nbsp;
       <label>Seed: </label>
       <input id="seed"/>
+      &nbsp;
+      <button id="loadHints" onclick="loadHints()" type="button">Load Hints</button>
+      <button id="debugHints" onclick="debugHints()" type="button">Debug Hints</button>
     </div>
     <br/>
     <div id="protection" class="protection" style="position: fixed; top: 0; left: 0; opacity: 40%; width: 100%; height: 100%; z-index: 99;" hidden>
@@ -452,6 +459,14 @@
         <input type="checkbox" id="halfCanvasRequirements" name="halfCanvasRequirements" value="halfCanvasRequirements" onchange="updateCanvasHalf()"/>
         <br/>
         <br/>
+        <label for="randoDataLocation">Location of randomiser data files: </label>
+        <input id="randoDataLocation" name="randoDataLocation"/>
+        <button id="randoDataLocationSubmit" onclick="updateRandoDataLocation()">Save</button>
+        <br/>
+        <br/>
+        <label for="seedDataLocation">Location of seed data files: </label>
+        <input id="seedDataLocation" name="seedDataLocation"/>
+        <button id="seedDataLocationSubmit" onclick="updateSeedDataLocation()">Save</button>
         <div id="panelOrder" class="noSelect">
           Panel Order:
           <ul id="panelOrderList">
@@ -524,19 +539,19 @@
               </div>
             </div>
             <div class="cell20 cell20s">
-              <div class="clickToggle">
+              <div class="clickToggle clickBoss" data-boss="Noel">
                 <img src="resources/images/boss-noel.png" alt="Noel Kreiss" width="100" class="boss"/>
               </div>
-              <div class="clickToggle">
+              <div class="clickToggle clickBoss" data-boss="Snow">
                 <img src="resources/images/boss-snow.png" alt="Snow Villiers" width="100" class="boss"/>
               </div>
-              <div class="clickToggle">
+              <div class="clickToggle clickBoss" data-boss="Caius">
                 <img src="resources/images/boss-caius.png" alt="Caius Ballad" width="100" class="boss"/>
               </div>
-              <div class="clickToggle">
+              <div class="clickToggle clickBoss" data-boss="Grendel">
                 <img src="resources/images/boss-gren.png" alt="Grendel" width="100" class="boss"/>
               </div>
-              <div class="clickToggle">
+              <div class="clickToggle clickBoss" data-boss="Zaltys">
                 <img src="resources/images/boss-zaltys.png" alt="Zaltys" width="100" class="boss" />
               </div>
             </div>
@@ -589,10 +604,10 @@
               <div class="clickRange" data-min="0" data-max="3" data-key="key_d_wing,key_d_top,key_d_base" data-oneway="true">
                 <img src="resources/images/saints-crux.png" alt="Saint's Crux" title="Saint's Crux Pieces" class="icon" style="height: 35px"/> <span class="value">0</span>
               </div>
-              <div class="centerImage clickToggle">
+              <div class="centerImage clickToggle clickBoss" data-boss="Ereshkigal">
                 <img src="resources/images/boss-eres.png" alt="Ereshkigal" width="100" class="boss"/>
               </div>
-              <div class="centerImage clickToggle">
+              <div class="centerImage clickToggle clickBoss" data-boss="Aeronite">
                 <img src="resources/images/boss-aero.png" alt="Aeronite" width="100" class="boss"/>
               </div>
             </div>
@@ -789,14 +804,14 @@
           </div>
         </div>
         <div id="hintNotesReference" class="flexRegion noSelect" style="order: 6">
-          <div class="row column120 columnHalf">
+          <div class="row column160 columnHalf">
             Quest hint notes:
             <table style="table-layout: fixed; width: 100%;" id="questHintTable">
               <tr>
                 <th style="width: 15px;"></th>
-                <th style="width: calc(30% - 15px);" data-sort="asc" onclick="sortQuestHintRows(event)">Area</th>
-                <th style="width: 33%" data-sort="asc" onclick="sortQuestHintRows(event)">Location</th>
-                <th style="width: 35%" data-sort="asc" onclick="sortQuestHintRows(event)">Item</th>
+                <th style="width: calc(25% - 15px);" data-sort="asc" onclick="sortQuestHintRows(event)">Area</th>
+                <th style="width: 45%" data-sort="asc" onclick="sortQuestHintRows(event)">Location</th>
+                <th style="width: 30%" data-sort="asc" onclick="sortQuestHintRows(event)">Item</th>
               </tr>
               <tr>
                 <td onclick="addQuestHintRow()">+</td>
@@ -811,7 +826,7 @@
           <div class="row column120 columnHalf noscroll">
             Shop notes:<br/>
             <div class="row column60" style="height: inherit;">
-              <table id="shopHeaders">
+              <table id="shopHeaders" class="shopSelect">
                 <tr id="shop_mock_header"><td>Mock (Lux North)</td></tr>
                 <tr id="shop_lena_header"><td>Lena (Lux Warren)</td></tr>
                 <tr id="shop_stinky_header"><td>Stinky (Yus Reveller's)</td></tr>

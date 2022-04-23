@@ -1,7 +1,7 @@
 import { BYTE, DWORD, INT, INT64, SHORT } from "memoryjs";
 import { LrMemoryReader } from "./memoryReader";
 import { resolveDateTime } from "./datetime";
-import { prettyPrintEpAbility, extractZoneInfo, getSideQuestProgress, inflateCanvasBytes, Areas } from 'lr-rando-core';
+import { prettyPrintEpAbility, extractZoneInfo, getSideQuestProgress, inflateCanvasBytes, Areas, btscBossMap } from 'lr-rando-core';
 import { stripNullChars } from ".";
 
 //CONFIG
@@ -13,6 +13,7 @@ const showEpAbilitiesEtc = false;
 const showSideQuests = false;
 const showCanvasQuests = false;
 const loop = false;
+const showBtscores = true;
 
 //Info
 const someStatsBaseLocation = 0x4CF79D8; //Initial pointer into interesting memory block
@@ -28,6 +29,7 @@ const chocoboOffset = 0x1A48;
 const sideQuestOffset = 0xAF10;
 const canvasOffsetMaybe = 0xC0F0;
 const charaCounterBaseLocation = 0x20D252C;
+const btscoreOffset = 0x1EF34;
 
 const epAbilitiesMaybe = 0x17B50;
 
@@ -186,6 +188,26 @@ const interval = setInterval(async () => {
             const soulSeedsMaybe = reader.readMemoryAddress(pSoulSeed, SHORT, true);
             console.log(`${pCharaCounterBase.toString(16)} + ${baseCharaCounterOffset.toString(16)} + ${(charaCounterIndex*18*8).toString(16)} + 0x30 = ${pSoulSeed.toString(16)}`);
             console.log(`Soul seeds: ${soulSeedsMaybe}`);
+
+            if(showBtscores){
+                var nextScore = true;
+                var offset = 0;
+                while(nextScore){
+                    const btscoreToReadLoc = pSomeStatsBase + btscoreOffset + 0x10*offset;
+                    const constant = reader.readMemoryAddress(btscoreToReadLoc + 4, SHORT, true);
+                    if(constant == 0){
+                        nextScore = false;
+                        break;
+                    }
+                    const encounterName = reader.readMemoryAddress(btscoreToReadLoc, INT, true);
+                    const encounterScore = reader.readMemoryAddress(btscoreToReadLoc+8, INT, true);
+                    const encounterTime = reader.readMemoryAddress(btscoreToReadLoc + 12, INT, true);
+                    const name = `btsc${encounterName.toString().padStart(5,'0')}`;
+                    console.log(`${name} - score: ${encounterScore}, time (seconds): ${encounterTime} - name (if known): ${btscBossMap[name]}`);
+                    offset++;
+                }
+                console.log(`Resolved ${offset} encounters`);
+            }
 
             if(!loop){
                 reader.detatch();
