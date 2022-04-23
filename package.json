@@ -16,7 +16,7 @@
       "packages/*"
     ],
     "nohoist": [
-        "**/electron", "**/electron/**", "**/memoryjs", "**/memoryjs/**"
+        "**/electron", "**/electron/**", "**/memoryjs", "**/memoryjs/**", "**/cheerio", "**/cheerio/**"
     ]
   },
   "devDependencies": {

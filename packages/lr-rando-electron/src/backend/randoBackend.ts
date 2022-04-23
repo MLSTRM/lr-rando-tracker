@@ -192,6 +192,9 @@ export class RandoBackend {
     }
 
     public checkMainQuest(main: string): {key: number; value: number} {
+        if(main === 'prologue'){
+            return {key: 0, value: this.stateValid ? ((this.oldState.mainQuestBytes?.yusnaan || 0) >= 0x5A ? 1 : 0) : 0}
+        }
         return {key: getKeyFromArea(main), value: this.stateValid ? this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0 : 0};
     }
 

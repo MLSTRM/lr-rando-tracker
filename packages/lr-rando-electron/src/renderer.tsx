@@ -6,10 +6,8 @@
 // needed in the renderer process.
 
 import { ipcRenderer } from "electron";
-import { values } from "lodash";
 import type { RandoMemoryState } from "lr-rando-autotracker";
 import type { SideQuestProgress } from "lr-rando-core";
-import type { HintLocation } from './backend/hintBackend';
 import type { EnrichedQuestInfo, EnrichedQuestRequirement } from "lr-rando-core/build/quests/model";
 
 let pollInterval: NodeJS.Timer;
@@ -329,7 +327,7 @@ function beginPoll() {
         const valueSpan = elem.getElementsByClassName('value').item(0);
         if(valueSpan){
           const currentValue = Number(valueSpan.textContent);
-          ipcRenderer.invoke('randoMainQuestCheck', {mainQuest, value: currentValue}).then(({result, hints}: {result: number, hints: HintLocation[]}) => {
+          ipcRenderer.invoke('randoMainQuestCheck', {mainQuest, value: currentValue}).then(({result, hints}: {result: number, hints: any[]}) => {
             if(result > currentValue){
               valueSpan.textContent = result.toString();
               const threshold = Number(elem.getAttribute('data-threshold'));
@@ -829,7 +827,7 @@ function exportData(){
     seed: (document.getElementById('seed') as HTMLInputElement)?.value,
     notes: (document.getElementById('notes') as HTMLTextAreaElement)?.value,
     hintNumbers: deflateHintGrid(document.getElementById('hintNumberGrid')!),
-    hintList: deflateTable(document.getElementById('questHintTable') as HTMLTableElement),
+    //hintList: deflateTable(document.getElementById('questHintTable') as HTMLTableElement),
     shopContents: [...document.getElementById('shopBody')?.children ?? []].map(c => ({id: c.id, body: deflateShopHints(c.id)})),
     active: getActiveBoxes()
   };
@@ -859,7 +857,7 @@ function importData(){
     (document.getElementById('seed') as HTMLInputElement).value = parsed.seed;
     (document.getElementById('notes') as HTMLTextAreaElement).value = parsed.notes;
     inflateHintGrid(parsed.hintNumbers);
-    inflateHintTable(parsed.hintList);
+    //inflateHintTable(parsed.hintList);
     (parsed.shopContents as {id: string, body: string[]}[]).forEach(({id, body}) => inflateShopHints(id, body));
     inflateActiveBoxes(parsed.active);
   } catch (e){

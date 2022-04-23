@@ -1,4 +1,3 @@
-import { val } from "cheerio/lib/api/attributes";
 import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
 import { HintBackend, HintLocation } from "./backend/hintBackend";

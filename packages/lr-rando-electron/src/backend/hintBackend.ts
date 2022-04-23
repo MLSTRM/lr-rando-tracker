@@ -102,11 +102,21 @@ export class HintBackend {
                     continue;
                 }
                 const [full, location, item, ...rest] = lineMatch;
-                hintArr.push({
-                    area: this.HintLocationMapping.get(location) || '',
-                    item,
-                    location
-                });
+                // Does this work for all hint types??
+                const resolvedArea = this.HintLocationMapping.get(location) || '';
+                if(resolvedArea === '' && hintAreaIdx[location]){
+                    hintArr.push({
+                        area: location,
+                        item,
+                        location: '?????'
+                    });
+                } else {
+                    hintArr.push({
+                        area: this.HintLocationMapping.get(location) || '',
+                        item,
+                        location
+                    });
+                }
             }
             hints.set(quest, hintArr);
         });
