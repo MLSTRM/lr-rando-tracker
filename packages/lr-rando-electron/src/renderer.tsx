@@ -688,8 +688,6 @@ function addQuestHintRow(rowData?: string[]){
   }
   const locationCell = newRow.insertCell();
   locationCell.innerHTML = `<input style="width: 90%;" ${rowData ? `value="${rowData[2]}"` : ''}/>`;
-  const hasCell = newRow.insertCell();
-  hasCell.innerText = 'has';
   const itemCell = newRow.insertCell();
   itemCell.innerHTML = `<input style="width: 90%;" ${rowData ? `value="${rowData[4]}"` : ''}/>`;
 }
@@ -701,6 +699,37 @@ function removeQuestHintRow(cell: HTMLTableCellElement){
     table.deleteRow(row.rowIndex);
     return undefined;
   }
+}
+
+function getCellValue (tr: HTMLTableRowElement, idx: number) {
+  const child = tr.children[idx];
+  if(child.firstChild instanceof HTMLSelectElement){
+    return child.firstChild.value;
+  } else if (child.firstChild instanceof HTMLInputElement){
+    return child.firstChild.value;
+  }
+  return child.textContent;
+}
+
+function comparer (idx: number, asc: boolean){
+  return (a: any, b: any) => (
+    valueCompare(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
+  );
+}
+
+function valueCompare(v1: any, v2: any) {
+  return v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
+}
+
+function sortQuestHintRows(ev: Event){
+  const th = ev.target as HTMLTableCellElement;
+  const table = th.closest('table') as HTMLTableElement;
+  const rows = Array.from(table.querySelectorAll('tr:nth-child(n+2)'));
+  const addRow = rows.pop()!;
+  rows.sort(comparer(Array.from(th.parentNode!.children).indexOf(th), th.getAttribute('data-sort') === 'asc'));
+  rows.push(addRow);
+  rows.forEach(tr => table.appendChild(tr) );
+  th.setAttribute('data-sort', th.getAttribute('data-sort') === 'asc' ? 'dec' : 'asc');
 }
 
 function prepareShopHints(){
@@ -745,29 +774,19 @@ function inflateShopHints(id: string, toFill: string[]): void {
 }
 
 const questSelectBody = `<option value="-1">Unknown</option>
-<option value="0">Yus 0-1</option>
-<option value="1">Lux 1-1</option>
-<option value="2">Lux 1-2</option>
-<option value="3">Lux 1-3</option>
-<option value="4">Lux 1-4</option>
-<option value="5">Lux 1-5</option>
-<option value="6">Yus 2-1</option>
-<option value="7">Yus 2-2</option>
-<option value="8">Yus 2-3</option>
-<option value="9">Wild 3-1</option>
-<option value="10">Wild 3-2</option>
-<option value="11">Wild 3-3</option>
-<option value="12">Dead 4-1</option>
-<option value="13">Dead 4-2</option>
-<option value="14">Dead 4-3</option>
-<option value="15">Dead 4-4</option>
-<option value="16">Dead 4-5</option>
-<option value="17">Sazh 5-1</option>
-<option value="18">Sazh 5-2</option>
-<option value="19">Sazh 5-3</option>
-<option value="20">Sazh 5-4</option>
-<option value="21">Sazh 5-5</option>
-<option value="22">Sazh 5-6</option>`;
+<option value="0">Ark</option>
+<option value="1">CoP Global</option>
+<option value="2">Luxerion</option>
+<option value="3">CoP Lux</option>
+<option value="4">Yusnaan</option>
+<option value="5">CoP Yus</option>
+<option value="6">Wildlands</option>
+<option value="7">CoP Wild</option>
+<option value="8">Dead Dunes</option>
+<option value="9">CoP Dunes</option>
+<option value="10">Hand-ins</option>
+<option value="11">Ult Lair</option>
+<option value="12">Final Day</option>`;
 
 function exportData(){
   const data = {
@@ -1012,8 +1031,5 @@ change hints to be:
 load check types from treasures.csv
 load enemy data + hints from docs
 autoadd hints
-allow hints to be reordered/sorted
 
---
-allow panels to be hidden??
 */

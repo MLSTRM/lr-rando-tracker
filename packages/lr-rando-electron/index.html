@@ -794,14 +794,12 @@
             <table style="table-layout: fixed; width: 100%;" id="questHintTable">
               <tr>
                 <th style="width: 15px;"></th>
-                <th style="width: 60px;">Quest</th>
-                <th style="width: 35%">Location</th>
-                <th></th>
-                <th style="width: 35%">Item</th>
+                <th style="width: calc(30% - 15px);" data-sort="asc" onclick="sortQuestHintRows(event)">Area</th>
+                <th style="width: 33%" data-sort="asc" onclick="sortQuestHintRows(event)">Location</th>
+                <th style="width: 35%" data-sort="asc" onclick="sortQuestHintRows(event)">Item</th>
               </tr>
               <tr>
                 <td onclick="addQuestHintRow()">+</td>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
