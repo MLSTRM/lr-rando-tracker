@@ -20,6 +20,7 @@ window.onload = () => {
   setupClickIds();
   setupClickToggle();
   setupClickRange();
+  setupPanelOrderList();
   hideAutotrackerElements();
   updateTheme(true);
   updateColumnWidth(true);
@@ -27,28 +28,37 @@ window.onload = () => {
   updateCanvasHalf(true);
   setSideSortByName(true);
   setSideHideComplete(true);
+  setPanelOrder(true);
   //updateCanvasRegion();
   updateSideQuestRegion();
   addQuestHintRow();
   prepareShopHints();
 }
 
+const domains = new Map([
+  ['pretty_tracker_region', 'grid'],
+  ['hintsReference', 'hint']
+]);
+
 function setupClickIds(){
-  let id = 0;
-  const toggleElements = document.getElementsByClassName('clickToggle');
-  for(var i = 0; i < toggleElements.length; i++){
-    const element = toggleElements[i];
-    if(!element.id){
-      element.id=`click_toggle_${id}`;
-      id++;
+  for(var [key, prefix] of domains.entries()){
+    const element = document.getElementById(key)!;
+    let id = 0;
+    const toggleElements = element.getElementsByClassName('clickToggle');
+    for(var i = 0; i < toggleElements.length; i++){
+      const element = toggleElements[i];
+      if(!element.id){
+        element.id=`click_toggle_${prefix}_${id}`;
+        id++;
+      }
     }
-  }
-  const rangeElements = document.getElementsByClassName('clickRange');
-  for(var i = 0; i < rangeElements.length; i++){
-    const element = rangeElements[i];
-    if(!element.id){
-      element.id=`click_range_${id}`;
-      id++;
+    const rangeElements = element.getElementsByClassName('clickRange');
+    for(var i = 0; i < rangeElements.length; i++){
+      const element = rangeElements[i];
+      if(!element.id){
+        element.id=`click_range_${prefix}_${id}`;
+        id++;
+      }
     }
   }
 }
@@ -769,6 +779,19 @@ function exportData(){
   document.getElementById('exportArea')?.removeAttribute('hidden');
 }
 
+function toggleSettingsPopup(){
+  const elem = document.getElementById('settingsFloat')!;
+  elem.hidden = !elem.hidden;
+  if(!elem.hidden){
+    exportData();
+    setupPanelOrderList();
+  }
+}
+
+function hideImportData(){
+  document.getElementById('exportArea')?.setAttribute('hidden', '');
+}
+
 function importData(){
   document.getElementById('exportArea')?.setAttribute('hidden', '');
   const raw = (document.getElementById('exportAreaContent') as HTMLTextAreaElement).value;
@@ -850,6 +873,75 @@ function inflateHintGrid(input: string[][]): void {
   });
 }
 
+// https://stackoverflow.com/questions/10588607/tutorial-for-html5-dragdrop-sortable-list
+var _el: any;
+
+function dragOver(e: any) {
+  var target = e.target!;
+  while (target.nodeName === 'TD') {
+      target = target.parentNode;
+  }
+  if (isBefore(_el, target))
+    target.parentNode.insertBefore(_el, target);
+  else
+    target.parentNode.insertBefore(_el, target.nextSibling);
+}
+
+function dragStart(e: any) {
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("text/plain", null); // Thanks to bqlou for their comment.
+  _el = e.target;
+}
+
+function isBefore(el1: Element, el2: Element) {
+  if (el2.parentNode === el1.parentNode)
+    for (var cur = el1.previousSibling; cur && cur.nodeType !== 9; cur = cur.previousSibling)
+      if (cur === el2)
+        return true;
+  return false;
+}
+// draggable end
+
+function setupPanelOrderList(){
+  var list = document.getElementById("panelOrderList") as HTMLUListElement;
+  var flexElements = ([...document.getElementsByClassName("flexRegion")] as Array<HTMLElement>).map(el => ({id: el.id, order: Number(el.style.order)}))
+  flexElements.sort((a,b) => a.order - b.order);
+  var newList = [];
+  for(const el of flexElements){
+    var listItem = document.createElement('li');
+    listItem.draggable = true;
+    listItem.addEventListener('dragover', ev => dragOver(ev));
+    listItem.addEventListener('dragstart', ev => dragStart(ev));
+    listItem.textContent = el.id;
+    newList.push(listItem);
+  }
+  list.replaceChildren(...newList);
+}
+
+function setPanelOrder(initial?: boolean){
+  var newOrder;
+  if(initial){
+    var storedOrder = localStorage.getItem('display-panel-order');
+    if(storedOrder){
+      var state = JSON.parse(storedOrder);
+      if(Array.isArray(state) && typeof state[0] === 'string'){
+        newOrder = state;
+      }
+    }
+  }
+  if(!newOrder){
+    var list = document.getElementById("panelOrderList") as HTMLUListElement;
+    newOrder = [...list.children].map(el => el.textContent || '');
+  }
+  localStorage.setItem('display-panel-order', JSON.stringify(newOrder));
+  newOrder.forEach((v, idx) => {
+    var item = document.getElementById(v);
+    if(item){
+      item.style.order = `${idx}`;
+    }
+  });
+}
+
 // Todo:
 // Check if I can have ipc renderer hooks in both directions maybe (seems yes - that will be helpful for settings etc.)
 // Start hooking up quest/npc info sections (done the backing, need to do the UI side)
@@ -891,7 +983,11 @@ oneway persist by element id in import/export?
 
 Grave of the colossi gets cropped off...
 
-TODO 0.6.1 rando parity
-hit autoloading from docs
-boss autotracking from docs
+TODO 0.6.5
+change hints to be:
+<area, location, item>
+load check types from treasures.csv
+load enemy data + hints from docs
+autoadd hints
+allow hints to be reordered/sorted
 */

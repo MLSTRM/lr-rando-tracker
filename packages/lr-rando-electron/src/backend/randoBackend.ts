@@ -168,7 +168,23 @@ export class RandoBackend {
     }
 
     public checkKeyItemCount(name: string): number {
-        return this.stateValid ? this.oldState.keyItems?.get(name) ?? 0 : 0;
+        if(!this.stateValid){
+            return 0;
+        }
+        var base = this.oldState.keyItems?.get(name) ?? 0;
+        if(name === 'key_d_sekiban'){
+            const stateCheck = {
+                mainQuestBytes: this.oldState.mainQuestBytes!
+            };
+            if(QuestPrerequisites['dunes_third_tablet'].check(stateCheck)){
+                return 3;
+            } else if (QuestPrerequisites['dunes_second_tablet'].check(stateCheck)){
+                return 2 + base;
+            } else if (QuestPrerequisites['dunes_first_tablet'].check(stateCheck)){
+                return 1 + base;
+            }
+        }
+        return base;
     }
 
     public checkEPAbility(name: string): boolean {
@@ -318,7 +334,7 @@ export class RandoBackend {
     }
 
     public setSettingsHalfCanvas(value?: boolean): void {
-        console.log(`Setting half canvas to: ${value}`);
+        // console.log(`Setting half canvas to: ${value}`);
         this.settings.halfCanvas = !!value;
     }
 }

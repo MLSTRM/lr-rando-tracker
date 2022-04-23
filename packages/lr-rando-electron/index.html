@@ -32,12 +32,28 @@
       font-family: "Xoireqe";
     }
 
-    .lightBody .row {
+    .lightBody .row,
+    .lightBody .overlay {
       background-color: #9fb3bd;
     }
 
-    .darkBody .row {
+    .darkBody .row,
+    .darkBody .overlay {
       background-color: #3f636d;
+    }
+
+    .overlay {
+      border-width: 2px;
+      border-color: #777777;
+      border-style: solid;
+      position: absolute;
+      margin-top: 5px;
+      margin-left: 5px;
+      margin-right: 5px;
+      max-height: calc(100% - 150px);
+      max-width: calc(100% - 30px);
+      z-index: 100;
+      overflow-y: scroll;
     }
 
     .row:after {
@@ -370,9 +386,10 @@
 <body id="mainBody" class="lightBody">
   <div>
     <div class="settings" style="width: 100%; height: 30px;">
+      <button id="showSettings" class="topButton" onclick="toggleSettingsPopup()" type="button">Settings</button>
       <button id="autoPollButton" class="topButton" onclick="beginPoll()" type="button">Start auto tracker</button>
       <button id="detatchButton" class="topButton autoTracker" onclick="detatchTracker()" type="button" disabled="true">Stop auto tracker</button>
-      &nbsp;
+      <!--&nbsp;
       <label for="bodyTheme">Body theme:</label>
       <select name="bodyTheme" id="bodyTheme" onchange="updateBodyTheme()">
         <option value="lightBody">Light (default)</option>
@@ -394,12 +411,69 @@
       <label>Seed: </label>
       <input id="seed"/>
       <button id="export" onclick="exportData()">Import/Export</button>
+      -->
+      &nbsp;
+      <label>Seed: </label>
+      <input id="seed"/>
     </div>
     <br/>
+    <div id="settingsFloat" hidden class="overlay">
+      <div style="margin: 30px;">
+        <button id="showSettings" onclick="toggleSettingsPopup()" type="button">Close</button>
+        <br/>
+        <br/>
+        <label for="bodyTheme">Body theme:</label>
+        <select name="bodyTheme" id="bodyTheme" onchange="updateBodyTheme()">
+          <option value="lightBody">Light (default)</option>
+          <option value="darkBody">Dark</option>
+        </select>
+        <br/>
+        <br/>
+        <label for="theme">Grid theme:</label>
+        <select name="theme" id="theme" onchange="updateTheme()">
+          <option value="checkerboard">Checkerboard (default)</option>
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+        </select>
+        <br/>
+        <br/>
+        <label for="columnWidth">Column Width:</label>
+        <select name="columnWidth" id="columnWidth" onchange="updateColumnWidth()">
+          <option value=100>Wide (default)</option>
+          <option value=65>Narrow</option>
+        </select>
+        <br/>
+        <br/>
+        <label for="halfCanvasRequirements">Half canvas of prayers requirements: </label>
+        <input type="checkbox" id="halfCanvasRequirements" name="halfCanvasRequirements" value="halfCanvasRequirements" onchange="updateCanvasHalf()"/>
+        <br/>
+        <br/>
+        <div id="panelOrder" class="noSelect">
+          Panel Order:
+          <ul id="panelOrderList">
+            <!--Generate pane list and order according to attribute-->
+            <li draggable="true" ondragover="dragOver(event)" ondragstart="dragStart(event)">Test1</li>
+            <li draggable="true" ondragover="dragOver(event)" ondragstart="dragStart(event)">Test2</li>
+            <li draggable="true" ondragover="dragOver(event)" ondragstart="dragStart(event)">Test3</li>
+          </ul>
+          <button id="setPanelOrder" onclick="setPanelOrder()">Save order</button>
+        </div>
+        <br/>
+        <!--<button id="export" onclick="exportData()">Import/Export</button>-->
+        <div id="exportArea" class="noSelect">
+            Exported data:
+            </br>
+            <textarea id="exportAreaContent" cols="25" rows="12" style="resize: none"></textarea>
+            <br>
+            <button id="cancelexport" onclick="hideImportData()">Cancel</button>
+            <button id="importexport" onclick="importData()">Import</button>
+        </div>
+      </div>
+    </div>
     <div class="mainHolder" style="width: 100%;">
 
       <div class="mainFlex">
-        <div id="pretty_tracker_region" class="noSelect columnGrid flexRegion">
+        <div id="pretty_tracker_region" class="noSelect columnGrid flexRegion" style="order: 0">
           <div class="row column100" id="pretty_region_top">
             <div class="column50" style="height: 40px;">
               <span id="auto-region"></span><br/><span id="auto-zone"></span>
@@ -478,8 +552,8 @@
               <div class="clickRange clickToggle" data-sideq="Tool of the Trade" data-min="0" data-max="50" id="appraised-parent">
                 <img src="resources/images/icon-unappraised.png" alt="Unapp:" class="iconmono"><span id="auto-unappraised" class="value">0</span>
               </div>
-              <div class="centerImage clickToggle">
-                <img src="resources/images/boss-eres.png" alt="Ereshkigal" width="100" class="boss"/>
+              <div class="clickToggle" data-key="key_w_yasai_t"> <!--MQ3-2 or Saving an Angel-->
+                <img src="resources/images/icon-greens.png" alt="Main Greens" class="iconmono" />
               </div>
             </div>
 
@@ -490,24 +564,18 @@
               <div class="clickToggle" data-key="key_y_id">
                 <img src="resources/images/idcard.png" alt="ID Card" title="ID Card" class="iconmono" />
               </div>
-              <div class="clickToggle" data-key="key_y_shiji">
-                <img src="resources/images/note.png" alt="Boss's Note" title="Boss's Note" class="iconmono"/>
-              </div>
               <div class="clickRange" data-min="0" data-max="10" data-key="key_y_fire">
                 <img src="resources/images/firework.png" alt="Fireworks" title="Fireworks" class="iconmono"/> <span class="value">0</span>
               </div>
               <div class="centerImage clickToggle" data-garb="Midnight Mauve" data-oneway="true">
                 <img src="resources/images/icon-garb.png" alt="Midnight Mauve" title="Midnight Mauve" class="iconmono"/>
               </div>
-            </div>
-
-            <div class="cell20 cell20s">
               <div class="centerImage clickToggle" data-key="key_y_serap">
                 <img src="resources/images/icon-pendant.png" alt="Serah's Pendant" title="Serah's Pendant" class="iconmono"/>
               </div>
-              <div class="clickToggle" data-key="key_w_yasai_t"> <!--MQ3-2 or Saving an Angel-->
-                <img src="resources/images/icon-greens.png" alt="Main Greens" class="iconmono" />
-              </div>
+            </div>
+
+            <div class="cell20 cell20s">
               <div class="clickRange" data-min="0" data-key="key_d_key">
                 <img src="resources/images/pilgrims-crux.png" alt="Pilgrim's Crux:" class="icon" style="height: 35px"> <span class="value">0</span>
               </div>
@@ -516,6 +584,12 @@
               </div>
               <div class="clickRange" data-min="0" data-max="3" data-key="key_d_wing,key_d_top,key_d_base" data-oneway="true">
                 <img src="resources/images/saints-crux.png" alt="Saint's Crux" title="Saint's Crux Pieces" class="icon" style="height: 35px"/> <span class="value">0</span>
+              </div>
+              <div class="centerImage clickToggle">
+                <img src="resources/images/boss-eres.png" alt="Ereshkigal" width="100" class="boss"/>
+              </div>
+              <div class="centerImage clickToggle">
+                <img src="resources/images/boss-aero.png" alt="Aeronite" width="100" class="boss"/>
               </div>
             </div>
 
@@ -591,7 +665,7 @@
             </div>
           </div>
         </div>
-        <div id="keyInventory" class="autoTracker flexRegion">
+        <div id="keyInventory" class="flexRegion" style="order: 1">
           <div class="row column50">
             Key Items:
             <br/>
@@ -601,7 +675,7 @@
             </div>
           </div>
         </div>
-        <div id="inventory" class="autoTracker flexRegion">
+        <div id="inventory" class="flexRegion" style="order: 2">
           <div class="row column50">
             Items: 
             <br/>
@@ -611,7 +685,7 @@
             </div>
           </div>
         </div>
-        <div id="sideQuests" class="flexRegion">
+        <div id="sideQuests" class="flexRegion" style="order: 3">
           <div class="row column160">
             Side quests & Canvas:&nbsp;<span style="float: right">Search:&nbsp;<input id="sideNameSearch" type="search" onkeyup="updateSideQuestRegion()" onsearch="updateSideQuestRegion()"/></span>
             <br style="clear: both"/>
@@ -664,14 +738,14 @@
             </div>
           </div>
         </div>
-        <div id="notesReference" class="flexRegion noSelect">
+        <div id="notesReference" class="flexRegion noSelect" style="order: 4">
           <div class="row column80 columnFull">
             Notes:
             </br>
             <textarea id="notes" cols="29" rows="35" style="resize: none"></textarea>
           </div>
         </div>
-        <div id="hintsReference" class="flexRegion noSelect">
+        <div id="hintsReference" class="flexRegion noSelect" style="order: 5">
           <div class="row column120">
             Hints
             <br/>
@@ -710,7 +784,7 @@
             </div>
           </div>
         </div>
-        <div id="hintNotesReference" class="flexRegion noSelect">
+        <div id="hintNotesReference" class="flexRegion noSelect" style="order: 6">
           <div class="row column120 columnHalf">
             Quest hint notes:
             <table style="table-layout: fixed; width: 100%;" id="questHintTable">
@@ -731,7 +805,7 @@
             </table>
           </div>
         </div>
-        <div id="shopNotesArea" class="flexRegion noSelect">
+        <div id="shopNotesArea" class="flexRegion noSelect" style="order: 7">
           <div class="row column120 columnHalf noscroll">
             Shop notes:<br/>
             <div class="row column60" style="height: inherit;">
@@ -748,15 +822,6 @@
             </div>
             <div id="shopBody" class="row column60">
             </div>
-          </div>
-        </div>
-        <div id="exportArea" class="flexRegion noSelect" hidden>
-          <div class="row column80 columnHalf">
-            Exported data:
-            </br>
-            <textarea id="exportAreaContent" cols="25" rows="12" style="resize: none"></textarea>
-            <br>
-            <button id="import" onclick="importData()">Import</button>
           </div>
         </div>
       </div>

@@ -142,7 +142,7 @@ export const DeadDunesSideQuests = {
             "skeleton_omega": true
         },
         prerequisiteOther: [
-            "keyItem_crux_body"
+            "dunes_first_tablet"
         ],
         prerequisiteQuests: [
             "Dead_4_3"
