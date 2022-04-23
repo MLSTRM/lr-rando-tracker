@@ -33,12 +33,14 @@
     }
 
     .lightBody .row,
-    .lightBody .overlay {
+    .lightBody .overlay,
+    .lightBody .protection {
       background-color: #9fb3bd;
     }
 
     .darkBody .row,
-    .darkBody .overlay {
+    .darkBody .overlay,
+    .darkBody .protection {
       background-color: #3f636d;
     }
 
@@ -417,6 +419,8 @@
       <input id="seed"/>
     </div>
     <br/>
+    <div id="protection" class="protection" style="position: fixed; top: 0; left: 0; opacity: 40%; width: 100%; height: 100%; z-index: 99;" hidden>
+    </div>
     <div id="settingsFloat" hidden class="overlay">
       <div style="margin: 30px;">
         <button id="showSettings" onclick="toggleSettingsPopup()" type="button">Close</button>

@@ -675,6 +675,9 @@ function addQuestHintRow(rowData?: string[]){
   const table = document.getElementById('questHintTable') as HTMLTableElement;
   if(!table){return;}
   const newRow = table.insertRow(table.rows.length-1);
+  newRow.draggable = true;
+  newRow.addEventListener('dragover', ev => dragOver(ev));
+  newRow.addEventListener('dragstart', ev => dragStart(ev));
   const newCell = newRow.insertCell(0);
   newCell.innerHTML = '-';
   newCell.onclick = removeQuestHintRow(newCell);
@@ -786,6 +789,7 @@ function toggleSettingsPopup(){
     exportData();
     setupPanelOrderList();
   }
+  document.getElementById('protection')!.hidden = elem.hidden;
 }
 
 function hideImportData(){
@@ -904,7 +908,10 @@ function isBefore(el1: Element, el2: Element) {
 
 function setupPanelOrderList(){
   var list = document.getElementById("panelOrderList") as HTMLUListElement;
-  var flexElements = ([...document.getElementsByClassName("flexRegion")] as Array<HTMLElement>).map(el => ({id: el.id, order: Number(el.style.order)}))
+  var flexElements = ([...document.getElementsByClassName("flexRegion")] as Array<HTMLElement>).map(el => {
+    var id = el.hidden ? `(${el.id})` : el.id;
+    return {id, order: Number(el.style.order)}
+  });
   flexElements.sort((a,b) => a.order - b.order);
   var newList = [];
   for(const el of flexElements){
@@ -912,10 +919,21 @@ function setupPanelOrderList(){
     listItem.draggable = true;
     listItem.addEventListener('dragover', ev => dragOver(ev));
     listItem.addEventListener('dragstart', ev => dragStart(ev));
+    listItem.addEventListener('click', ev => toggleBrackets(ev));
     listItem.textContent = el.id;
     newList.push(listItem);
   }
   list.replaceChildren(...newList);
+}
+
+function toggleBrackets(ev: Event){
+  const el = ev.target as Element;
+  const old = el.textContent;
+  if(old?.match(/\([^\(\)]*\)/)){
+    el.textContent = old.substring(1,old.length - 1);
+  } else {
+    el.textContent = `(${old})`;
+  }
 }
 
 function setPanelOrder(initial?: boolean){
@@ -934,10 +952,15 @@ function setPanelOrder(initial?: boolean){
     newOrder = [...list.children].map(el => el.textContent || '');
   }
   localStorage.setItem('display-panel-order', JSON.stringify(newOrder));
-  newOrder.forEach((v, idx) => {
-    var item = document.getElementById(v);
+  newOrder.forEach((v: string, idx) => {
+    const hide = v.match(/\([^\(\)]*\)/);
+    const name = hide ? v.substring(1,v.length - 1) : v;
+    var item = document.getElementById(name);
     if(item){
       item.style.order = `${idx}`;
+      if(!!hide != item.hidden){
+        item.hidden = !!hide;
+      }
     }
   });
 }
@@ -990,4 +1013,7 @@ load check types from treasures.csv
 load enemy data + hints from docs
 autoadd hints
 allow hints to be reordered/sorted
+
+--
+allow panels to be hidden??
 */
