@@ -108,9 +108,7 @@ function getActiveBoxes(): Array<string|{id: string; value: string}> {
   const rangeElems = document.getElementById('pretty_tracker_region')!.getElementsByClassName('clickRange');
   for(var i = 0; i < rangeElems.length; i++){
     const elem = rangeElems[i];
-    if(!elem.classList.contains(inactive)){
-      activeElements.push({id: elem.id, value: elem.getElementsByClassName('value').item(0)?.textContent ?? ''});
-    }
+    activeElements.push({id: elem.id, value: elem.getElementsByClassName('value').item(0)?.textContent ?? ''});
   }
   return activeElements;
 }
@@ -124,7 +122,11 @@ function inflateActiveBoxes(ids: Array<string|{id: string; value: string}>){
     else {
       const {id: innerId, value: innerValue} = id;
       const elem = document.getElementById(innerId);
-      if(Number(innerValue) > 0){
+      if(!elem){
+        continue;
+      }
+      const threshold = elem.getAttribute('data-treshold') || 0;
+      if(Number(innerValue) > threshold){
         elem?.classList.remove(inactive);
       }
       const innerHolder = elem?.getElementsByClassName('value')?.item(0);
@@ -383,12 +385,12 @@ function beginPoll() {
       }, 2000);
       pollingObtainedChecks.push(interval);
     }
-    setInterval(updateMq5Panes, 2000);
-    setInterval(updateBossPanes, 2000);
-
-    //setInterval(updateCanvasRegion, 5000);
-    setInterval(updateSideQuestRegion, 5000);
   }
+  setInterval(updateMq5Panes, 2000);
+  setInterval(updateBossPanes, 2000);
+
+  //setInterval(updateCanvasRegion, 5000);
+  setInterval(updateSideQuestRegion, 5000);
 }
 
 //Push to backend?
@@ -636,6 +638,7 @@ async function updateMq5Panes(){
       currentState[mq5Key] = active;
     }
   }
+  // console.log(JSON.stringify(currentState));
   const {result, hints} = await ipcRenderer.invoke('randoMainQuest5BytesCheck', currentState);
   if(result){
     for(var i = 0; i<autoTrackElements.length; i++){
@@ -1135,4 +1138,5 @@ Grave of the colossi gets cropped off...
 
 v0.10.0 issues:
 persistence is kinda wacky on reload?
+wildlands "key" items still getting halved in cop. Need exclusion list on pickups.
 */
