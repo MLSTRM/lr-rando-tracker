@@ -47,10 +47,10 @@ export class HintBackend {
             return;
         }
         const treasureDataFile = join(this.randoDataLoc, 'treasures.csv');
-        processCsv(treasureDataFile, this.hintLoadFromRow);
+        processCsv(treasureDataFile, this.hintLoadFromRow.bind(this));
 
         const battleDataFile = join(this.randoDataLoc, 'battleDrops.csv');
-        processCsv(battleDataFile, this.hintLoadFromRow);
+        processCsv(battleDataFile, this.hintLoadFromRow.bind(this));
     }
 
     private hintLoadFromRow([id, location, name, type, condition, depth]: string[]) {

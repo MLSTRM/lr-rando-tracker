@@ -178,6 +178,10 @@ function hideAutotrackerElements(){
   for(var i = 0; i<trackerElements.length; i++){
     trackerElements[i].setAttribute('hidden', 'true');
   }
+  const antiTrackerElements = document.getElementsByClassName('antiAutoTracker');
+  for(var i = 0; i<antiTrackerElements.length; i++){
+    antiTrackerElements[i].removeAttribute('hidden');
+  }
 }
 
 function beginPoll() {
@@ -186,6 +190,10 @@ function beginPoll() {
   const trackerElements = document.getElementsByClassName('autoTracker');
   for(var i = 0; i<trackerElements.length; i++){
     trackerElements[i].removeAttribute('hidden');
+  }
+  const antiTrackerElements = document.getElementsByClassName('antiAutoTracker');
+  for(var i = 0; i<antiTrackerElements.length; i++){
+    antiTrackerElements[i].setAttribute('hidden', 'true');
   }
   let event = 'randoFull';
   pollInterval = setInterval(() => ipcRenderer.invoke(event).then((result: Partial<RandoMemoryState>) => {
@@ -1058,8 +1066,10 @@ async function updateSeedDataLocation(){
 
 async function loadHints(){
   const seed = await ipcRenderer.invoke('hint-loadHints');
-  (document.getElementById('seed') as HTMLInputElement).value = seed;
   //Post setup of hints auto populate seed value
+  const seedInput = document.getElementById('seed') as HTMLInputElement;
+  seedInput.value = seed;
+  seedInput.disabled = true;
 }
 
 function debugHints(){
