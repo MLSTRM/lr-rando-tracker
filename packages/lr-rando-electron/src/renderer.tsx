@@ -827,7 +827,7 @@ function exportData(){
     seed: (document.getElementById('seed') as HTMLInputElement)?.value,
     notes: (document.getElementById('notes') as HTMLTextAreaElement)?.value,
     hintNumbers: deflateHintGrid(document.getElementById('hintNumberGrid')!),
-    //hintList: deflateTable(document.getElementById('questHintTable') as HTMLTableElement),
+    hintList: deflateTable(document.getElementById('questHintTable') as HTMLTableElement),
     shopContents: [...document.getElementById('shopBody')?.children ?? []].map(c => ({id: c.id, body: deflateShopHints(c.id)})),
     active: getActiveBoxes()
   };
@@ -857,7 +857,7 @@ function importData(){
     (document.getElementById('seed') as HTMLInputElement).value = parsed.seed;
     (document.getElementById('notes') as HTMLTextAreaElement).value = parsed.notes;
     inflateHintGrid(parsed.hintNumbers);
-    //inflateHintTable(parsed.hintList);
+    inflateHintTable(parsed.hintList);
     (parsed.shopContents as {id: string, body: string[]}[]).forEach(({id, body}) => inflateShopHints(id, body));
     inflateActiveBoxes(parsed.active);
   } catch (e){
@@ -1083,4 +1083,9 @@ Quest issues:
 Faster than lightning in progress still available
 
 Grave of the colossi gets cropped off...
+
+v0.10.0 issues:
+mq5 flags needed for hints....
+persistence is kinda wacky on reload.
+Block import if autotracker is running?
 */

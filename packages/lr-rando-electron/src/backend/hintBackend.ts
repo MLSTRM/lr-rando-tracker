@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "fs";
 import { join } from 'path';
-import { getLineBreakChar, parseCsvRow } from "./fileUtil";
+import { getLineBreakChar, parseCsvRow, processCsv } from "./fileUtil";
 import * as cheerio from "cheerio";
 
 export class HintBackend {
@@ -47,13 +47,18 @@ export class HintBackend {
             return;
         }
         const treasureDataFile = join(this.randoDataLoc, 'treasures.csv');
-        const treasureData = readFileSync(treasureDataFile).toString('utf-8');
-        const lineBreak = getLineBreakChar(treasureData);
-        const treasureRows = treasureData.split(lineBreak);
-        for(const row of treasureRows){
-            const [id, location, name, type, condition, depth] = parseCsvRow(row);
-            this.HintLocationMapping.set(name, location);
+        processCsv(treasureDataFile, this.hintLoadFromRow);
+
+        const battleDataFile = join(this.randoDataLoc, 'battleDrops.csv');
+        processCsv(battleDataFile, this.hintLoadFromRow);
+    }
+
+    private hintLoadFromRow([id, location, name, type, condition, depth]: string[]) {
+        if(id === 'ID' && location === 'Location'){
+            //Assume header row
+            return;
         }
+        this.HintLocationMapping.set(name, location);
     }
 
     public parseSeedData(): false | string {

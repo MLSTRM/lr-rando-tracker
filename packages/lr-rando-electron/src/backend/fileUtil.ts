@@ -1,3 +1,5 @@
+import {readFileSync} from 'fs';
+
 export function getLineBreakChar(data: string) {
     const indexOfLF = data.indexOf('\n', 1)  // No need to check first-character
     
@@ -36,4 +38,14 @@ export function parseCsvRow(input: string): string[] {
         }
     }
     return chunks;
+}
+
+export function processCsv(pathToFile: string, processor: (row: string[]) => void): void {
+    const fileData = readFileSync(pathToFile).toString('utf-8');
+    const lineBreak = getLineBreakChar(fileData);
+    const fileRows = fileData.split(lineBreak);
+    for(const row of fileRows){
+        const fields = parseCsvRow(row);
+        processor(fields);
+    }
 }
