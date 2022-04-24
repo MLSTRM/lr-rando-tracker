@@ -102,6 +102,30 @@ ipcMain.handle('randoMainQuestCheck', async (event, arg: {mainQuest: string, val
   return {result: newState, hints: hintArr};
 });
 
+ipcMain.handle('randoMainQuest5BytesCheck', async (event, arg: {chick: boolean, canvas: boolean, soul: boolean, slaughterhouse: boolean, sandstorm: boolean}) => {
+  const newState = backend.checkMainQuest5Bytes();
+  if(!newState){
+    return {result: undefined, hints: []};
+  }
+  const hintArr: HintLocation[] = [];
+  if(!arg.chick && newState.chick){
+    hintArr.push(...hints.resolveHintsForQuest('5-2'));
+  }
+  if(!arg.canvas && newState.canvas){
+    hintArr.push(...hints.resolveHintsForQuest('5-3'));
+  }
+  if(!arg.soul && newState.soul){
+    hintArr.push(...hints.resolveHintsForQuest('5-4'));
+  }
+  if(!arg.slaughterhouse && newState.slaughterhouse){
+    hintArr.push(...hints.resolveHintsForQuest('5-5'));
+  }
+  if(!arg.sandstorm && newState.sandstorm){
+    hintArr.push(...hints.resolveHintsForQuest('5-6'));
+  }
+  return {result: newState, hints: hintArr};
+});
+
 ipcMain.handle('sideQuestList', async (event, area) => {
   return backend.getSideQuestList(area);
 });

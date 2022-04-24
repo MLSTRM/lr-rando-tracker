@@ -1,6 +1,7 @@
 import { attachAndVerify, LrMemoryReader, RandoMemoryState, scrapeRandoState } from "lr-rando-autotracker";
 import { extractZoneInfo, MainQuestPosition, prettyPrintEpAbility, prettyPrintItem, prettyPrintKeyItem,
-    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName, QuestRequirement, getSideQuestInfo, QuestProgressCheck, QuestState, resolveMainQuestProgress, btscBossMap } from "lr-rando-core";
+    getCanvasNamesList, getCanvasQuestInfo, getSideQuestNamesList, SideQuestProgress, areaIndexStringToAreaName,
+    QuestRequirement, getSideQuestInfo, QuestProgressCheck, QuestState, resolveMainQuestProgress, btscBossMap, MainQuest5Bytes } from "lr-rando-core";
 import _ from 'lodash';
 import { QuestInfo, QuestPrerequisites, EnrichedQuestRequirement, EnrichedQuestInfo, resolveHighestProgress } from "lr-rando-core";
 
@@ -195,8 +196,20 @@ export class RandoBackend {
         if(main === 'prologue'){
             return {key: 0, value: this.stateValid ? ((this.oldState.mainQuestBytes?.yusnaan || 0) >= 0x5A ? 1 : 0) : 0}
         }
-        return {key: getKeyFromArea(main), value: this.stateValid ? this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0 : 0};
+        const key = getKeyFromArea(main);
+        if(!this.stateValid){
+            return {key, value: 0};
+        }
+        const value = this.oldState.mainQuestProgress?.[main as unknown as keyof MainQuestPosition] ?? 0;
+        if(typeof value !== 'number'){
+            return {key, value: 0};
+        }
+        return {key, value};
     }
+
+    public checkMainQuest5Bytes(): MainQuest5Bytes | undefined {
+        return this.oldState.mainQuestProgress?.sazhChunks;
+    } 
 
     public getSideQuestList(area?: number): Map<string, SideQuestProgress | undefined> {
         const keys = getSideQuestNamesList(area);

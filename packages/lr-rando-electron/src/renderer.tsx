@@ -383,9 +383,11 @@ function beginPoll() {
       }, 2000);
       pollingObtainedChecks.push(interval);
     }
+    setInterval(updateMq5Panes, 2000);
+    setInterval(updateBossPanes, 2000);
+
     //setInterval(updateCanvasRegion, 5000);
     setInterval(updateSideQuestRegion, 5000);
-    setInterval(updateBossPanes, 5000);
   }
 }
 
@@ -614,6 +616,43 @@ async function updateBossPanes(){
       }
     }
     continue;
+  }
+}
+
+async function updateMq5Panes(){
+  const autoTrackElements = document.getElementsByClassName('mq5SubBox');
+  const currentState: any = {
+    chick: false,
+    canvas: false,
+    soul: false,
+    slaughterhouse: false,
+    sandstorm: false
+  };
+  for(var i = 0; i<autoTrackElements.length; i++){
+    const elem = autoTrackElements[i];
+    const mq5Key = elem.getAttribute('data-mq5');
+    if(mq5Key){
+      const active = !elem.classList.contains(inactive);
+      currentState[mq5Key] = active;
+    }
+  }
+  const {result, hints} = await ipcRenderer.invoke('randoMainQuest5BytesCheck', currentState);
+  if(result){
+    for(var i = 0; i<autoTrackElements.length; i++){
+      const elem = autoTrackElements[i];
+      const mq5Key = elem.getAttribute('data-mq5');
+      if(mq5Key){
+        const newState = result[mq5Key];
+        if(newState && elem.classList.contains(inactive)){
+          elem.classList.remove(inactive);
+        }
+      }
+    }
+    if(hints.length > 0){
+      for(const hint of hints){
+        addQuestHintRow(['', hint.area, hint.location, hint.item]);
+      }
+    }
   }
 }
 
@@ -1095,7 +1134,5 @@ Faster than lightning in progress still available
 Grave of the colossi gets cropped off...
 
 v0.10.0 issues:
-mq5 flags needed for hints....
-persistence is kinda wacky on reload.
-Block import if autotracker is running?
+persistence is kinda wacky on reload?
 */

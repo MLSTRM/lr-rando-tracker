@@ -3,17 +3,19 @@ import { LrMemoryReader } from "./memoryReader";
 import { resolveDateTime } from "./datetime";
 import { prettyPrintEpAbility, extractZoneInfo, getSideQuestProgress, inflateCanvasBytes, Areas, btscBossMap } from 'lr-rando-core';
 import { stripNullChars } from ".";
+import { debug } from "console";
 
 //CONFIG
 const reader = new LrMemoryReader(false);
 const showItems = false;
 const showGarbs = false;
-const showSchemaInfo = true;
+const showSchemaInfo = false;
 const showEpAbilitiesEtc = false;
 const showSideQuests = false;
 const showCanvasQuests = false;
 const loop = false;
-const showBtscores = true;
+const showBtscores = false;
+const debugSazh = true;
 
 //Info
 const someStatsBaseLocation = 0x4CF79D8; //Initial pointer into interesting memory block
@@ -30,6 +32,7 @@ const sideQuestOffset = 0xAF10;
 const canvasOffsetMaybe = 0xC0F0;
 const charaCounterBaseLocation = 0x20D252C;
 const btscoreOffset = 0x1EF34;
+const MQ5LibraOffset = 0x21476;
 
 const epAbilitiesMaybe = 0x17B50;
 
@@ -149,14 +152,16 @@ const interval = setInterval(async () => {
             }
 
             if(showSideQuests){
+                console.log(`Side quests start: ${(pSomeStatsBase+sideQuestOffset).toString(16)}`);
                 for(var i = 0; i<99; i++){
                     const questProgress = reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * i), SHORT, true);
                     if(questProgress > 0){
-                        console.log(`Side quest ${i} (${questProgress}) - ${JSON.stringify(getSideQuestProgress(undefined, i, questProgress))}`);
+                        console.log(`Side quest ${i} (${questProgress}) - ${JSON.stringify(getSideQuestProgress(undefined, i, [questProgress]))}`);
                     }
                 }
             }
 
+            console.log(`Canvas location: ${(pSomeStatsBase + canvasOffsetMaybe).toString(16)}`);
             if(showCanvasQuests){
                 const canvasAcceptBuffer = reader.readBuffer(pSomeStatsBase + canvasOffsetMaybe, 40, true);
                 const canvasAcceptArr = Uint8Array.from(canvasAcceptBuffer);
@@ -207,6 +212,13 @@ const interval = setInterval(async () => {
                     offset++;
                 }
                 console.log(`Resolved ${offset} encounters`);
+            }
+
+            if(debugSazh){
+                for(var i = 0; i<6; i++){
+                    const MQ5LibraOffsetChunk = reader.readMemoryAddress(pSomeStatsBase+MQ5LibraOffset+i, BYTE, true);
+                    console.log(`Sazh bytes maybe ${i}: complete: ${(MQ5LibraOffsetChunk & 0x40) !== 0} - ${MQ5LibraOffsetChunk.toString(16)}`);
+                }
             }
 
             if(!loop){

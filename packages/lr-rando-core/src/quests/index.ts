@@ -113,7 +113,10 @@ export interface MainQuestProgressValues {
     wildlands1: number; //This is the one with the HIGHER memory address
     wildlands2: number;
     deaddunes: number;
-    sazh: number[];
+    sazh: {
+        sideQuest: number[];
+        mainQuestInfo: number[];
+    };
 }
 
 export interface MainQuestPosition {
@@ -122,6 +125,15 @@ export interface MainQuestPosition {
     wildlands: number;
     deaddunes: number;
     sazh: number;
+    sazhChunks: MainQuest5Bytes;
+}
+
+export interface MainQuest5Bytes {
+    chick: boolean;
+    canvas: boolean;
+    soul: boolean;
+    slaughterhouse: boolean;
+    sandstorm: boolean;
 }
 
 export function resolveMainQuestProgress(input: MainQuestProgressValues): MainQuestPosition {
@@ -129,13 +141,20 @@ export function resolveMainQuestProgress(input: MainQuestProgressValues): MainQu
     const {num: yusnaan} = processValueBoundaries(YusMainQuestCompletionValues, input.yusnaan);
     const {num: wildlands} = processValueBoundaries(WildMainQuestCompletionValues, input.wildlands1, input.wildlands2);
     const {num: deaddunes} = processValueBoundaries(DeadMainQuestCompletionValues, input.deaddunes);
-    const sazh = getSideQuestProgress(Areas.GLOBAL, 34, input.sazh).status === 'Complete' ? 1 : 0;
+    const sazh = getSideQuestProgress(Areas.GLOBAL, 34, input.sazh.sideQuest).status === 'Complete' ? 1 : 0;
     return {
         luxerion,
         yusnaan,
         wildlands,
         deaddunes,
-        sazh
+        sazh,
+        sazhChunks: {
+            chick: (input.sazh.mainQuestInfo[1] & 0x40) !== 0,
+            canvas: (input.sazh.mainQuestInfo[2] & 0x40) !== 0,
+            soul: (input.sazh.mainQuestInfo[3] & 0x40) !== 0,
+            slaughterhouse: (input.sazh.mainQuestInfo[4] & 0x40) !== 0,
+            sandstorm: (input.sazh.mainQuestInfo[5] & 0x40) !== 0,
+        }
     };
 }
 

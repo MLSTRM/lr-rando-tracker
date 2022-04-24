@@ -1,4 +1,4 @@
-import { Areas, getSideQuestProgress, inflateCanvasBytes, resolveMainQuestProgress, SideQuestProgress } from "lr-rando-core";
+import { Areas, getSideQuestProgress, inflateCanvasBytes, SideQuestProgress } from "lr-rando-core";
 import { BYTE, DWORD, INT, INT64, SHORT } from "./model";
 import { LrMemoryReader, RandoMemoryState, resolveDateTime } from ".";
 
@@ -31,6 +31,7 @@ const chocoboOffset = 0x1A48;
 const sideQuestOffset = 0xAF10;
 const canvasOffsetMaybe = 0xC0F0;
 const charaCounterBaseLocation = 0x20D252C;
+const mq5LibraOffset = 0x21476;
 
 const epAbilitiesMaybe = 0x17B50;
 const btscoreOffset = 0x1EF34;
@@ -94,12 +95,24 @@ export function scrapeRandoState(reader: LrMemoryReader): RandoMemoryState {
             wildlands1: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0x94, SHORT, true),
             wildlands2: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0x8C, SHORT, true),
             deaddunes: reader.readMemoryAddress(pSomeStatsBase + mapOffset + 0xA0, SHORT, true),
-            sazh: [
-                reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34), SHORT, true),
-                reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34) + 2, SHORT, true),
-                reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34) + 4, SHORT, true),
-                reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34) + 6, SHORT, true)
-            ]
+            sazh: {
+                sideQuest: [
+                    //Entry in the side quest list
+                    reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34), SHORT, true),
+                    reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34) + 2, SHORT, true),
+                    reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34) + 4, SHORT, true),
+                    reader.readMemoryAddress(pSomeStatsBase + sideQuestOffset + (0x8 * 34) + 6, SHORT, true)
+                ],
+                mainQuestInfo: [
+                    //5-1 -> 5-6 in main quest info bytes (0x40 = complete, lower bytes = pages)
+                    reader.readMemoryAddress(pSomeStatsBase + mq5LibraOffset, BYTE, true),
+                    reader.readMemoryAddress(pSomeStatsBase + mq5LibraOffset + 1, BYTE, true),
+                    reader.readMemoryAddress(pSomeStatsBase + mq5LibraOffset + 2, BYTE, true),
+                    reader.readMemoryAddress(pSomeStatsBase + mq5LibraOffset + 3, BYTE, true),
+                    reader.readMemoryAddress(pSomeStatsBase + mq5LibraOffset + 4, BYTE, true),
+                    reader.readMemoryAddress(pSomeStatsBase + mq5LibraOffset + 5, BYTE, true),
+                ]
+            }
         },
         sideQuestProgress: extractSideQuestProgress(reader, pSomeStatsBase + sideQuestOffset),
         canvasOfPrayers: {
