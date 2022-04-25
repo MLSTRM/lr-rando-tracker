@@ -1137,6 +1137,15 @@ Faster than lightning in progress still available
 Grave of the colossi gets cropped off...
 
 v0.10.0 issues:
-persistence is kinda wacky on reload?
-wildlands "key" items still getting halved in cop. Need exclusion list on pickups.
+persistence is kinda wacky on reload? is it though - probably fixed now
+
+rando v0.6.6 parity
+change hint scraping to be based on table id
+add libra note scraping + loading
+change hint numbers to -1 by default
+
+v0.11.0 ideas
+Allow panes to be resized
+Improve sorting visibility on hints
+
 */
