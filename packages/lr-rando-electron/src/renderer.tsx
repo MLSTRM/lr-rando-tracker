@@ -101,6 +101,10 @@ function getActiveBoxes(): Array<string|{id: string; value: string}> {
   const toggleElems = document.getElementById('pretty_tracker_region')!.getElementsByClassName('clickToggle');
   for(var i = 0; i < toggleElems.length; i++){
     const elem = toggleElems[i];
+    if(elem.id.includes('parent')){
+      //skip seed and unappraised
+      continue;
+    }
     if(!elem.classList.contains(inactive)){
       activeElements.push(elem.id);
     }
@@ -124,10 +128,6 @@ function inflateActiveBoxes(ids: Array<string|{id: string; value: string}>){
       const elem = document.getElementById(innerId);
       if(!elem){
         continue;
-      }
-      const threshold = elem.getAttribute('data-treshold') || 0;
-      if(Number(innerValue) > threshold){
-        elem?.classList.remove(inactive);
       }
       const innerHolder = elem?.getElementsByClassName('value')?.item(0);
       if(innerHolder){
@@ -284,8 +284,10 @@ function beginPoll() {
       const interval = setInterval(() => {
         ipcRenderer.invoke('randoKeyItemCheck', ...itemName.split(',')).then((result: number) => {
           if(elem.classList.contains('clickToggle')){
-            if(result > 0 && elem.classList.contains(inactive)){
-              elem.classList.remove(inactive);
+            if(result > 0){
+              if(elem.classList.contains(inactive)){
+                elem.classList.remove(inactive);
+              }
               if(oneWay){
                 clearInterval(interval);
               }
@@ -294,22 +296,22 @@ function beginPoll() {
             const valueSpan = elem.getElementsByClassName('value').item(0);
             if(valueSpan){
               const currentValue = Number(valueSpan.textContent);
+              const threshold = Number(elem.getAttribute('data-threshold'));
               if(!oneWay || result > currentValue){
                 valueSpan.textContent = result.toString();
-                const threshold = Number(elem.getAttribute('data-threshold'));
-                if(threshold){
-                  if(result > threshold){
-                    elem.classList.remove(inactive);
-                    if(oneWay){
-                      clearInterval(interval);
-                    }
+              }
+              if(threshold){
+                if(result > threshold){
+                  elem.classList.remove(inactive);
+                  if(oneWay){
+                    clearInterval(interval);
                   }
+                }
+              } else {
+                if(result > 0){
+                  elem.classList.remove(inactive);
                 } else {
-                  if(result > 0){
-                    elem.classList.remove(inactive);
-                  } else {
-                    elem.classList.add(inactive);
-                  }
+                  elem.classList.add(inactive);
                 }
               }
             }
@@ -580,7 +582,7 @@ async function updateSideQuestRegion(){
   let canvasNameArray = [...canvasNames];
 
   if(localStorage.getItem('display-sideHideComplete') === 'true'){
-    sideNameArray = sideNameArray.filter(([,q]) => q?.status !== 'Complete');
+    sideNameArray = sideNameArray.filter(([,q]) => q?.status !== 'Complete' && q?.status !== 'Failed');
     canvasNameArray = canvasNameArray.filter(([,s]) => s !== 'Complete');
   }
 
@@ -1135,9 +1137,6 @@ Quest issues:
 Faster than lightning in progress still available
 
 Grave of the colossi gets cropped off...
-
-v0.10.0 issues:
-persistence is kinda wacky on reload? is it though - probably fixed now
 
 rando v0.6.6 parity
 change hint scraping to be based on table id

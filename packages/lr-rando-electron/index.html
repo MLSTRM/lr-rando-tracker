@@ -470,13 +470,21 @@
         <br/>
         <br/>
         <label for="randoDataLocation">Location of randomiser data files: </label>
+        <br/>
+        <span style="font-size: small">"[rando install location]/data". Should contain "treasures.csv".</span>
+        <br/>
         <input id="randoDataLocation" name="randoDataLocation"/>
         <button id="randoDataLocationSubmit" onclick="updateRandoDataLocation()">Save</button>
         <br/>
         <br/>
         <label for="seedDataLocation">Location of seed data files: </label>
+        <br/>
+        <span style="font-size: small">The location in which the seed spoiler log is unpacked into. Should contain "LRRando_*_Seed.json"</span>
+        <br/>
         <input id="seedDataLocation" name="seedDataLocation"/>
         <button id="seedDataLocationSubmit" onclick="updateSeedDataLocation()">Save</button>
+        <br/>
+        <br/>
         <div id="panelOrder" class="noSelect">
           Panel Order:
           <ul id="panelOrderList">
