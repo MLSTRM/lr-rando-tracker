@@ -360,6 +360,14 @@ export class RandoBackend {
         const base = this.oldState?.btsc || [];
         return base.map(b => btscBossMap[b]);
     }
+
+    public getLibraInventory(): string[] {
+        return [...this.oldState.keyItems?.keys() || []]
+            .filter(i => i.startsWith('libra_'))
+            .map(i => prettyPrintKeyItem(i))
+            .filter(i => i.known && i.name.endsWith('*'))
+            .map(i => i.name.slice(0,-1));
+    }
 }
 
 function statusToIndex(status?: string): QuestState {

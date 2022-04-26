@@ -91,7 +91,7 @@ export class HintBackend {
         const treasureData = readFileSync(join(this.seedDocsDir, 'treasures.html'));
         const treasureDom = cheerio.load(treasureData);
         const hints: Map<string, HintLocation[]> = new Map();
-        treasureDom('.tm-content table:last-child tr:not(:first-child)').each((idx, row) => {
+        treasureDom('#mainquesthints tr:not(:first-child)').each((idx, row) => {
             const cells = treasureDom(row).children();
             const quest = cells.eq(0).text();
             const hint = cells.eq(1).text();
@@ -126,13 +126,37 @@ export class HintBackend {
             hints.set(quest, hintArr);
         });
         if(hints.size === 0){
-            console.log('Unable to resolve hint data');
+            console.log('Unable to resolve hint data (failure in main quest hint parsing)');
+            return false;
+        }
+        const areaHints: Map<string, AreaHint> = new Map();
+        treasureDom('#libranotehints tr:not(:first-child)').each((idx, row) => {
+            const cells = treasureDom(row).children();
+            const note = cells.eq(0).text();
+            const hint = cells.eq(1).text();
+            const lineMatch = hint.match(/(.*?) has (\d+) important checks./);
+            if(!lineMatch){
+                return;
+            }
+            const [full, area, countStr, ...rest] = lineMatch;
+            const count = Number(countStr);
+            if(isNaN(count)){
+                return;
+            }
+            areaHints.set(note, {
+                area,
+                count
+            });
+        });
+        if(areaHints.size === 0){
+            console.log('Unable to resolve hint data (failure in libra parsing)');
             return false;
         }
         this.seedData = {
             id,
             hints,
-            battles
+            battles,
+            areaHints
         }
         console.log('Loaded and parsed hint data');
         return id;
@@ -146,6 +170,7 @@ export class HintBackend {
         console.log(this.seedData.id);
         console.log(JSON.stringify([...this.seedData.battles]));
         console.log(JSON.stringify([...this.seedData.hints]));
+        console.log(JSON.stringify([...this.seedData.areaHints]));
     }
 
     public mapBossNames(bosses: string[]): string[] {
@@ -166,6 +191,19 @@ export class HintBackend {
             area: mapArea(h.area)
         }));
     }
+
+    public resolveAreaHints(libraItems: string[]): AreaHint[] {
+        return libraItems.map(lib => this.seedData?.areaHints.get(lib))
+            .filter(exists)
+            .map(({area, count}) => ({
+                area: mapArea(area),
+                count
+            }));
+    }
+}
+
+function exists<T>(item: T | undefined): item is T {
+    return !!item;
 }
 
 function mapArea(area: string): string {
@@ -195,9 +233,16 @@ interface SeedData {
     id: string;
     hints: Map<string, HintLocation[]>;
     battles: Map<string, string>;
+    areaHints: Map<string, AreaHint>;
 }
+
 export interface HintLocation {
-    area: string,
-    location: string,
-    item: string
+    area: string;
+    location: string;
+    item: string;
+}
+
+export interface AreaHint {
+    area: string;
+    count: number;
 }

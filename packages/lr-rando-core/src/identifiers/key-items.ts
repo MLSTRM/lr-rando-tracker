@@ -149,7 +149,7 @@ export const keyItemNameMap = Object.freeze({
     'libra_m356': 'Chimera Notes',
     'libra_m357': 'Cyclops Notes',
     'libra_m370': 'Study of the Depths*',
-    'libra_m375': 'Study of Despair',
+    'libra_m375': 'Study of Despair*',
     'libra_m380': 'Prophecy of the Future*',
     'libra_m381': 'Prophecy of Aspiration*',
     'libra_m387': 'Holy Revelations*',

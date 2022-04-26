@@ -149,6 +149,20 @@ function decrementValueSpan(el: Element | undefined | null, parent: Element, thr
   } else {
     parent.classList.add(inactive);
   }
+  normaliseUndefValueMask(el);
+}
+
+function normaliseUndefValueMask(el: Element){
+  const elem = el.parentElement?.getElementsByClassName('undefValueMask')[0];
+  if(!elem){
+    return;
+  }
+  const num = Number(el.textContent);
+  if(isNaN(num) || num<0){
+    elem.textContent = '?';
+  } else {
+    elem.textContent = num.toString();
+  }
 }
 
 function incrementValueSpan(el: Element | undefined | null, parent: Element, threshold: number, max?: number){
@@ -163,6 +177,7 @@ function incrementValueSpan(el: Element | undefined | null, parent: Element, thr
   } else {
     parent.classList.add(inactive);
   }
+  normaliseUndefValueMask(el);
 }
 
 function toggleInactive(el: Element){
@@ -393,6 +408,8 @@ function beginPoll() {
 
   //setInterval(updateCanvasRegion, 5000);
   setInterval(updateSideQuestRegion, 5000);
+
+  setInterval(checkForAreaLibra, 5000);
 }
 
 //Push to backend?
@@ -1119,6 +1136,38 @@ async function loadHints(){
 function debugHints(){
   ipcRenderer.send('hint-debugHints');
 }
+
+async function checkForAreaLibra(){
+  const areaHintList = await ipcRenderer.invoke('hint-areaHintCheck');
+  const areaHints: Set<{area: string, count: number}> = new Set(areaHintList);
+  const hintNumberGrid = document.getElementById('hintNumberGrid');
+  const areaRanges = hintNumberGrid?.getElementsByClassName('clickRange') || [];
+  for(const range of areaRanges){
+    const areaAtt = range.getAttribute('data-areaHint');
+    if(!areaAtt){
+      continue;
+    }
+    const valueSpan = range.getElementsByClassName('value').item(0);
+    if(valueSpan){
+      const currentValue = Number(valueSpan.textContent);
+      for(const hint of areaHints){
+        if(hint.area === areaAtt){
+          const hintValue = hint.count;
+          if(currentValue !== hintValue){
+            valueSpan.textContent = hintValue.toString();
+            normaliseUndefValueMask(valueSpan);
+          }
+          // No need to check the rest of the hints, just go to the next area
+          areaHints.delete(hint);
+          break;
+        }
+      }
+    }
+  }
+  if(areaHints.size > 0){
+    console.log(`${areaHints.size} unmapped area hints.`);
+  }
+}
 // Hint engine end
 
 /*
@@ -1138,12 +1187,7 @@ Faster than lightning in progress still available
 
 Grave of the colossi gets cropped off...
 
-rando v0.6.6 parity
-change hint scraping to be based on table id
-add libra note scraping + loading
-change hint numbers to -1 by default
-
-v0.11.0 ideas
+v0.12.0 plan
 Allow panes to be resized
 Improve sorting visibility on hints
 

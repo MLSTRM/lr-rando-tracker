@@ -155,6 +155,11 @@ ipcMain.handle('bossCheck', async (event, _) => {
   return hints.mapBossNames(btscoreBosses);
 });
 
+ipcMain.handle('hint-areaHintCheck', async (event, _) => {
+  const libra = backend.getLibraInventory();
+  return hints.resolveAreaHints(libra);
+});
+
 ipcMain.handle('hint-randodataloc', async (event, loc) => {
   return hints.setupRandoDataLocation(loc);
 });
