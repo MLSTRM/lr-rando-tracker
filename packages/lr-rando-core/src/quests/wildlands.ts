@@ -189,6 +189,7 @@ export const WildlandsSideQuests = {
     "Omega Point": {
         name: "Omega Point",
         requirements: {
+            "key_w_data": true,
             "data_scans": 4
         },
         prerequisiteQuests: [

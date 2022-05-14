@@ -141,7 +141,7 @@ export const keyItemNameMap = Object.freeze({
     'libra_m325': 'Dryad Notes',
     'libra_m326': 'Arcangeli Notes',
     'libra_m327': 'Skeleton Notes',
-    'libra_m330': 'Desmond Notes',
+    'libra_m330': 'Desmond Notes*',
     'libra_m352': 'Zaltys Notes',
     'libra_m353': 'Zomok Notes',
     'libra_m354': 'Chocobo Eater Notes',

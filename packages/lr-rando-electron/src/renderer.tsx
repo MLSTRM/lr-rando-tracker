@@ -367,6 +367,17 @@ function beginPoll() {
                 elem.classList.remove(inactive);
               }
             }
+            if(result === currentValue){
+              const threshold = Number(elem.getAttribute('data-threshold'));
+              if(!isNaN(threshold)){
+                if(result > threshold){
+                  elem.classList.remove(inactive);
+                  clearInterval(interval);
+                }
+              } else {
+                elem.classList.remove(inactive);
+              }
+            }
             if(hints.length > 0){
               for(const hint of hints){
                 addQuestHintRow(['', hint.area, hint.location, hint.item]);
@@ -994,6 +1005,7 @@ function inflateHintGrid(input: string[][]): void {
       const el = divElements[idx];
       if(el instanceof HTMLDivElement && el.firstChild instanceof HTMLSpanElement){
         el.firstChild.textContent = value;
+        normaliseUndefValueMask(el.firstChild);
       }
     }
   });
