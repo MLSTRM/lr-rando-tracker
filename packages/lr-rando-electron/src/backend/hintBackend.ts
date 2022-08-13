@@ -91,7 +91,7 @@ export class HintBackend {
         const treasureData = readFileSync(join(this.seedDocsDir, 'treasures.html'));
         const treasureDom = cheerio.load(treasureData);
         const hints: Map<string, HintLocation[]> = new Map();
-        treasureDom('#mainquesthints tr:not(:first-child)').each((idx, row) => {
+        treasureDom('#mainquesthints tr').each((idx, row) => {
             const cells = treasureDom(row).children();
             const quest = cells.eq(0).text();
             const hint = cells.eq(1).text();
@@ -130,7 +130,7 @@ export class HintBackend {
             return false;
         }
         const areaHints: Map<string, AreaHint> = new Map();
-        treasureDom('#libranotehints tr:not(:first-child)').each((idx, row) => {
+        treasureDom('#libranotehints tr').each((idx, row) => {
             const cells = treasureDom(row).children();
             const note = cells.eq(0).text();
             const hint = cells.eq(1).text();
