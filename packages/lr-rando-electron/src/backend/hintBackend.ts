@@ -80,7 +80,7 @@ export class HintBackend {
         const battleData = readFileSync(join(this.seedDocsDir, 'battles.html'));
         const battleDom = cheerio.load(battleData);
         const battles: Map<string, string> = new Map();
-        battleDom('.tm-content table:first-child tr:not(:first-child)').each((idx, el) => {
+        battleDom('#bosses tr:not(:first-child)').each((idx, el) => {
             const children = battleDom(el).children();
             battles.set(children.eq(0).text(), children.eq(1).text());
         });
