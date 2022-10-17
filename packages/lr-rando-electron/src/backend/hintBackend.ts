@@ -3,6 +3,10 @@ import { join } from 'path';
 import { getLineBreakChar, parseCsvRow, processCsv } from "./fileUtil";
 import * as cheerio from "cheerio";
 
+const itemLocationFileName = 'item_locations.html';
+const enemyLocationFileName = 'encounters.html';
+const hintDataLocationFileName = 'hints.html';
+
 export class HintBackend {
     private randoDataLoc?: string;
     private seedDocsDir?: string;
@@ -31,7 +35,7 @@ export class HintBackend {
     public setupSeedDocsDir(loc: string): boolean {
         try {
             const files = readdirSync(loc);
-            if(files.includes('treasures.html') && files.includes('battles.html')){
+            if(files.includes(hintDataLocationFileName) && files.includes(enemyLocationFileName) && files.includes(itemLocationFileName)){
                 this.seedDocsDir = loc;
                 console.log('Resolved seed data');
                 return true;
@@ -77,7 +81,7 @@ export class HintBackend {
             console.log('Unable to resolve seed data file');
             return false;
         }
-        const battleData = readFileSync(join(this.seedDocsDir, 'battles.html'));
+        const battleData = readFileSync(join(this.seedDocsDir, enemyLocationFileName));
         const battleDom = cheerio.load(battleData);
         const battles: Map<string, string> = new Map();
         battleDom('#bosses tr:not(:first-child)').each((idx, el) => {
@@ -88,11 +92,11 @@ export class HintBackend {
             console.log('Unable to load boss data');
             return false;
         }
-        const treasureData = readFileSync(join(this.seedDocsDir, 'treasures.html'));
-        const treasureDom = cheerio.load(treasureData);
+        const treasureData = readFileSync(join(this.seedDocsDir, hintDataLocationFileName));
+        const hintsDom = cheerio.load(treasureData);
         const hints: Map<string, HintLocation[]> = new Map();
-        treasureDom('#mainquesthints tr').each((idx, row) => {
-            const cells = treasureDom(row).children();
+        hintsDom('#mainquesthints tr').each((idx, row) => {
+            const cells = hintsDom(row).children();
             const quest = cells.eq(0).text();
             const hint = cells.eq(1).text();
             const lineSplit = getLineBreakChar(hint);
@@ -130,8 +134,8 @@ export class HintBackend {
             return false;
         }
         const areaHints: Map<string, AreaHint> = new Map();
-        treasureDom('#libranotehints tr').each((idx, row) => {
-            const cells = treasureDom(row).children();
+        hintsDom('#libranotehints tr').each((idx, row) => {
+            const cells = hintsDom(row).children();
             const note = cells.eq(0).text();
             const hint = cells.eq(1).text();
             const lineMatch = hint.match(/(.*?) has (\d+) important checks./);

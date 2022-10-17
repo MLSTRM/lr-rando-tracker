@@ -1184,7 +1184,8 @@ async function checkForAreaLibra(){
 
 /*
 TODO:
-Need to actually complete cried wolf on a save
+fix tables in hintBackend once bartz updates
+look into improving attachment when already running autotracker
 
 New features to do:
 -allow for manual toggle of side/canvas completion (and push to backend + store)
