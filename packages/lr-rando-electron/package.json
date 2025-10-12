@@ -25,16 +25,16 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
-    "typescript": "^4.5.2",
+    "typescript": "^5.9.0",
     "@types/react": "^17.0.36",
     "@types/react-dom": "^17.0.11",
     "@types/lodash": "^4.14.178",
     "rimraf": "^3.0.2"
   },
   "dependencies": {
-    "memoryjs": "^3.4.0",
-    "lr-rando-core": "^1.0.0",
-    "lr-rando-autotracker": "^1.0.0",
+    "memoryjs": "file:../../../memoryjs",
+    "lr-rando-core": "file:../lr-rando-core",
+    "lr-rando-autotracker": "file:../lr-rando-autotracker",
     "lodash": "^4.17.21",
     "cheerio": "^1.0.0-rc.10"
   }

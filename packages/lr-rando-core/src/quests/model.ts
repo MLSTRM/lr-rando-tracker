@@ -76,6 +76,7 @@ export const QuestPrerequisites: { [key: string]: { name: string; check: (contex
     "time_day_8": { name: 'Day 8', check: context => (context.day ?? 0) >= 8 },
     "time_day_9": { name: 'Day 9', check: context => (context.day ?? 0) >= 9 },
     "time_day_10": { name: 'Day 10', check: context => (context.day ?? 0) >= 10 },
+    "odin_level_0": { name: 'Odin fed main greens', check: context => !!context.hasObtained?.['key_y_yasai_t'] && (context.odin ?? 0) >= 0},
     "odin_level_1": { name: 'Odin Level 1', check: context => (context.odin ?? 0) >= 120 },
     "odin_level_2": { name: 'Odin Level 2 (Glide)', check: context => (context.odin ?? 0) >= 250 },
     "odin_level_3": { name: 'Odin Full Heal', check: context => (context.odin ?? 0) >= 400 },

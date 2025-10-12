@@ -29,22 +29,22 @@
 // 1 day = 1,080,000,000 ?
 
 
-export function resolveDateTime(base: number): { day: number, hour: number; minute: number;} {
+export function resolveDateTime(base: bigint): { day: number, hour: number; minute: number;} {
     //Known issue: this doesn't work on ark/final day? Or on day 3+? Pointer drifted...
-    const baseDay1 = 1350000000;
+    const baseDay1 = 1350000000n;
     const offset = base-baseDay1;
     //console.log(`date offset: ${offset} from base: ${base}`);
-    const day = 1 + Math.floor(offset / 1080000000);
-    const time = offset % 1080000000;
-    const hour = (6 + Math.floor(time/45000000)) % 24;
-    const minute = Math.floor((time % 45000000)*60/45000000);
-    return {day, hour, minute};
+    const day = 1n + offset / 1080000000n;
+    const time = offset % 1080000000n;
+    const hour = (6n + time/45000000n) % 24n;
+    const minute = ((time % 45000000n)*60n)/45000000n;
+    return {day: Number(day), hour: Number(hour), minute: Number(minute)};
 }
 
 export function generatePredictedValueFromDateTime(day: number, hour: number, minute: number): bigint {
-    const minuteTime = BigInt((minute/60)*45000000);
-    const hourTime = BigInt((hour - 6)*45000000);
-    const time = BigInt(minuteTime + hourTime);
-    const resolvedDay = BigInt((day - 1)*1080000000);
+    const minuteTime = (BigInt(minute)/60n)*45000000n;
+    const hourTime = (BigInt(hour) - 6n)*45000000n;
+    const time = minuteTime + hourTime;
+    const resolvedDay = (BigInt(day) - 1n)*1080000000n;
     return resolvedDay + time;
 }

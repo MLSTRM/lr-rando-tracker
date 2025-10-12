@@ -360,14 +360,6 @@ export class RandoBackend {
         const base = this.oldState?.btsc || [];
         return base.map(b => btscBossMap[b]);
     }
-
-    public getLibraInventory(): string[] {
-        return [...this.oldState.keyItems?.keys() || []]
-            .filter(i => i.startsWith('libra_'))
-            .map(i => prettyPrintKeyItem(i))
-            .filter(i => i.known && i.name.endsWith('*'))
-            .map(i => i.name.slice(0,-1));
-    }
 }
 
 function statusToIndex(status?: string): QuestState {
@@ -426,7 +418,7 @@ function mapMainQuestName(name: string, state: QuestProgressCheck): {name: strin
     const key = getAreaFromKey(match[1]);
     return {
         name: `Main Quest ${match[1]}-${match[2]}`,
-        complete: !!key && state?.mainQuestProgress?.[key] >= Number(match[2])
+        complete: !!key && (state?.mainQuestProgress?.[key] as number) >= Number(match[2])
     };
 }
 

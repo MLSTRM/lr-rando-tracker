@@ -57,6 +57,9 @@ export const WildlandsSideQuests = {
         prerequisiteQuests: [
             "Wild_3_1"
         ],
+        prerequisiteOther: [
+            'odin_level_0'
+        ],
         trigger: Sarala,
         handIn: Sarala,
         sideQuestId: 21,
@@ -74,6 +77,7 @@ export const WildlandsSideQuests = {
             "mat_z_036": 1
         },
         prerequisiteQuests: [
+            "The Right Stuff",
             "Wild_3_1"
         ],
         trigger: Hunter_Chief,
@@ -97,7 +101,7 @@ export const WildlandsSideQuests = {
             "Wild_3_1", //Not just this it seems
         ],
         prerequisiteOther: [
-            "odin_level_1", //verify????
+            "odin_level_0", //verify????
         ],
         trigger: Cardesia,
         handIn: Cardesia,

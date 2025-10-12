@@ -882,7 +882,8 @@ export const prayers = {
                 "key_s_okuri": 1
             },
             prerequisiteQuests: [
-                "Sazh_5_3"
+                // Only need to have started mq5 overall
+                "Sazh_5_1"
             ],
             canvasByteIndex: 0,
             canvasByteOffset: 0x10

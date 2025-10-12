@@ -106,6 +106,7 @@ export const YusnaanSideQuests = {
         sideQuestId: 64,
         sideQuestProgress: new Map([
             [1000, ()=>({status: "Available", requirements: {"event_pickett_steal": true}} as PartialQuestProgress)],
+            // TODO: back this by the item?
             [2000, ()=>({status: "In Progress", requirements: {"key_y_letter": true}} as PartialQuestProgress)],
             [3000, ()=>({status: "In Progress", requirements: {"pickett_steal_letter": true}} as PartialQuestProgress)]
         ])
@@ -233,7 +234,8 @@ export const YusnaanSideQuests = {
     "Play It for Me": {
         name: "Play It for Me",
         requirements: {
-            "key_y_kagi1": true,
+            // Technically optional
+            // "key_y_kagi1": true,
             "key_y_rappa": true,
             "key_y_kagi2": true,
             "key_y_kagi3": true

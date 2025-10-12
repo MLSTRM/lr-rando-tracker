@@ -17,7 +17,7 @@ export class LrMemoryReader {
             try {
                 this.memoryjs = await import('memoryjs');
             } catch (err){
-                console.debug('memoryjs unavailable');
+                console.debug(`memoryjs unavailable: ${err}`);
                 return false;
             }
         }

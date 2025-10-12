@@ -7,7 +7,7 @@ import { debug } from "console";
 
 //CONFIG
 const reader = new LrMemoryReader(false);
-const showItems = false;
+const showItems = true;
 const showGarbs = false;
 const showSchemaInfo = false;
 const showEpAbilitiesEtc = false;
@@ -59,6 +59,11 @@ const interval = setInterval(async () => {
             console.log(`reading Current EP as: ${reader.readMemoryAddress(pSomeStatsBase + 0x2880, INT, true) / 2000}`);
             console.log(`reading Max EP as: ${reader.readMemoryAddress(pSomeStatsBase + 0x2884, INT, true) / 2000}`);
             console.log(`recovery item slots: ${reader.readMemoryAddress(pSomeStatsBase + recoveryItemOffset, BYTE, true)}`);
+            console.log(`${(pSomeStatsBase + recoveryItemOffset).toString(16)}`);
+            for(var i = 0; i < 10; i++){
+                var buf = reader.readBuffer(pSomeStatsBase + recoveryItemOffset + 4 + 16*i, 16, true);
+                console.log(`Recovery item maybe: ${buf}`);
+            }
             console.log(`Odin health: ${reader.readMemoryAddress(pSomeStatsBase + chocoboOffset, SHORT, true)}`);
             // Seems not...
             /*
@@ -102,7 +107,7 @@ const interval = setInterval(async () => {
             const dayTime = reader.readMemoryAddress(pSomeStatsBase - 0x10680+0x100000, INT64, true);
             const destructuredDayTime = resolveDateTime(dayTime);
             console.log(`reading Day as: ${reader.readMemoryAddress(pSomeStatsBase + 0x1A6E, BYTE, true)}`);
-            console.log(`reading Day/Time as: ${JSON.stringify(destructuredDayTime)}`);
+            // console.log(`reading Day/Time as: ${JSON.stringify(destructuredDayTime)}`);
 
             const activeSchemaIndex = reader.readMemoryAddress(pSomeStatsBase + 0xBF, BYTE, true);
             if(showSchemaInfo){

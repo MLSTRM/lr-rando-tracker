@@ -4,6 +4,7 @@ import { DateTime, NpcAvailable } from '../model';
 import { DeadDunesNpcs } from './deaddunes';
 import { LuxerionNpcs } from './luxerion';
 import { WildlandsNpcs } from './wildlands';
+import { YusnaanNpcs } from './yusnaan';
 
 export * from './deaddunes';
 export * from './luxerion';
@@ -14,7 +15,7 @@ export const NpcRegistry: {[K in Areas]?: {[key: string]: NpcAvailable}} = {
     [Areas.DEAD_DUNES]: DeadDunesNpcs,
     [Areas.LUXERION]: LuxerionNpcs,
     [Areas.WILDLANDS]: WildlandsNpcs,
-    [Areas.DEAD_DUNES]: DeadDunesNpcs
+    [Areas.YUSNAAN]: YusnaanNpcs
 };
 
 export function isNpcAvailable(area: Areas, name: string, time: DateTime): boolean {

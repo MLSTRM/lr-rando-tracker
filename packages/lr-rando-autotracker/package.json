@@ -12,7 +12,7 @@
       "test": "yarn run build && node ./build/test-script.js"
     },
     "dependencies": {
-        "memoryjs": "^3.4.0"
+        "memoryjs": "file:../../../memoryjs"
     },
     "devDependencies": {
       "@types/node": "^16.11.9",

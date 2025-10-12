@@ -342,6 +342,13 @@
       overflow-x: hidden;
     }
 
+    .columnTaller {
+      min-height: 520px;
+      max-height: 600px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
     .columnHalf {
       min-height: 240px;
       max-height: 240px;
@@ -785,55 +792,14 @@
           </div>
         </div>
         <div id="notesReference" class="flexRegion noSelect" style="order: 4">
-          <div class="row column80 columnFull">
+          <div class="row column160 columnHalf">
             Notes:
             </br>
-            <textarea id="notes" cols="29" rows="35" style="resize: none"></textarea>
-          </div>
-        </div>
-        <div id="hintsReference" class="flexRegion noSelect" style="order: 5">
-          <div class="row column120">
-            Hints
-            <br/>
-            <div id="hintNumberGrid" class="">
-              <!--Convert to inner flex box for resizing purposes-->
-              <!--Auto generate headers somehow??-->
-              <div class="cellHint">
-                <div>Area</div><div title="Known">K</div><div title="Found">F</div>
-                <div>Area</div><div title="Known">K</div><div title="Found">F</div>
-              </div>
-              <div class="cellHint">
-                <div>Ark:</div><div class="clickRange" data-min="-1" data-areaHint="0"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-                <div>CoP Global:</div><div class="clickRange" data-min="-1" data-areaHint="1"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              </div>
-              <div class="cellHint">
-                <div>Luxerion:</div><div class="clickRange" data-min="-1" data-areaHint="2"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-                <div>CoP Luxerion:</div><div class="clickRange" data-min="-1" data-areaHint="3"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              </div>
-              <div class="cellHint">
-                <div>Yusnaan:</div><div class="clickRange" data-min="-1" data-areaHint="4"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-                <div>CoP Yusnaan:</div><div class="clickRange" data-min="-1" data-areaHint="5"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              </div>
-              <div class="cellHint">
-                <div>Wildlands:</div><div class="clickRange" data-min="-1" data-areaHint="6"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-                <div>CoP Wildlands:</div><div class="clickRange" data-min="-1" data-areaHint="7"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              </div>
-              <div class="cellHint">
-                <div>Dead Dunes:</div><div class="clickRange" data-min="-1" data-areaHint="8"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-                <div>CoP Dunes:</div><div class="clickRange" data-min="-1" data-areaHint="9"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              </div>
-              <div class="cellHint">
-                <div>Hand ins:</div><div class="clickRange" data-min="-1" data-areaHint="10"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-                <div>Ultimate Lair:</div><div class="clickRange" data-min="-1" data-areaHint="11"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              </div>
-              <div class="cellHint">
-                <div>Final Day:</div><div class="clickRange" data-min="-1" data-areaHint="12"><span class="value" hidden>-1</span><span class="undefValueMask">?</span></div><div class="clickRange" data-min="0"><span class="value">0</span></div>
-              </div>
-            </div>
+            <textarea id="notes" cols="59" rows="35" style="resize: none"></textarea>
           </div>
         </div>
         <div id="hintNotesReference" class="flexRegion noSelect" style="order: 6">
-          <div class="row column160 columnHalf">
+          <div class="row column160 columnTaller">
             Quest hint notes:
             <table style="table-layout: fixed; width: 100%;" id="questHintTable">
               <tr>

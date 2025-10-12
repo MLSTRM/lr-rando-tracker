@@ -366,6 +366,7 @@ export const LuxerionSideQuests = {
         sideQuestId: 19,
         sideQuestProgress: new Map([[1010, "Accepted"]])
     } as QuestInfo,
+    // TODO: requires MQ1 completion??
     "Voices from the Grave": {
         name: "Voices from the Grave",
         requirements: {

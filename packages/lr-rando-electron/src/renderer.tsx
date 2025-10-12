@@ -31,14 +31,13 @@ window.onload = () => {
   setPanelOrder(true);
   //updateCanvasRegion();
   updateSideQuestRegion();
-  addQuestHintRow();
+  // addQuestHintRow();
   prepareShopHints();
   presetupHintData();
 }
 
 const domains = new Map([
-  ['pretty_tracker_region', 'grid'],
-  ['hintsReference', 'hint']
+  ['pretty_tracker_region', 'grid']
 ]);
 
 function setupClickIds(){
@@ -419,8 +418,6 @@ function beginPoll() {
 
   //setInterval(updateCanvasRegion, 5000);
   setInterval(updateSideQuestRegion, 5000);
-
-  setInterval(checkForAreaLibra, 5000);
 }
 
 //Push to backend?
@@ -751,6 +748,7 @@ async function getSideQuestInfo(el: HTMLElement, type: 'sideQuest'|'canvas'){
   if(info.handIn){
     if(typeof info.handIn === 'string'){
       setPropOnElem('#sideLookupSelectedHandIn', info.handIn);
+      setPropOnElem('#sideLookupSelectedHandInTime', '');
     } else {
       setPropOnElem('#sideLookupSelectedHandIn', info.handIn.name);
       const av = info.handIn.available;
@@ -906,7 +904,6 @@ function exportData(){
   const data = {
     seed: (document.getElementById('seed') as HTMLInputElement)?.value,
     notes: (document.getElementById('notes') as HTMLTextAreaElement)?.value,
-    hintNumbers: deflateHintGrid(document.getElementById('hintNumberGrid')!),
     hintList: deflateTable(document.getElementById('questHintTable') as HTMLTableElement),
     shopContents: [...document.getElementById('shopBody')?.children ?? []].map(c => ({id: c.id, body: deflateShopHints(c.id)})),
     active: getActiveBoxes()
@@ -936,7 +933,6 @@ function importData(){
     const parsed = JSON.parse(raw);
     (document.getElementById('seed') as HTMLInputElement).value = parsed.seed;
     (document.getElementById('notes') as HTMLTextAreaElement).value = parsed.notes;
-    inflateHintGrid(parsed.hintNumbers);
     inflateHintTable(parsed.hintList);
     (parsed.shopContents as {id: string, body: string[]}[]).forEach(({id, body}) => inflateShopHints(id, body));
     inflateActiveBoxes(parsed.active);
@@ -985,30 +981,6 @@ function deflateInputOrSelect(el: Element): string {
     return child.textContent ?? '';
   }
   return '';
-}
-
-function deflateHintGrid(el: HTMLElement): string[][] {
-  const cellHintList = [...el.children];
-  cellHintList.shift();
-  return cellHintList.map(el => [...el.children].map(deflateInputOrSelect));
-}
-
-function inflateHintGrid(input: string[][]): void {
-  const gridParent = document.getElementById('hintNumberGrid')!;
-  const children = [...gridParent?.children];
-  children.shift();
-  children.forEach((div, i) => {
-    const inputRow = input[i];
-    const divElements = [...div.children];
-    for(const idx in divElements){
-      const value = inputRow[idx];
-      const el = divElements[idx];
-      if(el instanceof HTMLDivElement && el.firstChild instanceof HTMLSpanElement){
-        el.firstChild.textContent = value;
-        normaliseUndefValueMask(el.firstChild);
-      }
-    }
-  });
 }
 
 // https://stackoverflow.com/questions/10588607/tutorial-for-html5-dragdrop-sortable-list
@@ -1147,38 +1119,6 @@ async function loadHints(){
 
 function debugHints(){
   ipcRenderer.send('hint-debugHints');
-}
-
-async function checkForAreaLibra(){
-  const areaHintList = await ipcRenderer.invoke('hint-areaHintCheck');
-  const areaHints: Set<{area: string, count: number}> = new Set(areaHintList);
-  const hintNumberGrid = document.getElementById('hintNumberGrid');
-  const areaRanges = hintNumberGrid?.getElementsByClassName('clickRange') || [];
-  for(const range of areaRanges){
-    const areaAtt = range.getAttribute('data-areaHint');
-    if(!areaAtt){
-      continue;
-    }
-    const valueSpan = range.getElementsByClassName('value').item(0);
-    if(valueSpan){
-      const currentValue = Number(valueSpan.textContent);
-      for(const hint of areaHints){
-        if(hint.area === areaAtt){
-          const hintValue = hint.count;
-          if(currentValue !== hintValue){
-            valueSpan.textContent = hintValue.toString();
-            normaliseUndefValueMask(valueSpan);
-          }
-          // No need to check the rest of the hints, just go to the next area
-          areaHints.delete(hint);
-          break;
-        }
-      }
-    }
-  }
-  if(areaHints.size > 0){
-    console.log(`${areaHints.size} unmapped area hints.`);
-  }
 }
 // Hint engine end
 
